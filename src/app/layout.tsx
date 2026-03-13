@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Roami — 여행 동행, 지도에서 바로 찾기",
     description: "여행지에서 함께 밥 먹을 사람, 카페 갈 사람, 한잔 할 사람을 지도에서 바로 찾아보세요.",
-    url: "https://roami.app",
+    url: "https://roami.kr",
     siteName: "Roami",
     locale: "ko_KR",
     type: "website",

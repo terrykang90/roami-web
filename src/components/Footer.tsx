@@ -48,8 +48,8 @@ export default function Footer() {
               <h4 className="text-sm font-semibold text-gray-900 mb-3">문의</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="mailto:hello@roami.app" className="text-sm text-gray-500 hover:text-teal transition-colors">
-                    hello@roami.app
+                  <a href="mailto:hello@roami.kr" className="text-sm text-gray-500 hover:text-teal transition-colors">
+                    hello@roami.kr
                   </a>
                 </li>
               </ul>

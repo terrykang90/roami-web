@@ -95,7 +95,7 @@ export default function PrivacyPage() {
             <li>회원 탈퇴 (앱 내 설정에서 직접 가능)</li>
           </ul>
           <p>
-            위 권리 행사는 앱 내 설정 또는 이메일(hello@roami.app)을 통해 요청할 수 있습니다.
+            위 권리 행사는 앱 내 설정 또는 이메일(hello@roami.kr)을 통해 요청할 수 있습니다.
           </p>
         </Section>
 
@@ -119,7 +119,7 @@ export default function PrivacyPage() {
             개인정보 처리에 관한 문의사항은 아래로 연락해 주시기 바랍니다.
           </p>
           <ul>
-            <li>이메일: hello@roami.app</li>
+            <li>이메일: hello@roami.kr</li>
           </ul>
         </Section>
 

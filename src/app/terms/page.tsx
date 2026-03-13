@@ -77,7 +77,7 @@ export default function TermsPage() {
           <ol>
             <li>서비스는 본 약관을 위반한 이용자에 대해 경고, 일시 정지, 영구 정지 등의 조치를 취할 수 있습니다.</li>
             <li>이용 제한 조치 시, 이메일을 통해 사유를 안내합니다.</li>
-            <li>이용자는 이의가 있을 경우 hello@roami.app으로 문의할 수 있습니다.</li>
+            <li>이용자는 이의가 있을 경우 hello@roami.kr으로 문의할 수 있습니다.</li>
           </ol>
         </Section>
 
@@ -125,7 +125,7 @@ export default function TermsPage() {
           <ol>
             <li>서비스 이용과 관련한 분쟁은 대한민국 법률을 적용합니다.</li>
             <li>분쟁 발생 시, 서비스와 이용자 간의 원만한 해결을 위해 노력합니다.</li>
-            <li>문의사항은 hello@roami.app으로 연락해 주시기 바랍니다.</li>
+            <li>문의사항은 hello@roami.kr으로 연락해 주시기 바랍니다.</li>
           </ol>
         </Section>
       </div>

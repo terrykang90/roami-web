@@ -61,10 +61,10 @@ export default function FAQPage() {
           찾으시는 답변이 없나요?
         </p>
         <a
-          href="mailto:hello@roami.app"
+          href="mailto:hello@roami.kr"
           className="inline-block text-sm font-semibold text-teal hover:text-teal-dark transition-colors"
         >
-          hello@roami.app으로 문의하기
+          hello@roami.kr으로 문의하기
         </a>
       </div>
     </div>
