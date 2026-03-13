@@ -14,7 +14,7 @@ export default function WaitlistForm() {
     setErrorMessage("");
 
     try {
-      const res = await fetch("http://localhost:8080/waitlist", {
+      const res = await fetch("https://api.roami.app/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, city }),
