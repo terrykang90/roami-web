@@ -16,14 +16,11 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
+          <a href="https://plan.roami.kr" className="text-sm text-gray-600 hover:text-teal transition-colors">
+            여행 플래너
+          </a>
           <Link href="/faq" className="text-sm text-gray-600 hover:text-teal transition-colors">
             FAQ
-          </Link>
-          <Link href="/privacy" className="text-sm text-gray-600 hover:text-teal transition-colors">
-            개인정보처리방침
-          </Link>
-          <Link href="/terms" className="text-sm text-gray-600 hover:text-teal transition-colors">
-            이용약관
           </Link>
           <a
             href="#waitlist"
@@ -54,26 +51,19 @@ export default function Header() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-3">
+          <a
+            href="https://plan.roami.kr"
+            className="block text-sm text-gray-600 hover:text-teal py-2"
+            onClick={() => setMenuOpen(false)}
+          >
+            여행 플래너
+          </a>
           <Link
             href="/faq"
             className="block text-sm text-gray-600 hover:text-teal py-2"
             onClick={() => setMenuOpen(false)}
           >
             FAQ
-          </Link>
-          <Link
-            href="/privacy"
-            className="block text-sm text-gray-600 hover:text-teal py-2"
-            onClick={() => setMenuOpen(false)}
-          >
-            개인정보처리방침
-          </Link>
-          <Link
-            href="/terms"
-            className="block text-sm text-gray-600 hover:text-teal py-2"
-            onClick={() => setMenuOpen(false)}
-          >
-            이용약관
           </Link>
           <a
             href="#waitlist"

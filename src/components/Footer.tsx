@@ -23,6 +23,11 @@ export default function Footer() {
               <h4 className="text-sm font-semibold text-gray-900 mb-3">서비스</h4>
               <ul className="space-y-2">
                 <li>
+                  <a href="https://plan.roami.kr" className="text-sm text-gray-500 hover:text-teal transition-colors">
+                    여행 플래너
+                  </a>
+                </li>
+                <li>
                   <Link href="/faq" className="text-sm text-gray-500 hover:text-teal transition-colors">
                     자주 묻는 질문
                   </Link>
