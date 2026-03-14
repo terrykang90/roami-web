@@ -14,8 +14,9 @@ export default function PrivacyPage() {
       <div className="prose-custom space-y-10">
         <Section title="1. 개요">
           <p>
-            Roami(이하 &ldquo;서비스&rdquo;)는 개인 개발자가 운영하는 모바일 애플리케이션으로,
-            여행 중 동행을 찾을 수 있는 지도 기반 매칭 서비스입니다.
+            Roami(이하 &ldquo;서비스&rdquo;)는 개인 개발자가 운영하는 모바일 앱 및 웹 서비스로,
+            여행 중 동행을 찾을 수 있는 지도 기반 매칭 서비스(Roami)와
+            AI 기반 여행 일정 플래너(Roami Plan)를 제공합니다.
             본 개인정보처리방침은 서비스 이용 과정에서 수집되는 개인정보의 처리에 관한 사항을 안내합니다.
           </p>
         </Section>
@@ -33,6 +34,7 @@ export default function PrivacyPage() {
             <li>프로필 사진</li>
             <li>자기소개</li>
             <li>관심 여행 도시</li>
+            <li>여행 일정 데이터 (Roami Plan 이용 시)</li>
           </ul>
           <h4 className="font-semibold text-gray-900 mt-4 mb-2">자동 수집 항목</h4>
           <ul>
@@ -47,6 +49,7 @@ export default function PrivacyPage() {
           <ul>
             <li>회원 관리 및 본인 확인</li>
             <li>동행 매칭 서비스 제공 (지도 기반 모임 표시 및 참여)</li>
+            <li>AI 기반 여행 일정 생성 및 관리 (Roami Plan)</li>
             <li>서비스 개선 및 신규 기능 개발</li>
             <li>서비스 관련 공지사항 및 알림 전달</li>
             <li>부정 이용 방지 및 서비스 안전 관리</li>

@@ -16,7 +16,7 @@ export default function TermsPage() {
           <p>
             본 약관은 개인 개발자가 운영하는 Roami(이하 &ldquo;서비스&rdquo;)의 이용에 관한
             기본적인 사항을 규정함을 목적으로 합니다. 서비스는 여행 중 동행을 찾을 수 있는
-            지도 기반 매칭 모바일 애플리케이션입니다.
+            지도 기반 매칭 모바일 앱(Roami)과 AI 기반 여행 일정 플래너 웹 서비스(Roami Plan)를 포함합니다.
           </p>
         </Section>
 
@@ -28,6 +28,8 @@ export default function TermsPage() {
             <li>동행 참가 요청 및 승인 시스템</li>
             <li>동행 관련 채팅</li>
             <li>사용자 프로필 관리</li>
+            <li>AI 기반 여행 일정 생성 및 관리 (Roami Plan)</li>
+            <li>여행 일정 공유</li>
           </ul>
         </Section>
 
