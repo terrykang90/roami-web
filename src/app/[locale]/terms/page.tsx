@@ -1,13 +1,29 @@
-import type { Metadata } from "next";
+import { getLocale } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "이용약관 — Roami",
-  description: "Roami 앱의 이용약관입니다.",
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  return {
+    title: locale === "ko" ? "이용약관 — Roami" : "Terms of Service — Roami",
+    description:
+      locale === "ko"
+        ? "Roami 앱의 이용약관입니다."
+        : "Terms of Service for the Roami app.",
+  };
+}
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const locale = await getLocale();
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
+      {locale === "ko" ? <TermsKo /> : <TermsEn />}
+    </div>
+  );
+}
+
+function TermsKo() {
+  return (
+    <>
       <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">이용약관</h1>
       <p className="text-sm text-gray-400 mb-10">최종 업데이트: 2025년 3월</p>
 
@@ -131,7 +147,137 @@ export default function TermsPage() {
           </ol>
         </Section>
       </div>
-    </div>
+    </>
+  );
+}
+
+function TermsEn() {
+  return (
+    <>
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Terms of Service</h1>
+      <p className="text-sm text-gray-400 mb-10">Last updated: March 2025</p>
+
+      <div className="space-y-10">
+        <Section title="Article 1 (Purpose)">
+          <p>
+            These Terms govern the use of Roami (the &ldquo;Service&rdquo;), operated by an independent developer.
+            The Service includes a map-based travel companion matching mobile app (Roami) and
+            an AI-powered trip planner web service (Roami Plan).
+          </p>
+        </Section>
+
+        <Section title="Article 2 (Service Description)">
+          <p>The Service provides the following features:</p>
+          <ul>
+            <li>Map-based travel companion recruitment and participation</li>
+            <li>Category-based companion search (eat, cafe, drinks, activities)</li>
+            <li>Join request and approval system</li>
+            <li>Meetup-related chat</li>
+            <li>User profile management</li>
+            <li>AI-powered trip planning and management (Roami Plan)</li>
+            <li>Trip itinerary sharing</li>
+          </ul>
+        </Section>
+
+        <Section title="Article 3 (Registration and Accounts)">
+          <ol>
+            <li>Registration is required to use the Service.</li>
+            <li>You must provide accurate information during registration. Providing false information may result in restricted access.</li>
+            <li>Your account is for your personal use only and may not be transferred or lent to others.</li>
+            <li>You are responsible for your account security and must notify us immediately if you detect unauthorized access.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 4 (User Obligations)">
+          <p>When using the Service, you must:</p>
+          <ol>
+            <li>Respect the rights of others and use the Service in a courteous manner.</li>
+            <li>Maintain accurate profile information.</li>
+            <li>Honor the agreed time and place when participating in meetups.</li>
+            <li>Not collect or misuse personal information of other users obtained through the Service.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 5 (Prohibited Activities)">
+          <p>The following activities are prohibited and may result in restricted access or account suspension:</p>
+          <ul>
+            <li>Registering false information or impersonating others</li>
+            <li>Commercial promotion, advertising, or spam</li>
+            <li>Profanity, disparagement, discrimination, sexual harassment, or other offensive behavior</li>
+            <li>Fraud, soliciting money, or illegal activities</li>
+            <li>Interfering with the normal operation of the Service</li>
+            <li>Collecting, storing, or disclosing personal information of others without consent</li>
+            <li>Criminal activities through meetups</li>
+            <li>Attempting to bypass security measures or hack the Service</li>
+          </ul>
+        </Section>
+
+        <Section title="Article 6 (Meetups)">
+          <ol>
+            <li>Meetups are voluntary gatherings between users, and the Service acts only as an intermediary.</li>
+            <li>Hosts may approve or reject join requests.</li>
+            <li>Participants are responsible for any situations that arise during or after a meetup.</li>
+            <li>We recommend meeting in public places for safety.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 7 (Service Restrictions and Account Suspension)">
+          <ol>
+            <li>The Service may issue warnings, temporary suspensions, or permanent bans for violations of these Terms.</li>
+            <li>We will notify you of the reason for any restriction via email.</li>
+            <li>If you have an objection, you may contact us at hello@roami.kr.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 8 (Disclaimer)">
+          <ol>
+            <li>The Service only facilitates meetups between users and is not directly liable for any accidents, disputes, or damages arising from meetups.</li>
+            <li>The Service is not liable for service interruptions caused by force majeure events such as natural disasters or system failures.</li>
+            <li>Users are responsible for the accuracy of the information they provide.</li>
+            <li>The Service does not guarantee the reliability or accuracy of information exchanged between users.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 9 (Service Changes and Termination)">
+          <ol>
+            <li>The Service may modify its features as needed for operational or technical reasons.</li>
+            <li>We will notify users of changes in advance through in-app notices or email.</li>
+            <li>Given that the Service is operated by an independent developer, the Service may be terminated with at least 30 days&apos; notice.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 10 (Account Deletion)">
+          <ol>
+            <li>You may delete your account at any time through the app settings.</li>
+            <li>Upon deletion, your personal information will be destroyed immediately, and content such as meetup posts will be removed.</li>
+            <li>You may re-register with the same information after deletion.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 11 (Intellectual Property)">
+          <p>
+            All intellectual property rights in the Service, including designs, logos, text, and code, belong to the Service operator.
+            You may not reproduce, distribute, or modify content provided through the Service without authorization.
+          </p>
+        </Section>
+
+        <Section title="Article 12 (Changes to Terms)">
+          <ol>
+            <li>These Terms may be changed as needed.</li>
+            <li>We will notify users of changes at least 7 days before the effective date through in-app notices or email.</li>
+            <li>If you do not agree with the updated Terms, you may delete your account.</li>
+          </ol>
+        </Section>
+
+        <Section title="Article 13 (Dispute Resolution)">
+          <ol>
+            <li>Disputes related to the use of the Service shall be governed by the laws of the Republic of Korea.</li>
+            <li>In the event of a dispute, we will endeavor to reach an amicable resolution.</li>
+            <li>For inquiries, please contact us at hello@roami.kr.</li>
+          </ol>
+        </Section>
+      </div>
+    </>
   );
 }
 
