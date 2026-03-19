@@ -1,0 +1,162 @@
+{
+  "meta": {
+    "title": "Roami — Find travel meetups right on the map",
+    "description": "Find people for food, coffee, drinks, and activities nearby while you travel. A Korean-friendly meetup app that supports Korean and English."
+  },
+  "nav": {
+    "planner": "Travel Planner",
+    "faq": "FAQ",
+    "waitlist": "Join Waitlist",
+    "menu": "Menu"
+  },
+  "hero": {
+    "comingSoon": "Coming Soon",
+    "headlinePart1": "Find travel meetups",
+    "headlinePart2": "right on the map",
+    "subheadline": "Find people for food, coffee, drinks, and activities nearby while you travel.",
+    "subheadline2": "A Korean-friendly meetup app that supports Korean and English.",
+    "cta": "Join the waitlist"
+  },
+  "problem": {
+    "label": "Problem",
+    "title": "Still finding travel meetups the hard way?",
+    "card1Title": "Group chats",
+    "card1Desc": "There are lots of messages, but it is hard to tell who is free, where to meet, and when.",
+    "card2Title": "Community posts",
+    "card2Desc": "You can post and wait, but replies are slow and plans often do not line up.",
+    "card3Title": "Random encounters",
+    "card3Desc": "Even if you meet someone nearby, it is hard to know if your timing or vibe will match.",
+    "highlight": "Roami lets you find and connect with nearby companions right on the map."
+  },
+  "solution": {
+    "label": "Solution",
+    "title": "Roami makes travel meetups easier and more immediate.",
+    "point1": "Browse meetups nearby on a map",
+    "point2": "See what is happening now, today, or tomorrow",
+    "point3": "Join casual meetups for coffee, food, drinks, and activities",
+    "point4": "Keep it light with small groups"
+  },
+  "features": {
+    "label": "Features",
+    "title": "Four types of meetups on the map",
+    "subtitle": "Eat, drink, explore. Find companions for whatever you want to do.",
+    "eatLabel": "Eat together",
+    "eatDesc": "Find someone to share a meal at a local restaurant. Better than eating alone.",
+    "cafeLabel": "Cafe hangout",
+    "cafeDesc": "Meet someone at a cozy cafe to chat or work together.",
+    "drinksLabel": "Grab drinks",
+    "drinksDesc": "Enjoy the night with company. Share travel stories over a casual drink.",
+    "activityLabel": "Activities",
+    "activityDesc": "Tours, hiking, diving and more. Find companions for fun activities.",
+    "mapFirstTitle": "Map-First",
+    "mapFirstDesc": "Instead of scrolling through lists, see meetups around you right on the map. See where, when, and what kind of meetups are happening at a glance."
+  },
+  "howItWorks": {
+    "label": "How it works",
+    "title": "Finding meetups is this easy",
+    "step1Title": "Open the map",
+    "step1Desc": "Open the map of the city you are traveling in.",
+    "step2Title": "Find meetups",
+    "step2Desc": "See what meetups are happening nearby.",
+    "step3Title": "Request to join",
+    "step3Desc": "Request to join a meetup that fits you.",
+    "step4Title": "Meet up",
+    "step4Desc": "Once accepted, chat and meet!"
+  },
+  "whyRoami": {
+    "label": "Why Roami",
+    "title": "Why it feels easier",
+    "point1": "See where meetups are happening at a glance",
+    "point2": "Focus on what is actually happening soon",
+    "point3": "Smaller groups feel lighter and less awkward",
+    "point4": "Easy to start in Korean or English"
+  },
+  "useCases": {
+    "label": "Use cases",
+    "title": "When to use Roami",
+    "case1": "Grab food with someone nearby",
+    "case2": "Meet for coffee or coworking",
+    "case3": "Find a casual drink meetup tonight",
+    "case4": "Join a photo walk or local activity"
+  },
+  "preview": {
+    "label": "Preview",
+    "title": "App preview",
+    "placeholder": "App screenshots\ncoming soon"
+  },
+  "trust": {
+    "label": "Trust",
+    "title": "Designed to feel lighter and safer",
+    "point1Title": "Phone verification",
+    "point1Desc": "Verify your identity to build trust.",
+    "point2Title": "Review-based trust",
+    "point2Desc": "Trust signals from meetup history help you decide.",
+    "point3Title": "Small-group meetups",
+    "point3Desc": "Keep it casual with small group sizes.",
+    "point4Title": "Location after approval",
+    "point4Desc": "Exact location is shared only after approval."
+  },
+  "waitlist": {
+    "label": "Waitlist",
+    "title": "Want early access?",
+    "description": "Join the waitlist to get launch updates and early testing opportunities."
+  },
+  "waitlistForm": {
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "cityLabel": "Where would you like to use Roami?",
+    "cityPlaceholder": "e.g. Bangkok, Bali, Tokyo...",
+    "languageLabel": "Language",
+    "languageKo": "한국어",
+    "languageEn": "English",
+    "languageBoth": "Both",
+    "submit": "Join the waitlist",
+    "submitting": "Submitting...",
+    "successTitle": "You're on the list!",
+    "successDesc": "We'll let you know first when Roami launches.",
+    "successAnother": "Register another email",
+    "errorDefault": "Something went wrong. Please try again.",
+    "spam": "No spam. Only launch updates."
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Have questions about Roami?",
+    "q1": "Who is this for?",
+    "a1": "For travelers who want to meet nearby people for casual plans.",
+    "q2": "Is this a dating app?",
+    "a2": "No. It is built for light travel meetups like food, coffee, drinks, and activities.",
+    "q3": "Is it only for Koreans?",
+    "a3": "No. It is open to everyone, with support for Korean and English.",
+    "q4": "Is the exact location always shown?",
+    "a4": "Not always. Depending on the meetup type, exact location may be shared after approval.",
+    "contactPrompt": "Can't find your answer?",
+    "contactLink": "Contact us at hello@roami.kr",
+    "viewAll": "View all FAQ"
+  },
+  "faqPage": {
+    "q1": "What is Roami?",
+    "a1": "Roami is a map-based meetup app for finding travel companions. Find people for food, coffee, drinks, and activities right on the map. Instead of relying on group chats or community posts, find companions nearby in real time.",
+    "q2": "What kinds of meetups can I find?",
+    "a2": "Roami offers four categories of meetups:\n\n• Eat — Find someone to share a meal at a local restaurant\n• Cafe — Meet at a cozy cafe for conversation or coworking\n• Drinks — Grab a casual drink at a bar or pub\n• Activity — Join tours, hikes, diving, and more\n\nEach category is shown on the map so you can quickly find and join meetups.",
+    "q3": "How do I use it?",
+    "a3": "It's very simple:\n\n1. Open the map — See the map of the city you're traveling in.\n2. Find meetups — Check what's happening nearby.\n3. Request to join — Send a join request to a meetup you like.\n4. Meet up — Once the host approves, meet at the location!\n\nYou can also create your own meetup and be the host.",
+    "q4": "Is it free?",
+    "a4": "Yes, Roami's core features are free. Finding meetups, creating meetups, and joining are all free. Premium features may be added in the future, but the basic service will always be free.",
+    "q5": "Is it safe?",
+    "a5": "User safety is our top priority.\n\n• Host approval — Not just anyone can join. The host reviews and approves join requests.\n• Required profiles — All users must set up a profile to use the service.\n• Public places recommended — We encourage meeting in public places like cafes and restaurants.\n• Report system — You can report users for inappropriate behavior.\n\nWe're building a safe meetup culture together.",
+    "q6": "Where can I use it?",
+    "a6": "Roami is launching soon, starting with popular travel destinations. Let us know your city of interest when you sign up, and we'll factor it into our rollout plans.",
+    "q7": "When does it launch?",
+    "a7": "We're working hard on development and launching soon. When the date is set, waitlist members will be the first to know."
+  },
+  "footer": {
+    "tagline": "Find travel meetups right on the map",
+    "services": "Services",
+    "planner": "Travel Planner",
+    "faqLink": "FAQ",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact"
+  }
+}

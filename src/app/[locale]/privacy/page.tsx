@@ -1,13 +1,29 @@
-import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "개인정보처리방침 — Roami",
-  description: "Roami 앱의 개인정보처리방침입니다.",
-};
+export async function generateMetadata() {
+  const locale = await getLocale();
+  return {
+    title: locale === "ko" ? "개인정보처리방침 — Roami" : "Privacy Policy — Roami",
+    description:
+      locale === "ko"
+        ? "Roami 앱의 개인정보처리방침입니다."
+        : "Privacy Policy for the Roami app.",
+  };
+}
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const locale = await getLocale();
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
+      {locale === "ko" ? <PrivacyKo /> : <PrivacyEn />}
+    </div>
+  );
+}
+
+function PrivacyKo() {
+  return (
+    <>
       <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">개인정보처리방침</h1>
       <p className="text-sm text-gray-400 mb-10">최종 업데이트: 2025년 3월</p>
 
@@ -133,7 +149,137 @@ export default function PrivacyPage() {
           </p>
         </Section>
       </div>
-    </div>
+    </>
+  );
+}
+
+function PrivacyEn() {
+  return (
+    <>
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
+      <p className="text-sm text-gray-400 mb-10">Last updated: March 2025</p>
+
+      <div className="prose-custom space-y-10">
+        <Section title="1. Overview">
+          <p>
+            Roami (the &ldquo;Service&rdquo;) is a mobile app and web service operated by an independent developer.
+            It provides a map-based companion matching service for travelers (Roami) and
+            an AI-powered trip planner (Roami Plan).
+            This Privacy Policy explains how we collect, use, and protect your personal information.
+          </p>
+        </Section>
+
+        <Section title="2. Information We Collect">
+          <p>We collect the following personal information:</p>
+          <h4 className="font-semibold text-gray-900 mt-4 mb-2">Required</h4>
+          <ul>
+            <li>Email address (for registration and login)</li>
+            <li>Nickname (displayed on your profile)</li>
+            <li>Location data (for map-based services)</li>
+          </ul>
+          <h4 className="font-semibold text-gray-900 mt-4 mb-2">Optional</h4>
+          <ul>
+            <li>Profile photo</li>
+            <li>Bio / self-introduction</li>
+            <li>Cities of interest</li>
+            <li>Trip itinerary data (when using Roami Plan)</li>
+          </ul>
+          <h4 className="font-semibold text-gray-900 mt-4 mb-2">Automatically Collected</h4>
+          <ul>
+            <li>Device information (OS version, device model)</li>
+            <li>App usage logs (access times, feature usage)</li>
+            <li>Location data (when you have granted permission)</li>
+          </ul>
+        </Section>
+
+        <Section title="3. How We Use Your Information">
+          <p>We use the collected information for the following purposes:</p>
+          <ul>
+            <li>Account management and identity verification</li>
+            <li>Providing the companion matching service (displaying and joining meetups on the map)</li>
+            <li>AI-powered trip planning and management (Roami Plan)</li>
+            <li>Service improvement and new feature development</li>
+            <li>Sending service-related notices and notifications</li>
+            <li>Preventing misuse and maintaining service safety</li>
+          </ul>
+        </Section>
+
+        <Section title="4. Sharing with Third Parties">
+          <p>
+            We do not share your personal information with third parties, except in the following cases:
+          </p>
+          <ul>
+            <li>When you have given prior consent</li>
+            <li>When required by law</li>
+            <li>When minimal information (nickname, profile photo, etc.) is shared between meetup participants to provide the service</li>
+          </ul>
+        </Section>
+
+        <Section title="5. Data Retention and Deletion">
+          <p>
+            Personal information is retained while you use the service and is deleted immediately upon account deletion.
+            However, certain records may be retained as required by applicable law:
+          </p>
+          <ul>
+            <li>Records related to contracts or withdrawal: 5 years</li>
+            <li>Records related to consumer complaints or disputes: 3 years</li>
+            <li>Access logs: 3 months</li>
+          </ul>
+        </Section>
+
+        <Section title="6. Security Measures">
+          <p>We implement the following measures to protect your personal information:</p>
+          <ul>
+            <li>Encryption of personal data (TLS/SSL in transit, encryption at rest)</li>
+            <li>Access control management</li>
+            <li>Regular security audits</li>
+          </ul>
+        </Section>
+
+        <Section title="7. Your Rights">
+          <p>You have the right to:</p>
+          <ul>
+            <li>Request access to your personal information</li>
+            <li>Request correction or deletion of your personal information</li>
+            <li>Request suspension of personal data processing</li>
+            <li>Delete your account (available in app settings)</li>
+          </ul>
+          <p>
+            You can exercise these rights through the app settings or by contacting us at hello@roami.kr.
+          </p>
+        </Section>
+
+        <Section title="8. Location Information">
+          <p>
+            We collect location information for the map-based companion matching service.
+            Location data is collected with your consent and can be disabled at any time in the app or device settings.
+            Collected location data is used only for finding companions and displaying meetup locations.
+          </p>
+        </Section>
+
+        <Section title="9. Cookies and Tracking">
+          <p>
+            The mobile app does not use cookies. The website may use minimal cookies for essential functionality.
+          </p>
+        </Section>
+
+        <Section title="10. Contact">
+          <p>
+            For questions about how we handle personal information, please contact us:
+          </p>
+          <ul>
+            <li>Email: hello@roami.kr</li>
+          </ul>
+        </Section>
+
+        <Section title="11. Policy Changes">
+          <p>
+            This Privacy Policy may be updated due to changes in law or service.
+            We will notify you of any changes through in-app notices or email.
+          </p>
+        </Section>
+      </div>
+    </>
   );
 }
 
