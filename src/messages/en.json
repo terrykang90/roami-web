@@ -115,6 +115,7 @@
     "successTitle": "You're on the list!",
     "successDesc": "We'll let you know first when Roami launches.",
     "successAnother": "Register another email",
+    "errorDuplicate": "This email is already on the waitlist.",
     "errorDefault": "Something went wrong. Please try again.",
     "spam": "No spam. Only launch updates."
   },

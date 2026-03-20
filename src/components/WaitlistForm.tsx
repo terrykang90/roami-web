@@ -24,8 +24,11 @@ export default function WaitlistForm() {
       });
 
       if (!res.ok) {
+        if (res.status === 409) {
+          throw new Error(t("errorDuplicate"));
+        }
         const data = await res.json().catch(() => null);
-        throw new Error(data?.message || t("errorDefault"));
+        throw new Error(data?.error || data?.message || t("errorDefault"));
       }
 
       setStatus("success");

@@ -115,6 +115,7 @@
     "successTitle": "등록이 완료되었습니다!",
     "successDesc": "Roami 출시 소식을 가장 먼저 전해드릴게요.",
     "successAnother": "다른 이메일로 등록하기",
+    "errorDuplicate": "이미 등록된 이메일이에요.",
     "errorDefault": "등록에 실패했습니다. 다시 시도해주세요.",
     "spam": "스팸 없이, 출시 소식만 보내드릴게요."
   },
