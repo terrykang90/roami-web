@@ -68,7 +68,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className="scroll-smooth">
-      <body className={`${lineSeedKR.className} antialiased bg-white text-gray-900`}>
+      <body className={`${lineSeedKR.className} antialiased bg-bg-primary text-text-primary`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           <main className="pt-16">{children}</main>

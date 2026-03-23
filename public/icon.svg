@@ -1,0 +1,7 @@
+<svg width="160" height="160" viewBox="100 160 820 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Teal squircle (traveler) -->
+  <rect x="140" y="200" width="460" height="460" rx="115" fill="#2CB5AE" opacity="0.92"/>
+
+  <!-- Orange squircle (local) -->
+  <rect x="420" y="360" width="460" height="460" rx="115" fill="#E07A45" opacity="0.88"/>
+</svg>

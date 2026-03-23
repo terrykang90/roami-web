@@ -76,6 +76,20 @@ export default async function Home() {
         </svg>
       ),
     },
+    {
+      name: "Sightseeing",
+      label: features("sightseeingLabel"),
+      description: features("sightseeingDesc"),
+      color: "bg-sightseeing",
+      lightBg: "bg-[#EAFAF0]",
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4CAF7A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <path d="M21 15l-5-5L5 21" />
+        </svg>
+      ),
+    },
   ];
 
   const steps = [
@@ -96,7 +110,7 @@ export default async function Home() {
       title: howItWorks("step2Title"),
       description: howItWorks("step2Desc"),
       icon: (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2CB5AE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E07A45" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
@@ -120,7 +134,7 @@ export default async function Home() {
       title: howItWorks("step4Title"),
       description: howItWorks("step4Desc"),
       icon: (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2CB5AE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E07A45" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2" />
           <circle cx="9" cy="7" r="4" />
           <path d="M23 21v-2a4 4 0 00-3-3.87" />
@@ -180,7 +194,7 @@ export default async function Home() {
       title: trust("point2Title"),
       description: trust("point2Desc"),
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2CB5AE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E07A45" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
       ),
@@ -201,7 +215,7 @@ export default async function Home() {
       title: trust("point4Title"),
       description: trust("point4Desc"),
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2CB5AE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E07A45" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
           <circle cx="12" cy="10" r="3" />
         </svg>
@@ -224,10 +238,10 @@ export default async function Home() {
         <div className="relative max-w-6xl mx-auto px-6 pt-24 pb-0 md:pt-36 md:pb-0 text-center">
           <ScrollReveal>
             <Image
-              src="/logo.svg"
+              src="/icon.svg"
               alt="Roami"
-              width={400}
-              height={400}
+              width={100}
+              height={100}
               className="mx-auto mb-6"
             />
           </ScrollReveal>
@@ -239,14 +253,14 @@ export default async function Home() {
           </ScrollReveal>
 
           <ScrollReveal delay={200}>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight leading-tight mb-6">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-text-primary tracking-tight leading-tight mb-6">
               {hero("headlinePart1")}<br />
               <span className="text-teal">{hero("headlinePart2")}</span>
             </h1>
           </ScrollReveal>
 
           <ScrollReveal delay={300}>
-            <p className="text-base md:text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-text-secondary max-w-xl mx-auto leading-relaxed">
               {hero("subheadline")}<br className="hidden md:block" />
               {hero("subheadline2")}
             </p>
@@ -255,7 +269,7 @@ export default async function Home() {
           <ScrollReveal delay={400}>
             <a
               href="#waitlist"
-              className="inline-block mt-10 bg-teal hover:bg-teal-dark text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-colors shadow-lg shadow-teal/20"
+              className="inline-block mt-10 bg-secondary hover:bg-secondary/90 text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-colors shadow-lg shadow-secondary/20"
             >
               {hero("cta")}
             </a>
@@ -269,7 +283,7 @@ export default async function Home() {
           <ScrollReveal>
             <div className="text-center mb-14">
               <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{problem("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
                 {problem("title")}
               </h2>
             </div>
@@ -278,12 +292,12 @@ export default async function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             {problemCards.map((item, i) => (
               <ScrollReveal key={i} delay={i * 100}>
-                <div className="bg-gray-50 rounded-2xl p-6 h-full border border-gray-100">
-                  <div className="w-10 h-10 rounded-xl bg-gray-200 flex items-center justify-center text-gray-400 mb-4">
+                <div className="bg-bg-secondary rounded-2xl p-6 h-full border border-border-subtle">
+                  <div className="w-10 h-10 rounded-xl bg-bg-tertiary flex items-center justify-center text-text-muted mb-4">
                     {item.icon}
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{item.description}</p>
+                  <h3 className="font-semibold text-text-primary mb-2">{item.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">{item.description}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -306,12 +320,12 @@ export default async function Home() {
       </section>
 
       {/* ─── SOLUTION ─── */}
-      <section className="py-20 md:py-28 bg-teal-light/30">
+      <section className="py-20 md:py-28 bg-secondary-light/60">
         <div className="max-w-4xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{solution("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight max-w-2xl mx-auto">
+              <p className="text-xs font-semibold text-secondary uppercase tracking-widest mb-3">{solution("label")}</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight max-w-2xl mx-auto">
                 {solution("title")}
               </h2>
             </div>
@@ -320,11 +334,11 @@ export default async function Home() {
           <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
             {[solution("point1"), solution("point2"), solution("point3"), solution("point4")].map((point, i) => (
               <ScrollReveal key={i} delay={i * 100}>
-                <div className="flex items-start gap-3 bg-white rounded-xl p-5 border border-gray-100">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2CB5AE" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 mt-0.5">
+                <div className="flex items-start gap-3 bg-white rounded-xl p-5 border border-border-subtle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E07A45" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 mt-0.5">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  <p className="text-sm text-gray-700 font-medium">{point}</p>
+                  <p className="text-sm text-text-primary font-medium">{point}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -333,49 +347,49 @@ export default async function Home() {
       </section>
 
       {/* ─── FEATURES / CATEGORIES ─── */}
-      <section className="py-20 md:py-28 bg-gray-50">
+      <section className="py-20 md:py-28 bg-bg-secondary">
         <div className="max-w-6xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-14">
               <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{features("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight mb-4">
                 {features("title")}
               </h2>
-              <p className="text-gray-500 max-w-lg mx-auto text-sm leading-relaxed">
+              <p className="text-text-secondary max-w-lg mx-auto text-sm leading-relaxed">
                 {features("subtitle")}
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {categories.map((cat, i) => (
               <ScrollReveal key={cat.name} delay={i * 100}>
-                <div className={`${cat.lightBg} rounded-2xl p-6 h-full border border-transparent hover:border-gray-200 transition-colors`}>
+                <div className={`${cat.lightBg} rounded-2xl p-6 h-full border border-transparent hover:border-border-default transition-colors`}>
                   <div className="mb-4">{cat.icon}</div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`w-2 h-2 rounded-full ${cat.color}`} />
-                    <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                    <span className="text-xs font-semibold text-text-muted uppercase tracking-wide">
                       {cat.name}
                     </span>
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-2">{cat.label}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{cat.description}</p>
+                  <h3 className="font-bold text-text-primary mb-2">{cat.label}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">{cat.description}</p>
                 </div>
               </ScrollReveal>
             ))}
           </div>
 
           <ScrollReveal delay={400}>
-            <div className="mt-14 bg-white rounded-2xl p-8 md:p-10 border border-gray-100 text-center">
+            <div className="mt-14 bg-white rounded-2xl p-8 md:p-10 border border-border-subtle text-center">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2CB5AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
                   <line x1="8" y1="2" x2="8" y2="18" />
                   <line x1="16" y1="6" x2="16" y2="22" />
                 </svg>
-                <h3 className="font-bold text-gray-900">{features("mapFirstTitle")}</h3>
+                <h3 className="font-bold text-text-primary">{features("mapFirstTitle")}</h3>
               </div>
-              <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
+              <p className="text-sm text-text-secondary max-w-md mx-auto leading-relaxed">
                 {features("mapFirstDesc")}
               </p>
             </div>
@@ -388,8 +402,8 @@ export default async function Home() {
         <div className="max-w-4xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-14">
-              <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{howItWorks("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+              <p className="text-xs font-semibold text-secondary uppercase tracking-widest mb-3">{howItWorks("label")}</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
                 {howItWorks("title")}
               </h2>
             </div>
@@ -399,14 +413,14 @@ export default async function Home() {
             {steps.map((s, i) => (
               <ScrollReveal key={s.step} delay={i * 100}>
                 <div className="text-center">
-                  <div className="w-14 h-14 rounded-2xl bg-teal-light flex items-center justify-center mx-auto mb-4">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 ${i % 2 === 0 ? 'bg-teal-light' : 'bg-secondary-light'}`}>
                     {s.icon}
                   </div>
                   <span className="text-[10px] font-bold text-teal/60 uppercase tracking-widest">
                     Step {s.step}
                   </span>
-                  <h3 className="font-bold text-gray-900 mt-1 mb-2">{s.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{s.description}</p>
+                  <h3 className="font-bold text-text-primary mt-1 mb-2">{s.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">{s.description}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -415,12 +429,12 @@ export default async function Home() {
       </section>
 
       {/* ─── WHY ROAMI ─── */}
-      <section className="py-20 md:py-28 bg-gray-50">
+      <section className="py-20 md:py-28 bg-bg-secondary">
         <div className="max-w-4xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
               <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{whyRoami("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
                 {whyRoami("title")}
               </h2>
             </div>
@@ -429,13 +443,13 @@ export default async function Home() {
           <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
             {[whyRoami("point1"), whyRoami("point2"), whyRoami("point3"), whyRoami("point4")].map((point, i) => (
               <ScrollReveal key={i} delay={i * 100}>
-                <div className="flex items-start gap-3 bg-white rounded-xl p-5 border border-gray-100">
+                <div className="flex items-start gap-3 bg-white rounded-xl p-5 border border-border-subtle">
                   <div className="w-8 h-8 rounded-lg bg-teal-light flex items-center justify-center flex-shrink-0">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2CB5AE" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </div>
-                  <p className="text-sm text-gray-700 font-medium leading-relaxed pt-1">{point}</p>
+                  <p className="text-sm text-text-primary font-medium leading-relaxed pt-1">{point}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -444,12 +458,12 @@ export default async function Home() {
       </section>
 
       {/* ─── USE CASES ─── */}
-      <section className="py-20 md:py-28 bg-white">
+      <section className="py-20 md:py-28 bg-secondary-light/40">
         <div className="max-w-4xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{cases("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+              <p className="text-xs font-semibold text-secondary uppercase tracking-widest mb-3">{cases("label")}</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
                 {cases("title")}
               </h2>
             </div>
@@ -463,9 +477,9 @@ export default async function Home() {
               { text: cases("case4"), emoji: "📸" },
             ].map((item, i) => (
               <ScrollReveal key={i} delay={i * 100}>
-                <div className="flex items-center gap-4 bg-gray-50 rounded-xl p-5 border border-gray-100">
+                <div className="flex items-center gap-4 bg-bg-secondary rounded-xl p-5 border border-border-subtle">
                   <span className="text-2xl">{item.emoji}</span>
-                  <p className="text-sm text-gray-700 font-medium">{item.text}</p>
+                  <p className="text-sm text-text-primary font-medium">{item.text}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -474,12 +488,12 @@ export default async function Home() {
       </section>
 
       {/* ─── APP SCREENSHOTS (uncomment when ready) ───
-      <section className="py-20 md:py-28 bg-gray-50">
+      <section className="py-20 md:py-28 bg-bg-secondary">
         <div className="max-w-6xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-14">
               <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{preview("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
                 {preview("title")}
               </h2>
             </div>
@@ -490,9 +504,9 @@ export default async function Home() {
               {[1, 2, 3, 4].map((n) => (
                 <div
                   key={n}
-                  className="aspect-[9/16] bg-gray-200 rounded-2xl flex items-center justify-center border border-gray-100"
+                  className="aspect-[9/16] bg-bg-tertiary rounded-2xl flex items-center justify-center border border-border-subtle"
                 >
-                  <p className="text-sm text-gray-400 font-medium text-center px-4 whitespace-pre-line">
+                  <p className="text-sm text-text-muted font-medium text-center px-4 whitespace-pre-line">
                     {preview("placeholder")}
                   </p>
                 </div>
@@ -509,7 +523,7 @@ export default async function Home() {
           <ScrollReveal>
             <div className="text-center mb-14">
               <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{trust("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
                 {trust("title")}
               </h2>
             </div>
@@ -519,11 +533,11 @@ export default async function Home() {
             {trustPoints.map((item, i) => (
               <ScrollReveal key={i} delay={i * 100}>
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-2xl bg-teal-light flex items-center justify-center mx-auto mb-4">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 ${i % 2 === 0 ? 'bg-teal-light' : 'bg-secondary-light'}`}>
                     {item.icon}
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2 text-sm">{item.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{item.description}</p>
+                  <h3 className="font-semibold text-text-primary mb-2 text-sm">{item.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">{item.description}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -532,18 +546,18 @@ export default async function Home() {
       </section>
 
       {/* ─── WAITLIST CTA ─── */}
-      <section id="waitlist" className="py-20 md:py-28 bg-gray-50">
+      <section id="waitlist" className="py-20 md:py-28 bg-bg-secondary">
         <div className="max-w-6xl mx-auto px-6">
           <ScrollReveal>
-            <div className="bg-gradient-to-br from-teal-light/50 to-teal-light/20 rounded-3xl p-8 md:p-14">
+            <div className="bg-gradient-to-br from-secondary-light/60 to-teal-light/30 rounded-3xl p-8 md:p-14">
               <div className="text-center mb-10">
-                <span className="inline-block bg-teal/10 text-teal-dark text-xs font-semibold tracking-wide uppercase px-4 py-1.5 rounded-full mb-4">
+                <span className="inline-block bg-secondary/10 text-secondary text-xs font-semibold tracking-wide uppercase px-4 py-1.5 rounded-full mb-4">
                   {waitlist("label")}
                 </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight mb-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight mb-3">
                   {waitlist("title")}
                 </h2>
-                <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
+                <p className="text-sm text-text-secondary max-w-md mx-auto leading-relaxed">
                   {waitlist("description")}
                 </p>
               </div>
@@ -559,10 +573,10 @@ export default async function Home() {
         <div className="max-w-3xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight mb-3">
                 {faq("title")}
               </h2>
-              <p className="text-sm text-gray-500">{faq("subtitle")}</p>
+              <p className="text-sm text-text-secondary">{faq("subtitle")}</p>
             </div>
           </ScrollReveal>
 
