@@ -269,7 +269,7 @@ export default async function Home() {
           <ScrollReveal delay={400}>
             <a
               href="#waitlist"
-              className="inline-block mt-10 bg-secondary hover:bg-secondary/90 text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-colors shadow-lg shadow-secondary/20"
+              className="inline-block mt-10 bg-teal hover:bg-teal-dark text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-colors shadow-lg shadow-teal/20"
             >
               {hero("cta")}
             </a>

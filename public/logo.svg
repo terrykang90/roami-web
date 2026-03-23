@@ -3,8 +3,8 @@
   <rect x="0" y="10" width="88" height="88" rx="22" fill="#2CB5AE" opacity="0.92"/>
   <rect x="38" y="38" width="88" height="88" rx="22" fill="#E07A45" opacity="0.88"/>
 
-  <!-- Wordmark: roa (teal) + mi (orange) -->
-  <text x="155" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif" font-size="80" font-weight="700" letter-spacing="-2">
-    <tspan fill="#2CB5AE">roa</tspan><tspan fill="#E07A45">mi</tspan>
+  <!-- Wordmark: monochrome -->
+  <text x="155" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif" font-size="80" font-weight="700" letter-spacing="-2" fill="#1A1614">
+    roami
   </text>
 </svg>

@@ -35,7 +35,7 @@ export default function Header() {
           <LocaleSwitcher />
           <a
             href="#waitlist"
-            className="text-sm font-semibold text-white bg-secondary hover:bg-secondary/90 px-5 py-2 rounded-full transition-colors"
+            className="text-sm font-semibold text-white bg-teal hover:bg-teal-dark px-5 py-2 rounded-full transition-colors"
           >
             {t("waitlist")}
           </a>
@@ -81,7 +81,7 @@ export default function Header() {
           </div>
           <a
             href="#waitlist"
-            className="block text-sm font-semibold text-white bg-secondary hover:bg-secondary/90 px-5 py-2.5 rounded-full text-center transition-colors"
+            className="block text-sm font-semibold text-white bg-teal hover:bg-teal-dark px-5 py-2.5 rounded-full text-center transition-colors"
             onClick={() => setMenuOpen(false)}
           >
             {t("waitlist")}
