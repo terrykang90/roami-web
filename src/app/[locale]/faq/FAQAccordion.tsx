@@ -18,7 +18,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
           <div
             key={i}
             className={`rounded-2xl border transition-colors ${
-              isOpen ? "border-teal/20 bg-teal-light/20" : "border-gray-100 bg-white"
+              isOpen ? "border-teal/20 bg-teal-light/20" : "border-border-subtle bg-white"
             }`}
           >
             <button
@@ -26,7 +26,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
               aria-expanded={isOpen}
             >
-              <span className="text-sm font-semibold text-gray-900">{faq.question}</span>
+              <span className="text-sm font-semibold text-text-primary">{faq.question}</span>
               <svg
                 width="20"
                 height="20"
@@ -36,7 +36,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`flex-shrink-0 text-gray-400 transition-transform duration-200 ${
+                className={`flex-shrink-0 text-text-muted transition-transform duration-200 ${
                   isOpen ? "rotate-180" : ""
                 }`}
               >
@@ -50,7 +50,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               }`}
             >
               <div className="px-6 pb-5">
-                <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-line">
                   {faq.answer}
                 </p>
               </div>

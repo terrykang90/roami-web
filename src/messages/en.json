@@ -38,7 +38,7 @@
   },
   "features": {
     "label": "Features",
-    "title": "Four types of meetups on the map",
+    "title": "Five types of meetups on the map",
     "subtitle": "Eat, drink, explore. Find companions for whatever you want to do.",
     "eatLabel": "Eat together",
     "eatDesc": "Find someone to share a meal at a local restaurant. Better than eating alone.",
@@ -48,6 +48,8 @@
     "drinksDesc": "Enjoy the night with company. Share travel stories over a casual drink.",
     "activityLabel": "Activities",
     "activityDesc": "Tours, hiking, diving and more. Find companions for fun activities.",
+    "sightseeingLabel": "Sightseeing",
+    "sightseeingDesc": "Explore landmarks, take photos, and discover the city with a travel companion.",
     "mapFirstTitle": "Map-First",
     "mapFirstDesc": "Instead of scrolling through lists, see meetups around you right on the map. See where, when, and what kind of meetups are happening at a glance."
   },

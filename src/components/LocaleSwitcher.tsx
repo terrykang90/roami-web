@@ -20,7 +20,7 @@ export default function LocaleSwitcher() {
   return (
     <button
       onClick={switchLocale}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 cursor-pointer transition-colors"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-tertiary cursor-pointer transition-colors"
     >
       <svg
         width="14"

@@ -24,8 +24,8 @@ export default async function PrivacyPage() {
 function PrivacyKo() {
   return (
     <>
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">개인정보처리방침</h1>
-      <p className="text-sm text-gray-400 mb-10">최종 업데이트: 2025년 3월</p>
+      <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">개인정보처리방침</h1>
+      <p className="text-sm text-text-muted mb-10">최종 업데이트: 2025년 3월</p>
 
       <div className="prose-custom space-y-10">
         <Section title="1. 개요">
@@ -39,20 +39,20 @@ function PrivacyKo() {
 
         <Section title="2. 수집하는 개인정보">
           <p>서비스는 다음과 같은 개인정보를 수집합니다:</p>
-          <h4 className="font-semibold text-gray-900 mt-4 mb-2">필수 수집 항목</h4>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">필수 수집 항목</h4>
           <ul>
             <li>이메일 주소 (회원가입 및 로그인)</li>
             <li>닉네임 (프로필 표시)</li>
             <li>위치 정보 (지도 기반 서비스 제공)</li>
           </ul>
-          <h4 className="font-semibold text-gray-900 mt-4 mb-2">선택 수집 항목</h4>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">선택 수집 항목</h4>
           <ul>
             <li>프로필 사진</li>
             <li>자기소개</li>
             <li>관심 여행 도시</li>
             <li>여행 일정 데이터 (Roami Plan 이용 시)</li>
           </ul>
-          <h4 className="font-semibold text-gray-900 mt-4 mb-2">자동 수집 항목</h4>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">자동 수집 항목</h4>
           <ul>
             <li>기기 정보 (OS 버전, 기기 모델)</li>
             <li>앱 사용 로그 (접속 시간, 기능 사용 기록)</li>
@@ -156,8 +156,8 @@ function PrivacyKo() {
 function PrivacyEn() {
   return (
     <>
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
-      <p className="text-sm text-gray-400 mb-10">Last updated: March 2025</p>
+      <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">Privacy Policy</h1>
+      <p className="text-sm text-text-muted mb-10">Last updated: March 2025</p>
 
       <div className="prose-custom space-y-10">
         <Section title="1. Overview">
@@ -171,20 +171,20 @@ function PrivacyEn() {
 
         <Section title="2. Information We Collect">
           <p>We collect the following personal information:</p>
-          <h4 className="font-semibold text-gray-900 mt-4 mb-2">Required</h4>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">Required</h4>
           <ul>
             <li>Email address (for registration and login)</li>
             <li>Nickname (displayed on your profile)</li>
             <li>Location data (for map-based services)</li>
           </ul>
-          <h4 className="font-semibold text-gray-900 mt-4 mb-2">Optional</h4>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">Optional</h4>
           <ul>
             <li>Profile photo</li>
             <li>Bio / self-introduction</li>
             <li>Cities of interest</li>
             <li>Trip itinerary data (when using Roami Plan)</li>
           </ul>
-          <h4 className="font-semibold text-gray-900 mt-4 mb-2">Automatically Collected</h4>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">Automatically Collected</h4>
           <ul>
             <li>Device information (OS version, device model)</li>
             <li>App usage logs (access times, feature usage)</li>
@@ -286,8 +286,8 @@ function PrivacyEn() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-lg font-bold text-gray-900 mb-3">{title}</h2>
-      <div className="text-sm text-gray-600 leading-relaxed space-y-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_li]:text-gray-600">
+      <h2 className="text-lg font-bold text-text-primary mb-3">{title}</h2>
+      <div className="text-sm text-text-secondary leading-relaxed space-y-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_li]:text-text-secondary">
         {children}
       </div>
     </section>

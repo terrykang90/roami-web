@@ -24,8 +24,8 @@ export default async function TermsPage() {
 function TermsKo() {
   return (
     <>
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">이용약관</h1>
-      <p className="text-sm text-gray-400 mb-10">최종 업데이트: 2025년 3월</p>
+      <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">이용약관</h1>
+      <p className="text-sm text-text-muted mb-10">최종 업데이트: 2025년 3월</p>
 
       <div className="space-y-10">
         <Section title="제1조 (목적)">
@@ -154,8 +154,8 @@ function TermsKo() {
 function TermsEn() {
   return (
     <>
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Terms of Service</h1>
-      <p className="text-sm text-gray-400 mb-10">Last updated: March 2025</p>
+      <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">Terms of Service</h1>
+      <p className="text-sm text-text-muted mb-10">Last updated: March 2025</p>
 
       <div className="space-y-10">
         <Section title="Article 1 (Purpose)">
@@ -284,8 +284,8 @@ function TermsEn() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-lg font-bold text-gray-900 mb-3">{title}</h2>
-      <div className="text-sm text-gray-600 leading-relaxed space-y-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1.5 [&_li]:text-gray-600">
+      <h2 className="text-lg font-bold text-text-primary mb-3">{title}</h2>
+      <div className="text-sm text-text-secondary leading-relaxed space-y-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-1.5 [&_li]:text-text-secondary">
         {children}
       </div>
     </section>

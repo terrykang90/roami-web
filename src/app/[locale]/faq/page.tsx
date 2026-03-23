@@ -26,14 +26,14 @@ export default async function FAQPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
       <div className="text-center mb-12">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">{faq("title")}</h1>
-        <p className="text-sm text-gray-500">{faq("subtitle")}</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-3">{faq("title")}</h1>
+        <p className="text-sm text-text-secondary">{faq("subtitle")}</p>
       </div>
 
       <FAQAccordion faqs={faqs} />
 
-      <div className="mt-14 text-center bg-gray-50 rounded-2xl p-8">
-        <p className="text-sm text-gray-500 mb-3">{faq("contactPrompt")}</p>
+      <div className="mt-14 text-center bg-bg-secondary rounded-2xl p-8">
+        <p className="text-sm text-text-secondary mb-3">{faq("contactPrompt")}</p>
         <a
           href="mailto:hello@roami.kr"
           className="inline-block text-sm font-semibold text-teal hover:text-teal-dark transition-colors"

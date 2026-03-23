@@ -12,23 +12,23 @@ export default function Header() {
   const locale = useLocale();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border-subtle">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href={`/${locale}`} className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="Roami" width={100} height={36} />
+          <Image src="/logo.svg" alt="Roami" width={120} height={43} />
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
           <a
             href={`https://plan.roami.kr/${locale}`}
-            className="text-sm text-gray-600 hover:text-teal transition-colors"
+            className="text-sm text-text-secondary hover:text-teal transition-colors"
           >
             {t("planner")}
           </a>
           <Link
             href={`/${locale}/faq`}
-            className="text-sm text-gray-600 hover:text-teal transition-colors"
+            className="text-sm text-text-secondary hover:text-teal transition-colors"
           >
             {t("faq")}
           </Link>
@@ -43,7 +43,7 @@ export default function Header() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 text-gray-600"
+          className="md:hidden p-2 text-text-secondary"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={t("menu")}
         >
@@ -61,17 +61,17 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-3">
+        <div className="md:hidden bg-white border-t border-border-subtle px-6 py-4 space-y-3">
           <a
             href={`https://plan.roami.kr/${locale}`}
-            className="block text-sm text-gray-600 hover:text-teal py-2"
+            className="block text-sm text-text-secondary hover:text-teal py-2"
             onClick={() => setMenuOpen(false)}
           >
             {t("planner")}
           </a>
           <Link
             href={`/${locale}/faq`}
-            className="block text-sm text-gray-600 hover:text-teal py-2"
+            className="block text-sm text-text-secondary hover:text-teal py-2"
             onClick={() => setMenuOpen(false)}
           >
             {t("faq")}
