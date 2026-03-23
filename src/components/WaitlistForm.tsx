@@ -103,7 +103,6 @@ export default function WaitlistForm() {
           <option value="zh">{t("languageZh")}</option>
           <option value="th">{t("languageTh")}</option>
           <option value="ja">{t("languageJa")}</option>
-          <option value="both">{t("languageBoth")}</option>
         </select>
       </div>
 
