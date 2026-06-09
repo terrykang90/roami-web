@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "roami — Find travel meetups right on the map",
+    "title": "roami — In a new city, find your people on the map",
     "description": "Find people for food, coffee, drinks, and activities nearby while you travel. A Korean-friendly meetup app that supports Korean and English."
   },
   "nav": {
@@ -10,8 +10,8 @@
   },
   "hero": {
     "betaBadge": "Now in beta in Chiang Mai",
-    "headlinePart1": "Find travel meetups",
-    "headlinePart2": "right on the map",
+    "headlinePart1": "In a new city,",
+    "headlinePart2": "find your people on the map",
     "subheadline": "Find people for food, coffee, drinks, and activities nearby while you travel.",
     "subheadline2": "A Korean-friendly meetup app that supports Korean and English.",
     "cta": "Join the waitlist",
@@ -23,7 +23,7 @@
   },
   "problem": {
     "label": "Problem",
-    "title": "Still finding travel meetups the hard way?",
+    "title": "Still meeting people the hard way in a new city?",
     "card1Title": "Group chats",
     "card1Desc": "There are lots of messages, but it is hard to tell who is free, where to meet, and when.",
     "card2Title": "Community posts",
@@ -162,7 +162,7 @@
     "a7": "We're working hard on development and launching soon. When the date is set, waitlist members will be the first to know."
   },
   "footer": {
-    "tagline": "Find travel meetups right on the map",
+    "tagline": "In a new city, find your people on the map",
     "services": "Services",
     "faqLink": "FAQ",
     "legal": "Legal",
