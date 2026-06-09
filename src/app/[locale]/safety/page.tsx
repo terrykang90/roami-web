@@ -3,11 +3,18 @@ import { getLocale } from "next-intl/server";
 export async function generateMetadata() {
   const locale = await getLocale();
   return {
-    title: locale === "ko" ? "커뮤니티·안전 수칙 — roami" : "Community & Safety Guidelines — roami",
+    title:
+      locale === "ko"
+        ? "커뮤니티·안전 수칙 — roami"
+        : locale === "th"
+          ? "แนวทางชุมชนและความปลอดภัย — roami"
+          : "Community & Safety Guidelines — roami",
     description:
       locale === "ko"
         ? "roami를 안전하게 이용하기 위한 커뮤니티·안전 수칙입니다."
-        : "Community and safety guidelines for using roami safely.",
+        : locale === "th"
+          ? "แนวทางชุมชนและความปลอดภัยสำหรับการใช้ roami อย่างปลอดภัย"
+          : "Community and safety guidelines for using roami safely.",
   };
 }
 
@@ -16,7 +23,7 @@ export default async function SafetyPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
-      {locale === "ko" ? <SafetyKo /> : <SafetyEn />}
+      {locale === "ko" ? <SafetyKo /> : locale === "th" ? <SafetyTh /> : <SafetyEn />}
     </div>
   );
 }
@@ -152,6 +159,75 @@ function SafetyEn() {
           <p>
             Violations may lead to restrictions under the Terms of Service.
             Report via the in-app tools or hello@roami.kr; for emergencies, contact local police.
+          </p>
+        </Section>
+      </div>
+    </>
+  );
+}
+
+function SafetyTh() {
+  return (
+    <>
+      <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">แนวทางชุมชนและความปลอดภัย</h1>
+      <p className="text-sm text-text-muted mb-10">อัปเดตล่าสุด: มิถุนายน 2026</p>
+
+      <div className="space-y-10">
+        <p className="text-sm text-text-secondary leading-relaxed">
+          roami เชื่อมต่อนักเดินทางและคนท้องถิ่นที่มาเจอกันตัวจริง ทุกมีตอัปเป็นการพบปะโดยสมัครใจระหว่างผู้ใช้
+          และความปลอดภัยมาเป็นอันดับแรก โปรดปฏิบัติตามแนวทางต่อไปนี้
+        </p>
+
+        <Section title="1. ก่อนไปเจอ">
+          <ul>
+            <li>เจอกันครั้งแรกในที่สาธารณะที่มีคนพลุกพล่าน</li>
+            <li>แชทในแอปก่อนเพื่อทำความรู้จักอีกฝ่าย</li>
+            <li>บอกเพื่อนหรือครอบครัวว่าจะเจอใคร เมื่อไหร่ และที่ไหน</li>
+            <li>ถ้าโปรไฟล์หรือบทสนทนารู้สึกไม่ปกติ อย่าไปเจอ</li>
+          </ul>
+        </Section>
+
+        <Section title="2. ระหว่างมีตอัป">
+          <ul>
+            <li>เตรียมการเดินทางของตัวเองเพื่อให้กลับได้ทุกเมื่อ</li>
+            <li>ระวังเครื่องดื่มและของมีค่า อย่าดื่มมากเกินไปในมีตอัปดื่ม</li>
+            <li>ถ้ารู้สึกอึดอัดหรือไม่ปลอดภัย ออกจากที่นั่นทันที เชื่อสัญชาตญาณของตัวเอง</li>
+            <li>เมื่อเดินทาง ควรรู้เบอร์ฉุกเฉินในพื้นที่ล่วงหน้า</li>
+          </ul>
+        </Section>
+
+        <Section title="3. ข้อมูลส่วนตัวและเงิน">
+          <ul>
+            <li>อย่าแชร์ข้อมูลอ่อนไหว เช่น ที่อยู่บ้าน ข้อมูลการเงิน หรือบัตรประชาชน</li>
+            <li>การขอเงิน โอนเงิน หรือชวนลงทุน เป็นสัญญาณหลอกลวง ให้ปฏิเสธและรายงาน</li>
+            <li>ระวังหากมีคนพยายามชวนไปคุยนอกแอปหรือเว็บอื่น</li>
+          </ul>
+        </Section>
+
+        <Section title="4. การเคารพและการรายงาน">
+          <ul>
+            <li>ห้ามใช้คำหยาบ เลือกปฏิบัติ คุกคาม หรือล่วงละเมิดทางเพศ ผู้ฝ่าฝืนจะถูกจำกัดการใช้งาน</li>
+            <li>ใช้ฟีเจอร์รายงานและบล็อกในแอปกับผู้ที่ทำให้อึดอัดหรือเป็นอันตราย</li>
+            <li>หากเป็นอาชญากรรมหรืออันตรายเฉพาะหน้า ติดต่อตำรวจในพื้นที่ (เบอร์ฉุกเฉิน) ก่อน</li>
+          </ul>
+        </Section>
+
+        <Section title="5. สำหรับโฮสต์">
+          <ul>
+            <li>เขียนรายละเอียดมีตอัปให้ถูกต้องและเลือกสถานที่ปลอดภัย</li>
+            <li>ตรวจสอบคำขอเข้าร่วมก่อนอนุมัติ</li>
+            <li>หากแผนเปลี่ยน แจ้งผู้เข้าร่วมล่วงหน้า</li>
+          </ul>
+        </Section>
+
+        <Section title="6. การคุ้มครองผู้เยาว์">
+          <p>ผู้ที่อายุต่ำกว่า 14 ปีไม่สามารถใช้บริการได้ และห้ามมีพฤติกรรมไม่เหมาะสมต่อผู้เยาว์โดยเด็ดขาด</p>
+        </Section>
+
+        <Section title="การรายงานและติดต่อ">
+          <p>
+            การฝ่าฝืนอาจนำไปสู่การจำกัดการใช้งานตามข้อกำหนดการใช้งาน
+            รายงานผ่านฟีเจอร์ในแอปหรือ hello@roami.kr กรณีฉุกเฉินติดต่อตำรวจในพื้นที่
           </p>
         </Section>
       </div>

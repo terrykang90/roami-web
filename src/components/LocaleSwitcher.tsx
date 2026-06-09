@@ -8,12 +8,15 @@ export default function LocaleSwitcher() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const otherLocale = locale === "ko" ? "en" : "ko";
-  const label = locale === "ko" ? "EN" : "한국어";
+  // Cycle ko → en → th → ko. The button shows the language it switches to.
+  const locales = ["ko", "en", "th"] as const;
+  const labels: Record<string, string> = { ko: "한국어", en: "EN", th: "ไทย" };
+  const nextLocale = locales[(locales.indexOf(locale as (typeof locales)[number]) + 1) % locales.length];
+  const label = labels[nextLocale];
 
   function switchLocale() {
     const segments = pathname.split("/");
-    segments[1] = otherLocale;
+    segments[1] = nextLocale;
     router.push(segments.join("/"));
   }
 
