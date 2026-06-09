@@ -304,10 +304,7 @@ export default async function Home() {
                   <span className="block text-sm font-bold">{hero("iosCta")}</span>
                 </span>
               </a>
-              <div
-                aria-disabled="true"
-                className="inline-flex items-center gap-2.5 bg-white border-[1.5px] border-border-subtle text-text-muted px-5 py-3 rounded-2xl cursor-not-allowed select-none"
-              >
+              <div className="inline-flex items-center gap-2.5 bg-white border-[1.5px] border-border-subtle text-text-muted px-5 py-3 rounded-2xl select-none">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.86 3.23a11.5 11.5 0 0 0-9.78 0L5.25 5.9a.4.4 0 1 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
                 </svg>
@@ -347,7 +344,7 @@ export default async function Home() {
               {SHOTS.map((s) => (
                 <div
                   key={s.screen}
-                  className={`relative flex-none snap-center md:transition-transform md:duration-300 md:hover:[transform:translateY(-12px)_scale(1.08)] md:hover:z-[9] ${s.fan} ${
+                  className={`relative flex-none snap-center md:transition-transform md:duration-300 md:hover:z-20 ${s.fan} ${
                     s.hero ? "w-[200px] md:w-[200px]" : "w-[188px] md:w-[200px]"
                   }`}
                 >
@@ -356,20 +353,24 @@ export default async function Home() {
                       🌐 {preview("chatTag")}
                     </span>
                   )}
+                  {/* Lift on hover lives here (not the parent) so it composes with the fan transform instead of overwriting it. */}
                   <div
-                    className={`rounded-[2.2rem] bg-[#0E0C0B] p-2 ${
+                    className={`rounded-[2.2rem] bg-[#0E0C0B] p-2 md:transition-transform md:duration-300 md:hover:-translate-y-3 md:hover:scale-[1.03] ${
                       s.hero ? "shadow-2xl shadow-teal/25" : "shadow-xl shadow-black/15"
                     }`}
                   >
-                    <div className="overflow-hidden rounded-[1.7rem] bg-white">
+                    {/* Fixed aspect reserves layout space before the lazy image decodes (no CLS). */}
+                    <div className="overflow-hidden rounded-[1.7rem] bg-white aspect-[1179/2556]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`/screenshots/shot-${s.screen}-${
                           SHOT_LOCALES.includes(locale) ? locale : "ko"
                         }.png`}
                         alt={s.alt}
+                        width={1179}
+                        height={2556}
                         loading="lazy"
-                        className="block w-full h-auto"
+                        className="block w-full h-full object-cover"
                       />
                     </div>
                   </div>
