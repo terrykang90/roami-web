@@ -5,8 +5,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
-// TestFlight public beta link. Replace with the real testflight.apple.com/join/XXXX URL.
-const TESTFLIGHT_URL = "https://testflight.apple.com/join/REPLACE_ME";
+// TestFlight public beta link (Chiang Mai beta).
+const TESTFLIGHT_URL = "https://testflight.apple.com/join/AU2THE4z";
 
 export default async function Home() {
   const locale = await getLocale();
