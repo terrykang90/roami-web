@@ -88,6 +88,8 @@
   "preview": {
     "label": "Preview",
     "title": "App preview",
+    "subtitle": "Find meetups on the map and chat across languages with built-in translation.",
+    "chatTag": "Live translation",
     "placeholder": "App screenshots\ncoming soon"
   },
   "trust": {
