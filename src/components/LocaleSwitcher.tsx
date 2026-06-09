@@ -33,7 +33,10 @@ export default function LocaleSwitcher() {
     if (code === locale) return;
     const segments = pathname.split("/");
     segments[1] = code;
-    router.push(segments.join("/"));
+    // Preserve query + hash so locale switches keep UTM params and section anchors.
+    const suffix =
+      typeof window !== "undefined" ? window.location.search + window.location.hash : "";
+    router.push(segments.join("/") + suffix);
   }
 
   return (

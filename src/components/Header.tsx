@@ -27,12 +27,12 @@ export default function Header() {
             {t("faq")}
           </Link>
           <LocaleSwitcher />
-          <a
-            href="#waitlist"
+          <Link
+            href={`/${locale}#waitlist`}
             className="text-sm font-semibold text-white bg-teal hover:bg-teal-dark px-5 py-2 rounded-full transition-colors"
           >
             {t("waitlist")}
-          </a>
+          </Link>
         </nav>
 
         {/* Mobile hamburger */}
@@ -66,13 +66,13 @@ export default function Header() {
           <div className="py-2">
             <LocaleSwitcher />
           </div>
-          <a
-            href="#waitlist"
+          <Link
+            href={`/${locale}#waitlist`}
             className="block text-sm font-semibold text-white bg-teal hover:bg-teal-dark px-5 py-2.5 rounded-full text-center transition-colors"
             onClick={() => setMenuOpen(false)}
           >
             {t("waitlist")}
-          </a>
+          </Link>
         </div>
       )}
     </header>
