@@ -239,7 +239,7 @@ export default async function Home() {
           <ScrollReveal>
             <Image
               src="/icon.svg"
-              alt="Roami"
+              alt="roami"
               width={100}
               height={100}
               className="mx-auto mb-6"
