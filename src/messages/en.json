@@ -9,12 +9,17 @@
     "menu": "Menu"
   },
   "hero": {
-    "comingSoon": "Coming Soon",
+    "betaBadge": "Now in beta in Chiang Mai",
     "headlinePart1": "Find travel meetups",
     "headlinePart2": "right on the map",
     "subheadline": "Find people for food, coffee, drinks, and activities nearby while you travel.",
     "subheadline2": "A Korean-friendly meetup app that supports Korean and English.",
-    "cta": "Join the waitlist"
+    "cta": "Join the waitlist",
+    "iosTagline": "iOS beta",
+    "iosCta": "Get it on TestFlight",
+    "androidCta": "Android coming soon",
+    "waitlistPrefix": "Outside Chiang Mai?",
+    "waitlistLink": "Join the waitlist for launch updates →"
   },
   "problem": {
     "label": "Problem",

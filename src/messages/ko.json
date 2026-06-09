@@ -9,12 +9,17 @@
     "menu": "메뉴"
   },
   "hero": {
-    "comingSoon": "Coming Soon",
+    "betaBadge": "치앙마이에서 베타 운영 중",
     "headlinePart1": "여행 모임,",
     "headlinePart2": "지도에서 바로 찾기",
     "subheadline": "여행지에서 함께 밥 먹을 사람, 카페 갈 사람, 한잔할 사람을 지도 위에서 바로 찾아보세요.",
     "subheadline2": "한국어와 영어로 쉽게 연결할 수 있어요.",
-    "cta": "사전 등록하기"
+    "cta": "사전 등록하기",
+    "iosTagline": "iOS 베타",
+    "iosCta": "TestFlight로 받기",
+    "androidCta": "Android 곧 출시",
+    "waitlistPrefix": "치앙마이 밖이신가요?",
+    "waitlistLink": "사전 등록하고 오픈 알림 받기 →"
   },
   "problem": {
     "label": "Problem",
