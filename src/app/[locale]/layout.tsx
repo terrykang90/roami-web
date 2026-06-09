@@ -30,13 +30,13 @@ export async function generateMetadata({
     description: t("description"),
     keywords:
       locale === "ko"
-        ? ["여행", "동행", "여행 동행", "travel meetup", "roami", "지도"]
-        : ["travel", "meetup", "travel companions", "nearby meetup", "roami", "map"],
+        ? ["여행", "모임", "여행 모임", "travel meetup", "roami", "지도"]
+        : ["travel", "meetup", "travel meetups", "nearby meetup", "roami", "map"],
     openGraph: {
       title: t("title"),
       description: t("description"),
       url: "https://roami.kr",
-      siteName: "Roami",
+      siteName: "roami",
       locale: locale === "ko" ? "ko_KR" : "en_US",
       type: "website",
     },

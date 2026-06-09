@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           <div>
-            <Image src="/logo.svg" alt="Roami" width={130} height={46} />
+            <Image src="/logo.svg" alt="roami" width={130} height={46} />
             <p className="text-sm text-text-muted mt-2">{t("tagline")}</p>
           </div>
 
@@ -21,14 +21,6 @@ export default function Footer() {
             <div>
               <h4 className="text-sm font-semibold text-text-primary mb-3">{t("services")}</h4>
               <ul className="space-y-2">
-                <li>
-                  <a
-                    href={`https://plan.roami.kr/${locale}`}
-                    className="text-sm text-text-secondary hover:text-teal transition-colors"
-                  >
-                    {t("planner")}
-                  </a>
-                </li>
                 <li>
                   <Link
                     href={`/${locale}/faq`}
@@ -58,6 +50,14 @@ export default function Footer() {
                     {t("terms")}
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href={`/${locale}/safety`}
+                    className="text-sm text-text-secondary hover:text-teal transition-colors"
+                  >
+                    {t("safety")}
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -78,7 +78,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-border-default">
           <p className="text-xs text-text-muted text-center">
-            &copy; {new Date().getFullYear()} Roami. All rights reserved.
+            &copy; {new Date().getFullYear()} roami. All rights reserved.
           </p>
         </div>
       </div>

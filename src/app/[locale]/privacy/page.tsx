@@ -1,13 +1,13 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 
 export async function generateMetadata() {
   const locale = await getLocale();
   return {
-    title: locale === "ko" ? "개인정보처리방침 — Roami" : "Privacy Policy — Roami",
+    title: locale === "ko" ? "개인정보처리방침 — roami" : "Privacy Policy — roami",
     description:
       locale === "ko"
-        ? "Roami 앱의 개인정보처리방침입니다."
-        : "Privacy Policy for the Roami app.",
+        ? "roami 앱의 개인정보처리방침입니다."
+        : "Privacy Policy for the roami app.",
   };
 }
 
@@ -25,127 +25,144 @@ function PrivacyKo() {
   return (
     <>
       <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">개인정보처리방침</h1>
-      <p className="text-sm text-text-muted mb-10">최종 업데이트: 2025년 3월</p>
+      <p className="text-sm text-text-muted mb-10">최종 업데이트: 2026년 6월</p>
 
       <div className="prose-custom space-y-10">
         <Section title="1. 개요">
           <p>
-            Roami(이하 &ldquo;서비스&rdquo;)는 개인 개발자가 운영하는 모바일 앱 및 웹 서비스로,
-            여행 중 동행을 찾을 수 있는 지도 기반 매칭 서비스(Roami)와
-            AI 기반 여행 일정 플래너(Roami Plan)를 제공합니다.
-            본 개인정보처리방침은 서비스 이용 과정에서 수집되는 개인정보의 처리에 관한 사항을 안내합니다.
+            roami(이하 &ldquo;서비스&rdquo;)는 개인 개발자가 운영하는 모바일 앱 및 웹 서비스로,
+            여행자와 현지인이 지도 기반으로 모임(meetup)을 만들고 참여하는 다국어 매칭 서비스를 제공합니다.
+            본 방침은 서비스 이용 과정에서 수집·이용·제공되는 개인정보의 처리에 관한 사항을 안내합니다.
           </p>
         </Section>
 
         <Section title="2. 수집하는 개인정보">
-          <p>서비스는 다음과 같은 개인정보를 수집합니다:</p>
           <h4 className="font-semibold text-text-primary mt-4 mb-2">필수 수집 항목</h4>
           <ul>
-            <li>이메일 주소 (회원가입 및 로그인)</li>
+            <li>이메일 주소 (소셜 로그인 — Google 또는 Apple 계정 연동)</li>
             <li>닉네임 (프로필 표시)</li>
             <li>위치 정보 (지도 기반 서비스 제공)</li>
           </ul>
           <h4 className="font-semibold text-text-primary mt-4 mb-2">선택 수집 항목</h4>
           <ul>
-            <li>프로필 사진</li>
-            <li>자기소개</li>
-            <li>관심 여행 도시</li>
-            <li>여행 일정 데이터 (Roami Plan 이용 시)</li>
+            <li>프로필 사진 및 추가 사진</li>
+            <li>자기소개(bio), 국적, 생년월일·성별</li>
+            <li>구사 언어 및 선호 언어, 관심 여행 도시</li>
+          </ul>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">서비스 이용 과정에서 생성되는 정보</h4>
+          <ul>
+            <li>모임 제목·설명, 모임 장소(정확/표시용 좌표)</li>
+            <li>채팅 메시지 (텍스트·이미지·위치 공유 포함)</li>
+            <li>커뮤니티(Hub) 게시글·댓글, 호스트 리뷰</li>
+            <li>관심 핀, 신고·차단 내역, 알림 구독(도시/주변) 정보</li>
           </ul>
           <h4 className="font-semibold text-text-primary mt-4 mb-2">자동 수집 항목</h4>
           <ul>
-            <li>기기 정보 (OS 버전, 기기 모델)</li>
+            <li>기기 정보 (OS 버전, 기기 모델), 푸시 알림 토큰</li>
             <li>앱 사용 로그 (접속 시간, 기능 사용 기록)</li>
-            <li>위치 데이터 (서비스 이용 시 동의한 경우)</li>
+            <li>정확한 위치 좌표 (위치 동의 시)</li>
+            <li>오류·진단 로그 (앱 안정성 분석)</li>
           </ul>
         </Section>
 
         <Section title="3. 개인정보의 이용 목적">
-          <p>수집된 개인정보는 다음 목적으로 이용됩니다:</p>
           <ul>
             <li>회원 관리 및 본인 확인</li>
-            <li>동행 매칭 서비스 제공 (지도 기반 모임 표시 및 참여)</li>
-            <li>AI 기반 여행 일정 생성 및 관리 (Roami Plan)</li>
+            <li>모임 매칭 서비스 제공 (지도 기반 표시 및 참여)</li>
+            <li>다국어 번역 제공 (모임·채팅·게시글)</li>
+            <li>채팅 및 커뮤니티 기능 제공</li>
+            <li>알림 전달, 안전 관리(신고·차단), 부정 이용 방지</li>
             <li>서비스 개선 및 신규 기능 개발</li>
-            <li>서비스 관련 공지사항 및 알림 전달</li>
-            <li>부정 이용 방지 및 서비스 안전 관리</li>
           </ul>
         </Section>
 
-        <Section title="4. 개인정보의 제3자 제공">
+        <Section title="4. 개인정보 처리의 위탁 및 제3자 제공">
           <p>
-            서비스는 원칙적으로 이용자의 개인정보를 제3자에게 제공하지 않습니다.
-            다만, 다음의 경우에는 예외로 합니다:
+            서비스는 기능 제공을 위해 아래 외부 처리자(수탁사)에 일부 개인정보·콘텐츠를 위탁합니다.
+            이용자의 개인정보를 마케팅 목적으로 제3자에게 판매·제공하지 않습니다.
           </p>
-          <ul>
-            <li>이용자가 사전에 동의한 경우</li>
-            <li>법령에 의해 요구되는 경우</li>
-            <li>서비스 제공을 위해 필요한 최소한의 정보를 동행 참가자 간에 공유하는 경우 (닉네임, 프로필 사진 등)</li>
-          </ul>
-        </Section>
-
-        <Section title="5. 개인정보의 보관 및 파기">
+          <LegalTable
+            head={["수탁사 (소재 국가)", "위탁 항목", "목적"]}
+            rows={[
+              ["DeepSeek (중국)", "모임 제목·설명, 채팅 메시지, 게시글·댓글, 자기소개 등 텍스트", "다국어 번역 (기본)"],
+              ["Google Cloud Translation (미국)", "채팅 메시지 텍스트", "번역 (보조)"],
+              ["Google / Firebase Cloud Messaging (미국)", "기기 푸시 토큰, 알림 제목·내용", "푸시 알림 발송"],
+              ["Google Cloud Platform · Storage (미국/아시아)", "서비스 데이터, 업로드 이미지", "서버 호스팅 및 이미지 저장"],
+              ["Google · Apple (미국)", "로그인 토큰 (이메일, 계정 식별자)", "소셜 로그인 인증"],
+              ["Mapbox (미국)", "위치 정보, 지도 이용 데이터", "지도 표시"],
+              ["Sentry (미국)", "오류·진단 로그, 기기 정보", "앱 오류 분석"],
+            ]}
+          />
           <p>
-            개인정보는 서비스 이용 기간 동안 보관되며, 회원 탈퇴 시 즉시 파기됩니다.
-            다만, 관련 법령에 따라 보존할 필요가 있는 경우 해당 기간 동안 보관됩니다:
+            또한 서비스 제공을 위해 필요한 최소한의 정보(닉네임, 프로필 사진, 국적 등)는 모임 참가자 간에 공유되며,
+            법령에 따라 요구되는 경우 관계기관에 제공될 수 있습니다.
           </p>
+        </Section>
+
+        <Section title="5. 개인정보의 국외 이전">
+          <p>위 수탁사 중 일부는 국외에 소재하여, 서비스 이용 시 개인정보·콘텐츠가 국외로 이전됩니다.</p>
           <ul>
-            <li>계약 또는 청약철회 등에 관한 기록: 5년</li>
-            <li>소비자의 불만 또는 분쟁처리에 관한 기록: 3년</li>
-            <li>접속 로그: 3개월</li>
+            <li><b>이전받는 자 / 국가:</b> 위 4항 표 기재 (미국·중국 등)</li>
+            <li><b>이전 항목:</b> 4항 표의 위탁 항목과 동일</li>
+            <li><b>이전 시점 및 방법:</b> 해당 기능 이용 시점에 암호화된 통신(TLS)으로 전송</li>
+            <li><b>이용 목적·보유 기간:</b> 각 수탁사의 처리 목적 달성 시까지 (번역 결과는 서비스 내 저장)</li>
+          </ul>
+          <p>이용자는 위치 동의 해제, 자동 번역 비활성화, 회원 탈퇴 등을 통해 국외 이전을 제한할 수 있습니다.</p>
+        </Section>
+
+        <Section title="6. 개인정보의 보관 및 파기">
+          <p>개인정보는 서비스 이용 기간 동안 보관되며, 회원 탈퇴 시 지체 없이 파기합니다. 다만 다음의 경우 예외로 합니다:</p>
+          <ul>
+            <li>공개 커뮤니티 게시글·리뷰 등 다른 이용자와 연관된 콘텐츠는 익명화 또는 삭제 처리</li>
+            <li>신고·차단 등 안전·분쟁 관련 기록은 분쟁 대응 목적으로 일정 기간 보관 후 파기</li>
+            <li>법령에 따른 보존: 계약/청약철회 기록 5년, 소비자 분쟁 기록 3년, 접속 로그 3개월</li>
           </ul>
         </Section>
 
-        <Section title="6. 개인정보의 안전성 확보 조치">
-          <p>서비스는 개인정보의 안전성 확보를 위해 다음 조치를 시행합니다:</p>
+        <Section title="7. 개인정보의 안전성 확보 조치">
           <ul>
-            <li>개인정보의 암호화 (전송 시 TLS/SSL, 저장 시 암호화)</li>
-            <li>접근 권한 관리</li>
-            <li>정기적인 보안 점검</li>
+            <li>전송 구간 암호화(TLS/SSL) 및 저장 데이터 보호</li>
+            <li>접근 권한 관리 및 최소 수집 원칙</li>
+            <li>지도 표시 시 모임 위치 좌표 일부를 흐리게 처리하여 정확한 위치 노출 최소화</li>
           </ul>
         </Section>
 
-        <Section title="7. 이용자의 권리">
-          <p>이용자는 다음과 같은 권리를 행사할 수 있습니다:</p>
+        <Section title="8. 이용자의 권리">
           <ul>
-            <li>개인정보 열람 요청</li>
-            <li>개인정보 정정 및 삭제 요청</li>
-            <li>개인정보 처리 정지 요청</li>
+            <li>개인정보 열람·정정·삭제·처리정지 요청</li>
             <li>회원 탈퇴 (앱 내 설정에서 직접 가능)</li>
+            <li>위치·알림·자동 번역 동의 철회 (앱/기기 설정)</li>
           </ul>
+          <p>권리 행사는 앱 내 설정 또는 이메일(hello@roami.kr)로 요청할 수 있습니다.</p>
+        </Section>
+
+        <Section title="9. 위치 정보">
           <p>
-            위 권리 행사는 앱 내 설정 또는 이메일(hello@roami.kr)을 통해 요청할 수 있습니다.
+            서비스는 지도 기반 모임 매칭을 위해 정확한 위치 좌표를 수집하며, 앱 사용 중에만 수집합니다.
+            위치 정보는 동의 하에 수집되고 앱·기기 설정에서 언제든 비활성화할 수 있습니다.
+            모임의 정확한 위치는 호스트가 설정하며, 지도에는 보호를 위해 근사 좌표로 표시됩니다.
           </p>
         </Section>
 
-        <Section title="8. 위치 정보">
+        <Section title="10. 아동의 개인정보">
+          <p>서비스는 만 14세 미만 아동의 가입을 허용하지 않으며, 해당 연령 미만의 개인정보를 수집하지 않습니다.</p>
+        </Section>
+
+        <Section title="11. 쿠키 및 추적 기술">
           <p>
-            서비스는 지도 기반 동행 매칭을 위해 위치 정보를 수집합니다.
-            위치 정보는 이용자의 동의 하에 수집되며, 앱 설정 또는 기기 설정에서 언제든지 비활성화할 수 있습니다.
-            수집된 위치 정보는 동행 검색 및 모임 장소 표시 목적으로만 사용됩니다.
+            모바일 앱은 광고 식별자(IDFA 등)나 제3자 광고·추적 SDK를 사용하지 않습니다.
+            웹사이트의 경우 필수 기능을 위해 최소한의 쿠키를 사용할 수 있습니다.
           </p>
         </Section>
 
-        <Section title="9. 쿠키 및 추적 기술">
-          <p>
-            모바일 앱에서는 쿠키를 사용하지 않습니다. 웹사이트의 경우, 필수적인 기능을 위해
-            최소한의 쿠키를 사용할 수 있습니다.
-          </p>
+        <Section title="12. 개인정보 보호책임자 및 문의">
+          <ul><li>이메일: hello@roami.kr</li></ul>
         </Section>
 
-        <Section title="10. 개인정보 보호책임자">
+        <Section title="13. 방침 변경">
           <p>
-            개인정보 처리에 관한 문의사항은 아래로 연락해 주시기 바랍니다.
-          </p>
-          <ul>
-            <li>이메일: hello@roami.kr</li>
-          </ul>
-        </Section>
-
-        <Section title="11. 방침 변경">
-          <p>
-            본 개인정보처리방침은 법령 및 서비스 변경에 따라 수정될 수 있으며,
-            변경 시 앱 내 공지 또는 이메일을 통해 안내합니다.
+            본 방침은 법령 및 서비스 변경에 따라 수정될 수 있으며,
+            중요한 변경 시 앱 내 공지 또는 이메일로 안내합니다.
           </p>
         </Section>
       </div>
@@ -157,125 +174,147 @@ function PrivacyEn() {
   return (
     <>
       <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">Privacy Policy</h1>
-      <p className="text-sm text-text-muted mb-10">Last updated: March 2025</p>
+      <p className="text-sm text-text-muted mb-10">Last updated: June 2026</p>
 
       <div className="prose-custom space-y-10">
         <Section title="1. Overview">
           <p>
-            Roami (the &ldquo;Service&rdquo;) is a mobile app and web service operated by an independent developer.
-            It provides a map-based companion matching service for travelers (Roami) and
-            an AI-powered trip planner (Roami Plan).
-            This Privacy Policy explains how we collect, use, and protect your personal information.
+            roami (the &ldquo;Service&rdquo;) is a mobile app and web service operated by an independent developer.
+            It provides a map-based, multilingual matching service where travelers and locals create and join meetups.
+            This Privacy Policy explains how we collect, use, share, and protect your personal information.
           </p>
         </Section>
 
         <Section title="2. Information We Collect">
-          <p>We collect the following personal information:</p>
           <h4 className="font-semibold text-text-primary mt-4 mb-2">Required</h4>
           <ul>
-            <li>Email address (for registration and login)</li>
-            <li>Nickname (displayed on your profile)</li>
+            <li>Email address (via social login &mdash; Google or Apple)</li>
+            <li>Nickname (shown on your profile)</li>
             <li>Location data (for map-based services)</li>
           </ul>
           <h4 className="font-semibold text-text-primary mt-4 mb-2">Optional</h4>
           <ul>
-            <li>Profile photo</li>
-            <li>Bio / self-introduction</li>
-            <li>Cities of interest</li>
-            <li>Trip itinerary data (when using Roami Plan)</li>
+            <li>Profile photo and additional photos</li>
+            <li>Bio, nationality, date of birth, gender</li>
+            <li>Spoken &amp; preferred languages, cities of interest</li>
           </ul>
-          <h4 className="font-semibold text-text-primary mt-4 mb-2">Automatically Collected</h4>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">Generated through use of the Service</h4>
           <ul>
-            <li>Device information (OS version, device model)</li>
+            <li>Meetup titles/descriptions and location (exact/display coordinates)</li>
+            <li>Chat messages (including images and shared location)</li>
+            <li>Community (Hub) posts &amp; comments, host reviews</li>
+            <li>Interest pins, reports/blocks, alert subscriptions (city/nearby)</li>
+          </ul>
+          <h4 className="font-semibold text-text-primary mt-4 mb-2">Automatically collected</h4>
+          <ul>
+            <li>Device info (OS version, model), push notification token</li>
             <li>App usage logs (access times, feature usage)</li>
-            <li>Location data (when you have granted permission)</li>
+            <li>Precise location coordinates (with your permission)</li>
+            <li>Error/diagnostic logs (app stability)</li>
           </ul>
         </Section>
 
         <Section title="3. How We Use Your Information">
-          <p>We use the collected information for the following purposes:</p>
           <ul>
             <li>Account management and identity verification</li>
-            <li>Providing the companion matching service (displaying and joining meetups on the map)</li>
-            <li>AI-powered trip planning and management (Roami Plan)</li>
+            <li>Providing the meetup matching service (map display and participation)</li>
+            <li>Multilingual translation (meetups, chat, posts)</li>
+            <li>Chat and community features</li>
+            <li>Notifications, safety (reports/blocks), and misuse prevention</li>
             <li>Service improvement and new feature development</li>
-            <li>Sending service-related notices and notifications</li>
-            <li>Preventing misuse and maintaining service safety</li>
           </ul>
         </Section>
 
-        <Section title="4. Sharing with Third Parties">
+        <Section title="4. Processors &amp; Third-Party Sharing">
           <p>
-            We do not share your personal information with third parties, except in the following cases:
+            To provide its features, the Service entrusts certain personal information and content to the external
+            processors below. We do not sell your personal information or share it with third parties for marketing.
+          </p>
+          <LegalTable
+            head={["Processor (location)", "Data shared", "Purpose"]}
+            rows={[
+              ["DeepSeek (China)", "Text from meetup titles/descriptions, chat messages, posts/comments, bios", "Translation (primary)"],
+              ["Google Cloud Translation (USA)", "Chat message text", "Translation (fallback)"],
+              ["Google / Firebase Cloud Messaging (USA)", "Push token, notification title/body", "Push notifications"],
+              ["Google Cloud Platform · Storage (USA/Asia)", "Service data, uploaded images", "Hosting & image storage"],
+              ["Google · Apple (USA)", "Login token (email, account ID)", "Social login auth"],
+              ["Mapbox (USA)", "Location, map usage data", "Map rendering"],
+              ["Sentry (USA)", "Error/diagnostic logs, device info", "Crash analysis"],
+            ]}
+          />
+          <p>
+            Minimal information needed to provide the service (nickname, profile photo, nationality, etc.) is shared
+            between meetup participants, and information may be disclosed to authorities where required by law.
+          </p>
+        </Section>
+
+        <Section title="5. International Data Transfers">
+          <p>
+            Some processors above are located outside your country, so your information may be transferred
+            internationally when you use the Service.
           </p>
           <ul>
-            <li>When you have given prior consent</li>
-            <li>When required by law</li>
-            <li>When minimal information (nickname, profile photo, etc.) is shared between meetup participants to provide the service</li>
+            <li><b>Recipients / countries:</b> as listed in Section 4 (USA, China, etc.)</li>
+            <li><b>Data transferred:</b> same as the Section 4 table</li>
+            <li><b>When &amp; how:</b> at the time you use the feature, over encrypted (TLS) connections</li>
+            <li><b>Purpose &amp; retention:</b> until each processor&apos;s purpose is fulfilled (translations are stored within the Service)</li>
           </ul>
+          <p>You can limit these transfers by disabling location, turning off auto-translation, or deleting your account.</p>
         </Section>
 
-        <Section title="5. Data Retention and Deletion">
-          <p>
-            Personal information is retained while you use the service and is deleted immediately upon account deletion.
-            However, certain records may be retained as required by applicable law:
-          </p>
+        <Section title="6. Data Retention and Deletion">
+          <p>Personal information is retained while you use the Service and deleted without delay upon account deletion, except:</p>
           <ul>
-            <li>Records related to contracts or withdrawal: 5 years</li>
-            <li>Records related to consumer complaints or disputes: 3 years</li>
-            <li>Access logs: 3 months</li>
+            <li>Public community posts/reviews tied to other users are anonymized or removed</li>
+            <li>Safety/dispute records (reports, blocks) are kept for a limited period for dispute handling, then deleted</li>
+            <li>Records required by law: contract/withdrawal 5 years, consumer disputes 3 years, access logs 3 months</li>
           </ul>
         </Section>
 
-        <Section title="6. Security Measures">
-          <p>We implement the following measures to protect your personal information:</p>
+        <Section title="7. Security Measures">
           <ul>
-            <li>Encryption of personal data (TLS/SSL in transit, encryption at rest)</li>
-            <li>Access control management</li>
-            <li>Regular security audits</li>
+            <li>Encryption in transit (TLS/SSL) and protection of stored data</li>
+            <li>Access control and data minimization</li>
+            <li>Meetup coordinates are fuzzed on the map to avoid exposing exact locations</li>
           </ul>
         </Section>
 
-        <Section title="7. Your Rights">
-          <p>You have the right to:</p>
+        <Section title="8. Your Rights">
           <ul>
-            <li>Request access to your personal information</li>
-            <li>Request correction or deletion of your personal information</li>
-            <li>Request suspension of personal data processing</li>
-            <li>Delete your account (available in app settings)</li>
+            <li>Request access, correction, deletion, or suspension of processing</li>
+            <li>Delete your account (in app settings)</li>
+            <li>Withdraw consent for location, notifications, and auto-translation (app/device settings)</li>
           </ul>
+          <p>Exercise these rights via app settings or hello@roami.kr.</p>
+        </Section>
+
+        <Section title="9. Location Information">
           <p>
-            You can exercise these rights through the app settings or by contacting us at hello@roami.kr.
+            We collect precise location coordinates for map-based matching, only while the app is in use.
+            Location is collected with your consent and can be disabled anytime in app or device settings.
+            A meetup&apos;s exact location is set by its host and shown on the map as an approximate point for safety.
           </p>
         </Section>
 
-        <Section title="8. Location Information">
+        <Section title="10. Children&apos;s Privacy">
+          <p>The Service does not allow registration by children under 14 and does not knowingly collect their personal information.</p>
+        </Section>
+
+        <Section title="11. Cookies and Tracking">
           <p>
-            We collect location information for the map-based companion matching service.
-            Location data is collected with your consent and can be disabled at any time in the app or device settings.
-            Collected location data is used only for finding companions and displaying meetup locations.
+            The mobile app does not use advertising identifiers (e.g., IDFA) or third-party ad/tracking SDKs.
+            The website may use minimal cookies for essential functionality.
           </p>
         </Section>
 
-        <Section title="9. Cookies and Tracking">
-          <p>
-            The mobile app does not use cookies. The website may use minimal cookies for essential functionality.
-          </p>
+        <Section title="12. Contact">
+          <ul><li>Email: hello@roami.kr</li></ul>
         </Section>
 
-        <Section title="10. Contact">
+        <Section title="13. Policy Changes">
           <p>
-            For questions about how we handle personal information, please contact us:
-          </p>
-          <ul>
-            <li>Email: hello@roami.kr</li>
-          </ul>
-        </Section>
-
-        <Section title="11. Policy Changes">
-          <p>
-            This Privacy Policy may be updated due to changes in law or service.
-            We will notify you of any changes through in-app notices or email.
+            This Policy may be updated due to changes in law or the Service.
+            We will notify you of material changes via in-app notice or email.
           </p>
         </Section>
       </div>
@@ -291,5 +330,34 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         {children}
       </div>
     </section>
+  );
+}
+
+function LegalTable({ head, rows }: { head: string[]; rows: string[][] }) {
+  return (
+    <div className="overflow-x-auto my-3">
+      <table className="w-full text-xs border-collapse">
+        <thead>
+          <tr>
+            {head.map((h) => (
+              <th key={h} className="border border-border-subtle bg-bg-secondary px-2.5 py-2 text-left font-semibold text-text-primary align-top">
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i}>
+              {row.map((cell, j) => (
+                <td key={j} className="border border-border-subtle px-2.5 py-2 align-top text-text-secondary">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
