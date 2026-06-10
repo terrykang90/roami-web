@@ -47,7 +47,7 @@ function DeleteKo() {
         <Section title="방법 2 — 이메일로 요청">
           <p>
             앱에 접근할 수 없는 경우, 가입에 사용한 이메일로{" "}
-            <a href="mailto:hello@roami.kr?subject=계정 삭제 요청" className="text-teal font-semibold">hello@roami.kr</a>
+            <a href="mailto:hello@roami.kr?subject=%EA%B3%84%EC%A0%95%20%EC%82%AD%EC%A0%9C%20%EC%9A%94%EC%B2%AD" className="text-teal font-semibold">hello@roami.kr</a>
             에 &ldquo;계정 삭제 요청&rdquo;을 보내주세요. 영업일 기준 7일 이내에 처리하고 회신해 드립니다.
           </p>
         </Section>
@@ -93,7 +93,7 @@ function DeleteEn() {
         <Section title="Option 2 — Request by email">
           <p>
             If you can no longer access the app, email{" "}
-            <a href="mailto:hello@roami.kr?subject=Account deletion request" className="text-teal font-semibold">hello@roami.kr</a>{" "}
+            <a href="mailto:hello@roami.kr?subject=Account%20deletion%20request" className="text-teal font-semibold">hello@roami.kr</a>{" "}
             from the address you signed up with, with the subject &ldquo;Account deletion request&rdquo;.
             We process requests within 7 business days and confirm by reply.
           </p>
@@ -140,7 +140,7 @@ function DeleteTh() {
         <Section title="วิธีที่ 2 — ส่งคำขอทางอีเมล">
           <p>
             หากเข้าแอปไม่ได้ ส่งอีเมลจากที่อยู่ที่ใช้สมัครไปที่{" "}
-            <a href="mailto:hello@roami.kr?subject=Account deletion request" className="text-teal font-semibold">hello@roami.kr</a>{" "}
+            <a href="mailto:hello@roami.kr?subject=Account%20deletion%20request" className="text-teal font-semibold">hello@roami.kr</a>{" "}
             หัวข้อ &ldquo;Account deletion request&rdquo; เราจะดำเนินการภายใน 7 วันทำการและตอบกลับยืนยัน
           </p>
         </Section>
