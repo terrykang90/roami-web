@@ -50,11 +50,20 @@ export async function generateMetadata({
       siteName: "roami",
       locale: locale === "ko" ? "ko_KR" : locale === "th" ? "th_TH" : "en_US",
       type: "website",
+      images: [
+        {
+          url: `${SITE_BASE}/og.png`,
+          width: 1200,
+          height: 630,
+          alt: "roami — travel meetups, right on the map",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
+      images: [`${SITE_BASE}/og.png`],
     },
     robots: {
       index: true,
