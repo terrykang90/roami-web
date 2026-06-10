@@ -58,6 +58,22 @@ export default function Footer() {
                     {t("safety")}
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href={`/${locale}/child-safety`}
+                    className="text-sm text-text-secondary hover:text-teal transition-colors"
+                  >
+                    {t("childSafety")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={`/${locale}/delete-account`}
+                    className="text-sm text-text-secondary hover:text-teal transition-colors"
+                  >
+                    {t("deleteAccount")}
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
