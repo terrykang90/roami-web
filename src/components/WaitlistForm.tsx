@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { API_BASE } from "@/lib/api";
 
 export default function WaitlistForm() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ export default function WaitlistForm() {
     setErrorMessage("");
 
     try {
-      const res = await fetch("https://api.roami.kr/waitlist", {
+      const res = await fetch(`${API_BASE}/waitlist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, city, language }),

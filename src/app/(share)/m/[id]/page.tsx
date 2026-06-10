@@ -1,0 +1,190 @@
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+import QRCode from "qrcode";
+import { getPublicMeetup, type PublicMeetup } from "@/lib/api";
+import {
+  APP_STORE_URL,
+  LAUNCH_STATE,
+  PLAY_STORE_URL,
+  SITE_BASE,
+  TESTFLIGHT_URL,
+} from "@/lib/config";
+import {
+  detectPlatform,
+  resolveCta,
+  resolveCtaHref,
+  resolveLocale,
+  resolveState,
+  type CtaVariant,
+  type ShareLocale,
+  type ShareState,
+  type ShareT,
+} from "@/lib/share";
+import ShareCard from "./ShareCard";
+import GetAppPanel, { StoreBadges } from "./GetAppPanel";
+import AndroidBetaForm, { type AndroidBetaLabels } from "./AndroidBetaForm";
+import { CtaButton, Shell } from "./Shell";
+
+// Public share landing (ROA-192 Phase 2). Server-rendered; personalizes on
+// Accept-Language (chrome locale) + User-Agent (CTA platform), so the route is
+// dynamic — the API fetch itself is data-cached (revalidate: 60). Next emits
+// `private, no-store` for the HTML; if a CDN is ever put in front, /m/* HTML
+// must NOT be force-cached (locale/platform poisoning — see DESIGN.md).
+
+type Params = { params: Promise<{ id: string }> };
+
+const CTA_URLS = { testflight: TESTFLIGHT_URL, appStore: APP_STORE_URL, playStore: PLAY_STORE_URL };
+
+async function viewerLocale(): Promise<ShareLocale> {
+  const h = await headers();
+  return resolveLocale(h.get("accept-language"));
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { id } = await params;
+  const locale = await viewerLocale();
+  const t = await getTranslations({ locale, namespace: "share" });
+  const result = await getPublicMeetup(id, locale);
+
+  const base: Metadata = {
+    openGraph: {
+      url: `${SITE_BASE}/m/${id}`,
+      siteName: "roami",
+      type: "website",
+      locale: locale === "ko" ? "ko_KR" : locale === "th" ? "th_TH" : "en_US",
+    },
+    twitter: { card: "summary_large_image" },
+  };
+
+  if (result.kind !== "ok") {
+    const title = result.kind === "not_found" ? t("notFoundTitle") : "roami";
+    return {
+      ...base,
+      title: `${title} · roami`,
+      description: t("notFoundDesc"),
+      openGraph: { ...base.openGraph, title, description: t("notFoundDesc") },
+      robots: { index: false },
+    };
+  }
+
+  const m = result.meetup;
+  const description = m.description.trim() || `${m.city} · ${m.categoryLabel} · roami`;
+  return {
+    ...base,
+    title: `${m.title} · roami`,
+    description,
+    openGraph: { ...base.openGraph, title: m.title, description },
+    twitter: { ...base.twitter, title: m.title, description },
+  };
+}
+
+export default async function ShareLandingPage({ params }: Params) {
+  const { id } = await params;
+  const h = await headers();
+  const locale = resolveLocale(h.get("accept-language"));
+  const platform = detectPlatform(h.get("user-agent"));
+  const t = await getTranslations({ locale, namespace: "share" });
+  const result = await getPublicMeetup(id, locale);
+
+  // Gone/hidden meetup → branded not-found WITH a real 404 status (not-found.tsx).
+  if (result.kind === "not_found") notFound();
+
+  const androidBetaLabels: AndroidBetaLabels = {
+    title: t("androidBetaTitle"),
+    placeholder: t("androidBetaPlaceholder"),
+    submit: t("androidBetaSubmit"),
+    submitting: t("androidBetaSubmitting"),
+    success: t("androidBetaSuccess"),
+    error: t("androidBetaError"),
+    duplicate: t("androidBetaDuplicate"),
+  };
+
+  // Transient API failure: same shell, apologetic copy, still funnels to "/".
+  if (result.kind === "error") {
+    return (
+      <Shell t={t}>
+        <div className="mx-auto flex w-full max-w-[480px] flex-1 flex-col items-center justify-center px-6 text-center">
+          <p aria-hidden="true" className="text-[44px]">
+            ⚠️
+          </p>
+          <h1 className="mb-1.5 mt-3 text-[18px] font-bold">{t("errorTitle")}</h1>
+          <p className="text-[13.5px] leading-normal text-text-secondary">{t("errorDesc")}</p>
+        </div>
+        <div className="mx-auto w-full max-w-[480px] px-4 pb-2">
+          <CtaButton href="/" label={t("ctaNotFound")} />
+        </div>
+      </Shell>
+    );
+  }
+
+  const meetup = result.meetup;
+  const state = resolveState(meetup.status, meetup.full);
+  const cta = resolveCta(platform, LAUNCH_STATE);
+  const ctaHref = resolveCtaHref(state, cta, platform, CTA_URLS);
+  const qrDataUrl = await QRCode.toDataURL(`${SITE_BASE}/m/${id}`, {
+    width: 300,
+    margin: 0,
+    color: { dark: "#1A1614", light: "#FFFFFF" },
+  });
+
+  return (
+    <Shell t={t}>
+      <div className="mx-auto flex w-full max-w-[1000px] flex-1 items-start justify-center gap-10 px-4 pb-6 pt-2 md:px-10 md:pt-8">
+        {/* card column */}
+        <div className="w-full max-w-[480px]">
+          <ShareCard meetup={meetup} state={state} locale={locale} t={t} />
+
+          {/* mobile CTA area (desktop uses the right panel) */}
+          <div className="mt-4 md:hidden">
+            {cta === "android_beta_email" && state === "active" ? (
+              <AndroidBetaForm meetupId={meetup.id} labels={androidBetaLabels} />
+            ) : (
+              <CtaButton href={ctaHref} label={ctaLabel(state, t, meetup)} />
+            )}
+            <SecondaryArea state={state} cta={cta} t={t} />
+          </div>
+        </div>
+
+        {/* desktop get-app panel */}
+        <div className="hidden w-[320px] flex-none md:block">
+          <GetAppPanel qrDataUrl={qrDataUrl} meetupId={meetup.id} androidBetaLabels={androidBetaLabels} t={t} />
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+function ctaLabel(state: ShareState, t: ShareT, meetup: PublicMeetup): string {
+  switch (state) {
+    case "active":
+      return t("ctaActive");
+    case "full":
+      return t("ctaFull", { city: meetup.city || "Roami" });
+    case "completed":
+      return t("ctaCompleted");
+    case "cancelled":
+      return t("ctaCancelled");
+  }
+}
+
+// Below the mobile CTA: state note (full/done/cancel) or install paths (active).
+function SecondaryArea({ state, cta, t }: { state: ShareState; cta: CtaVariant; t: ShareT }) {
+  if (state !== "active") {
+    const note =
+      state === "full" ? t("noteFull") : state === "completed" ? t("noteCompleted") : t("noteCancelled");
+    return <p className="mt-2.5 text-center text-[12px] text-text-secondary">{note}</p>;
+  }
+  if (cta === "testflight") {
+    return <p className="mt-2.5 text-center text-[12px] text-text-secondary">{t("testflightNote")}</p>;
+  }
+  if (cta === "stores") {
+    return (
+      <div className="mt-3">
+        <StoreBadges t={t} />
+      </div>
+    );
+  }
+  return null;
+}
