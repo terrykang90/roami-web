@@ -55,11 +55,12 @@ export default function MiniMap({
         <div aria-hidden="true" className="mx-auto mt-1.5 h-[7px] w-[22px] rounded-full bg-[rgba(26,22,20,0.18)] blur-[1px]" />
       </div>
 
-      {/* state overlay (full / completed / cancelled) */}
+      {/* state overlay (full / completed / cancelled) — scrims dark enough for
+          14px bold white to clear WCAG AA over the light map palette */}
       {stateBadge && (
         <div
           className={`absolute inset-0 z-[6] flex items-center justify-center text-[14px] font-bold text-white ${
-            stateBadge.tone === "orange" ? "bg-[rgba(224,122,69,0.55)]" : "bg-[rgba(26,22,20,0.48)]"
+            stateBadge.tone === "orange" ? "bg-secondary/75" : "bg-text-primary/60"
           }`}
         >
           {stateBadge.label}

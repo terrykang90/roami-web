@@ -2,10 +2,15 @@ import { describe, it, expect } from 'vitest'
 import {
   resolveState,
   resolveCta,
+  resolveCtaHref,
   resolveLocale,
   detectPlatform,
   categoryEmoji,
   flagEmoji,
+  formatStartTime,
+  normalizeTier,
+  truncate,
+  type CtaUrls,
 } from './share'
 
 // Eng-review Q2/T1: the state/CTA matrices are where landing bugs hide —
@@ -62,6 +67,69 @@ describe('detectPlatform', () => {
     [null, 'desktop'],
   ])('%s → %s', (ua, expected) => {
     expect(detectPlatform(ua)).toBe(expected)
+  })
+})
+
+describe('resolveCtaHref (funnel routing)', () => {
+  const urls: CtaUrls = { testflight: 'https://tf.example', appStore: 'https://as.example', playStore: 'https://ps.example' }
+  it.each([
+    // every non-active state routes to the marketing site, whatever the cta
+    ['full', 'testflight', 'ios', '/'],
+    ['completed', 'stores', 'android', '/'],
+    ['cancelled', 'desktop_panel', 'desktop', '/'],
+    // active funnels per cta variant
+    ['active', 'testflight', 'ios', 'https://tf.example'],
+    ['active', 'stores', 'ios', 'https://as.example'],
+    ['active', 'stores', 'android', 'https://ps.example'],
+    ['active', 'android_beta_email', 'android', '/'],
+    ['active', 'desktop_panel', 'desktop', '/'],
+  ] as const)('(%s, %s, %s) → %s', (state, cta, platform, expected) => {
+    expect(resolveCtaHref(state, cta, platform, urls)).toBe(expected)
+  })
+})
+
+describe('formatStartTime (Asia/Bangkok display)', () => {
+  it('invalid/empty ISO → empty string (date row silently omitted)', () => {
+    expect(formatStartTime('garbage', 'en')).toBe('')
+    expect(formatStartTime('', 'ko')).toBe('')
+  })
+  it('UTC instant converts with +7 day rollover', () => {
+    // 2026-06-15T17:30Z = 2026-06-16 00:30 in Bangkok
+    const out = formatStartTime('2026-06-15T17:30:00Z', 'en')
+    expect(out).toContain('16')
+    expect(out).toContain('00:30')
+  })
+  it('locale branches render localized month names', () => {
+    const iso = '2026-06-12T12:00:00Z'
+    expect(formatStartTime(iso, 'ko')).toContain('월')
+    expect(formatStartTime(iso, 'en')).toContain('June')
+    expect(formatStartTime(iso, 'th')).toMatch(/มิถุนายน|มิ\.ย\./)
+  })
+})
+
+describe('normalizeTier', () => {
+  it.each([
+    ['trusted', 'trusted'],
+    ['veteran', 'veteran'],
+    ['first_completed', 'first_completed'],
+    ['new_member', 'new_member'],
+    ['gold_superhost', 'new_member'], // unknown future tier → safe fallback
+    ['', 'new_member'],
+  ])('%s → %s', (input, expected) => {
+    expect(normalizeTier(input)).toBe(expected)
+  })
+})
+
+describe('truncate (code-point safe)', () => {
+  it('short strings pass through, long strings get ellipsis', () => {
+    expect(truncate('hello', 10)).toBe('hello')
+    expect(truncate('a'.repeat(40), 10)).toBe('a'.repeat(9) + '…')
+  })
+  it('never splits an emoji surrogate pair at the boundary', () => {
+    const s = '🍜'.repeat(40)
+    const out = truncate(s, 10)
+    expect(out).toBe('🍜'.repeat(9) + '…')
+    expect(out).not.toMatch(/[\uD800-\uDBFF]…$/)
   })
 })
 

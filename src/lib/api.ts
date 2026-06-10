@@ -54,8 +54,23 @@ export async function getPublicMeetup(id: string, locale: string): Promise<Publi
     if (res.status === 404) return { kind: 'not_found' }
     if (!res.ok) return { kind: 'error' }
     const meetup = (await res.json()) as PublicMeetup
+    // Minimal shape guard: a partial/changed backend payload must degrade to the
+    // branded error state, not a raw 500 mid-render ("no dead ends", D5).
+    if (
+      typeof meetup?.id !== 'string' ||
+      typeof meetup.title !== 'string' ||
+      typeof meetup.description !== 'string' ||
+      typeof meetup.status !== 'string' ||
+      typeof meetup.host !== 'object' ||
+      meetup.host === null
+    ) {
+      console.error(`getPublicMeetup(${id}): unexpected payload shape`)
+      return { kind: 'error' }
+    }
     return { kind: 'ok', meetup }
-  } catch {
+  } catch (e) {
+    // timeout / DNS / network — log so a chronic backend issue is visible in prod
+    console.error(`getPublicMeetup(${id}) failed:`, e)
     return { kind: 'error' }
   }
 }

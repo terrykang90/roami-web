@@ -1,13 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import type { PublicMeetup } from "@/lib/api";
-import { flagEmoji, formatStartTime, type ShareLocale, type ShareState } from "@/lib/share";
+import {
+  flagEmoji,
+  formatStartTime,
+  normalizeTier,
+  type ShareLocale,
+  type ShareState,
+  type ShareT,
+} from "@/lib/share";
 import MiniMap from "./MiniMap";
 
 // The hybrid meetup card (locked mockup: meetup-hybrid.html / meetup-states.html).
 // All copy comes in via `t`; all D1 content fallbacks (no description, missing
-// avatar/nationality/nickname, 0 reviews) are handled here.
-
-type T = (key: string, values?: Record<string, string | number>) => string;
+// avatar/nationality/nickname, 0 reviews, unknown tier) are handled here.
 
 const TIER_SHIELD = new Set(["trusted", "veteran"]);
 
@@ -20,7 +25,7 @@ export default function ShareCard({
   meetup: PublicMeetup;
   state: ShareState;
   locale: ShareLocale;
-  t: T;
+  t: ShareT;
 }) {
   const dimmed = state === "completed" || state === "cancelled";
   const stateBadge =
@@ -39,7 +44,9 @@ export default function ShareCard({
   const host = meetup.host;
   const nickname = host.nickname?.trim() || t("hostFallback");
   const flag = flagEmoji(host.nationality);
-  const tierLabel = t(`tier_${host.tierBadge}` as Parameters<T>[0]);
+  // Whitelisted tier → never leaks a raw i18n key path if the backend adds a tier.
+  const tier = normalizeTier(host.tierBadge);
+  const tierLabel = t(`tier_${tier}`);
   // D1: a brand-new host shows the tier chip only — no "hosted 0 · 👍 0" line.
   const trustParts: string[] = [];
   if (host.hostedCount > 0) trustParts.push(t("hostedCount", { count: host.hostedCount }));
@@ -93,6 +100,7 @@ export default function ShareCard({
                 alt={nickname}
                 width={40}
                 height={40}
+                referrerPolicy="no-referrer"
                 className="h-10 w-10 rounded-full object-cover"
               />
             ) : (
@@ -111,7 +119,7 @@ export default function ShareCard({
             <span className="block text-[14px] font-bold">
               {nickname}
               <span className="ml-1.5 inline-block rounded-full bg-teal-light px-2 py-0.5 align-middle text-[10px] font-bold text-teal-dark">
-                {TIER_SHIELD.has(host.tierBadge) && <span aria-hidden="true">🛡️ </span>}
+                {TIER_SHIELD.has(tier) && <span aria-hidden="true">🛡️ </span>}
                 {tierLabel}
               </span>
             </span>

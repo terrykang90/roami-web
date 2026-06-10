@@ -5,14 +5,15 @@ import { routing } from "@/i18n/routing";
 import localFont from "next/font/local";
 import { Prompt } from "next/font/google";
 import type { Metadata } from "next";
+import { SITE_BASE } from "@/lib/config";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import "../globals.css";
+import "../../globals.css";
 
 const lineSeedKR = localFont({
   src: [
-    { path: "../../assets/fonts/LINESeedKR-Rg.otf", weight: "400", style: "normal" },
-    { path: "../../assets/fonts/LINESeedKR-Bd.otf", weight: "700", style: "normal" },
+    { path: "../../../assets/fonts/LINESeedKR-Rg.otf", weight: "400", style: "normal" },
+    { path: "../../../assets/fonts/LINESeedKR-Bd.otf", weight: "700", style: "normal" },
   ],
   variable: "--font-line-seed",
   display: "swap",
@@ -45,7 +46,7 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: `https://roami.kr/${locale}`,
+      url: `${SITE_BASE}/${locale}`,
       siteName: "roami",
       locale: locale === "ko" ? "ko_KR" : locale === "th" ? "th_TH" : "en_US",
       type: "website",

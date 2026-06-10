@@ -8,7 +8,8 @@
   --color-secondary: #E07A45;
   --color-secondary-light: #FFF1EA;
 
-  /* Category */
+  /* Category — hex values mirrored in src/lib/share.ts CATEGORY_COLOR
+     (OG images can't read CSS vars); update BOTH on palette changes. */
   --color-eat: #E07A45;
   --color-cafe: #A78B6B;
   --color-drinks: #D9A63A;

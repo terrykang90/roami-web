@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import localFont from "next/font/local";
 import { Prompt } from "next/font/google";
 import { resolveLocale } from "@/lib/share";
-import "../../globals.css";
+import "../../../globals.css";
 
 // The share landing lives OUTSIDE the [locale] segment (shared links must not
 // be locale-redirected), so this layout owns its own <html>/<body> and resolves
@@ -10,8 +10,8 @@ import "../../globals.css";
 
 const lineSeedKR = localFont({
   src: [
-    { path: "../../../assets/fonts/LINESeedKR-Rg.otf", weight: "400", style: "normal" },
-    { path: "../../../assets/fonts/LINESeedKR-Bd.otf", weight: "700", style: "normal" },
+    { path: "../../../../assets/fonts/LINESeedKR-Rg.otf", weight: "400", style: "normal" },
+    { path: "../../../../assets/fonts/LINESeedKR-Bd.otf", weight: "700", style: "normal" },
   ],
   variable: "--font-line-seed",
   display: "swap",

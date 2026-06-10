@@ -5,8 +5,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
-// TestFlight public beta link (Chiang Mai beta).
-const TESTFLIGHT_URL = "https://testflight.apple.com/join/AU2THE4z";
+import { TESTFLIGHT_URL } from "@/lib/config";
 
 // App-preview phones. Ordered so the emphasized `chat` phone sits centre-front
 // in the desktop 3D fan. `fan` holds the md+ perspective transform per position;

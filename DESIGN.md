@@ -154,4 +154,6 @@ Public OG-previewable meetup landing, outside the `[locale]` segment (viewer loc
 
 **A11y**: readable text uses `text-secondary` (#6B6460, ≈5:1 on cream) — `text-muted` is decoration-only. `<html lang>` = viewer locale. 48px CTA, 44px badges, focus rings, `prefers-reduced-motion` guard.
 
+**Hosting rule**: `/m/*` HTML personalizes on Accept-Language + User-Agent with no `Vary` headers — Next emits `private, no-store` so this is safe on Vercel, but a CDN must NEVER force-cache `/m/*` HTML (one viewer's locale/platform would be served to everyone). The OG image route sets `public, max-age=300, s-maxage=86400` and serves a static PNG for unknown ids.
+
 **Known limitations**: CSS mini-map (real static-map tile = follow-up polish); meetup times formatted in Asia/Bangkok (beta footprint is UTC+7); OG Thai titles fetch Prompt from Google Fonts best-effort.

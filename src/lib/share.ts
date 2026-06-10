@@ -4,6 +4,9 @@
 export const SHARE_LOCALES = ['ko', 'en', 'th'] as const
 export type ShareLocale = (typeof SHARE_LOCALES)[number]
 
+/** Translator shape passed from the server page into share components. */
+export type ShareT = (key: string, values?: Record<string, string | number>) => string
+
 /**
  * Viewer locale for the landing chrome. /m/[id] sits OUTSIDE the [locale]
  * segment, so next-intl's request locale does not apply — we parse the
@@ -51,6 +54,53 @@ export function resolveCta(platform: Platform, launchState: LaunchState): CtaVar
   if (platform === 'desktop') return 'desktop_panel'
   if (launchState === 'launched') return 'stores'
   return platform === 'ios' ? 'testflight' : 'android_beta_email'
+}
+
+export interface CtaUrls {
+  testflight: string
+  appStore: string
+  playStore: string
+}
+
+/**
+ * The funnel half of the CTA matrix: where the primary button actually goes.
+ * Only an ACTIVE meetup funnels into the app; every other state routes to the
+ * marketing site (no dead ends). Desktop's button is informational — the
+ * sticky panel carries the funnel.
+ */
+export function resolveCtaHref(
+  state: ShareState,
+  cta: CtaVariant,
+  platform: Platform,
+  urls: CtaUrls,
+): string {
+  if (state !== 'active') return '/'
+  switch (cta) {
+    case 'testflight':
+      return urls.testflight
+    case 'stores':
+      return platform === 'ios' ? urls.appStore : urls.playStore
+    case 'android_beta_email':
+    case 'desktop_panel':
+      return '/'
+  }
+}
+
+// Tiers the share UI knows how to label; unknown future values must never leak
+// a raw i18n key path into the trust chip — fall back to new_member.
+export const KNOWN_TIERS = ['new_member', 'first_completed', 'trusted', 'veteran'] as const
+export type KnownTier = (typeof KNOWN_TIERS)[number]
+
+export function normalizeTier(tierBadge: string): KnownTier {
+  return (KNOWN_TIERS as readonly string[]).includes(tierBadge)
+    ? (tierBadge as KnownTier)
+    : 'new_member'
+}
+
+/** Code-point-safe truncation (UTF-16 slicing can split emoji surrogate pairs). */
+export function truncate(s: string, max: number): string {
+  const cps = Array.from(s)
+  return cps.length > max ? `${cps.slice(0, max - 1).join('')}…` : s
 }
 
 export function detectPlatform(userAgent: string | null): Platform {

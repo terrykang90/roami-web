@@ -71,12 +71,12 @@ export default function AndroidBetaForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={labels.placeholder}
-          className="min-w-0 flex-1 rounded-xl border border-border-default bg-white px-3.5 py-3 text-[13px] text-text-primary placeholder-text-muted transition-all focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
+          className="min-h-[48px] min-w-0 flex-1 rounded-xl border border-border-default bg-white px-3.5 py-3 text-[13px] text-text-primary placeholder-text-muted transition-all focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/30"
         />
         <button
           type="submit"
           disabled={status === "loading"}
-          className="flex-none rounded-xl bg-teal px-4 py-3 text-[13px] font-bold text-white transition-colors hover:bg-teal-dark focus:outline-none focus:ring-2 focus:ring-teal/40 disabled:cursor-not-allowed disabled:opacity-60"
+          className="min-h-[48px] flex-none rounded-xl bg-teal px-4 py-3 text-[13px] font-bold text-white transition-colors hover:bg-teal-dark focus:outline-none focus:ring-2 focus:ring-teal/40 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {status === "loading" ? labels.submitting : labels.submit}
         </button>
