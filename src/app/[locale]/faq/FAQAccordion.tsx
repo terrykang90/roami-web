@@ -25,6 +25,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
               onClick={() => setOpenIndex(isOpen ? null : i)}
               className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
               aria-expanded={isOpen}
+              aria-controls={`faq-panel-${i}`}
             >
               <span className="text-sm font-semibold text-text-primary">{faq.question}</span>
               <svg
@@ -45,6 +46,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
             </button>
 
             <div
+              id={`faq-panel-${i}`}
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
                 isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
               }`}

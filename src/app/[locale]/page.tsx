@@ -5,6 +5,24 @@ import ScrollReveal from "@/components/ScrollReveal";
 import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
+// TestFlight public beta link (Chiang Mai beta).
+const TESTFLIGHT_URL = "https://testflight.apple.com/join/AU2THE4z";
+
+// App-preview phones. Ordered so the emphasized `chat` phone sits centre-front
+// in the desktop 3D fan. `fan` holds the md+ perspective transform per position;
+// on mobile the transforms are absent and the row is a flat horizontal scroll.
+const SHOTS = [
+  { screen: "map", alt: "roami map view", hero: false,
+    fan: "md:[transform:rotateY(18deg)_translateX(34px)_translateY(22px)_scale(0.9)] md:z-[1]" },
+  { screen: "detail", alt: "roami meetup detail", hero: false,
+    fan: "md:[transform:rotateY(8deg)_translateX(14px)_translateY(6px)_scale(0.97)] md:z-[2]" },
+  { screen: "chat", alt: "roami chat with translation", hero: true,
+    fan: "md:[transform:translateY(-8px)_scale(1.07)] md:z-[5]" },
+  { screen: "create", alt: "roami create meetup", hero: false,
+    fan: "md:[transform:rotateY(-14deg)_translateX(-20px)_translateY(14px)_scale(0.95)] md:z-[3]" },
+];
+const SHOT_LOCALES = ["ko", "en", "th"];
+
 export default async function Home() {
   const locale = await getLocale();
   const hero = await getTranslations("hero");
@@ -239,7 +257,7 @@ export default async function Home() {
           <ScrollReveal>
             <Image
               src="/icon.svg"
-              alt="Roami"
+              alt="roami"
               width={100}
               height={100}
               className="mx-auto mb-6"
@@ -247,8 +265,12 @@ export default async function Home() {
           </ScrollReveal>
 
           <ScrollReveal delay={100}>
-            <span className="inline-block bg-teal/10 text-teal-dark text-xs font-semibold tracking-wide uppercase px-4 py-1.5 rounded-full mb-6">
-              {hero("comingSoon")}
+            <span className="inline-flex items-center gap-2 bg-teal/10 text-teal-dark text-xs font-semibold tracking-wide px-4 py-1.5 rounded-full mb-6">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-60 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22C55E]" />
+              </span>
+              {hero("betaBadge")}
             </span>
           </ScrollReveal>
 
@@ -267,12 +289,94 @@ export default async function Home() {
           </ScrollReveal>
 
           <ScrollReveal delay={400}>
-            <a
-              href="#waitlist"
-              className="inline-block mt-10 bg-teal hover:bg-teal-dark text-white font-semibold text-sm px-8 py-3.5 rounded-full transition-colors shadow-lg shadow-teal/20"
-            >
-              {hero("cta")}
-            </a>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={TESTFLIGHT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 bg-text-primary hover:opacity-90 text-white px-5 py-3 rounded-2xl transition-opacity shadow-lg shadow-text-primary/15"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z" />
+                </svg>
+                <span className="text-left leading-tight">
+                  <span className="block text-[10px] font-medium opacity-80">{hero("iosTagline")}</span>
+                  <span className="block text-sm font-bold">{hero("iosCta")}</span>
+                </span>
+              </a>
+              <div className="inline-flex items-center gap-2.5 bg-white border-[1.5px] border-border-subtle text-text-muted px-5 py-3 rounded-2xl select-none">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.86 3.23a11.5 11.5 0 0 0-9.78 0L5.25 5.9a.4.4 0 1 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+                </svg>
+                <span className="text-left leading-tight">
+                  <span className="block text-[10px] font-medium">Google Play</span>
+                  <span className="block text-sm font-bold text-text-secondary">{hero("androidCta")}</span>
+                </span>
+              </div>
+            </div>
+            <p className="mt-5 text-sm text-text-secondary">
+              {hero("waitlistPrefix")}{" "}
+              <a href="#waitlist" className="text-teal font-semibold hover:text-teal-dark transition-colors">
+                {hero("waitlistLink")}
+              </a>
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ─── APP SCREENSHOTS ─── */}
+      <section className="py-16 md:py-24 bg-bg-secondary overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6">
+          <ScrollReveal>
+            <div className="text-center mb-12 md:mb-16">
+              <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{preview("label")}</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight mb-3">
+                {preview("title")}
+              </h2>
+              <p className="text-sm md:text-base text-text-secondary max-w-xl mx-auto leading-relaxed">
+                {preview("subtitle")}
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal>
+            <div className="flex gap-5 md:gap-0 items-end md:items-center overflow-x-auto md:overflow-visible md:justify-center pb-4 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0 snap-x snap-mandatory md:[perspective:1800px]">
+              {SHOTS.map((s) => (
+                <div
+                  key={s.screen}
+                  className={`relative flex-none snap-center md:transition-transform md:duration-300 md:hover:z-20 ${s.fan} ${
+                    s.hero ? "w-[200px] md:w-[200px]" : "w-[188px] md:w-[200px]"
+                  }`}
+                >
+                  {s.hero && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-1 bg-teal text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg shadow-teal/30 whitespace-nowrap">
+                      🌐 {preview("chatTag")}
+                    </span>
+                  )}
+                  {/* Lift on hover lives here (not the parent) so it composes with the fan transform instead of overwriting it. */}
+                  <div
+                    className={`rounded-[2.2rem] bg-[#0E0C0B] p-2 md:transition-transform md:duration-300 md:hover:-translate-y-3 md:hover:scale-[1.03] ${
+                      s.hero ? "shadow-2xl shadow-teal/25" : "shadow-xl shadow-black/15"
+                    }`}
+                  >
+                    {/* Fixed aspect reserves layout space before the lazy image decodes (no CLS). */}
+                    <div className="overflow-hidden rounded-[1.7rem] bg-white aspect-[1179/2556]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`/screenshots/shot-${s.screen}-${
+                          SHOT_LOCALES.includes(locale) ? locale : "ko"
+                        }.png`}
+                        alt={s.alt}
+                        width={1179}
+                        height={2556}
+                        loading="lazy"
+                        className="block w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </ScrollReveal>
         </div>
       </section>
@@ -487,35 +591,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ─── APP SCREENSHOTS (uncomment when ready) ───
-      <section className="py-20 md:py-28 bg-bg-secondary">
-        <div className="max-w-6xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-14">
-              <p className="text-xs font-semibold text-teal uppercase tracking-widest mb-3">{preview("label")}</p>
-              <h2 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
-                {preview("title")}
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((n) => (
-                <div
-                  key={n}
-                  className="aspect-[9/16] bg-bg-tertiary rounded-2xl flex items-center justify-center border border-border-subtle"
-                >
-                  <p className="text-sm text-text-muted font-medium text-center px-4 whitespace-pre-line">
-                    {preview("placeholder")}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-      ─── */}
 
       {/* ─── TRUST / SAFETY ─── */}
       <section className="py-20 md:py-28 bg-white">

@@ -4,7 +4,7 @@ import FAQAccordion from "./FAQAccordion";
 export async function generateMetadata() {
   const t = await getTranslations("faq");
   return {
-    title: `${t("title")} — Roami`,
+    title: `${t("title")} — roami`,
     description: t("subtitle"),
   };
 }

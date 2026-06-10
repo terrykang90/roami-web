@@ -15,17 +15,11 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border-subtle">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href={`/${locale}`} className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="Roami" width={120} height={43} />
+          <Image src="/logo.svg" alt="roami" width={120} height={43} />
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
-          <a
-            href={`https://plan.roami.kr/${locale}`}
-            className="text-sm text-text-secondary hover:text-teal transition-colors"
-          >
-            {t("planner")}
-          </a>
           <Link
             href={`/${locale}/faq`}
             className="text-sm text-text-secondary hover:text-teal transition-colors"
@@ -33,12 +27,12 @@ export default function Header() {
             {t("faq")}
           </Link>
           <LocaleSwitcher />
-          <a
-            href="#waitlist"
+          <Link
+            href={`/${locale}#waitlist`}
             className="text-sm font-semibold text-white bg-teal hover:bg-teal-dark px-5 py-2 rounded-full transition-colors"
           >
             {t("waitlist")}
-          </a>
+          </Link>
         </nav>
 
         {/* Mobile hamburger */}
@@ -46,6 +40,8 @@ export default function Header() {
           className="md:hidden p-2 text-text-secondary"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={t("menu")}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
           {menuOpen ? (
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -61,14 +57,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-border-subtle px-6 py-4 space-y-3">
-          <a
-            href={`https://plan.roami.kr/${locale}`}
-            className="block text-sm text-text-secondary hover:text-teal py-2"
-            onClick={() => setMenuOpen(false)}
-          >
-            {t("planner")}
-          </a>
+        <div id="mobile-menu" className="md:hidden bg-white border-t border-border-subtle px-6 py-4 space-y-3">
           <Link
             href={`/${locale}/faq`}
             className="block text-sm text-text-secondary hover:text-teal py-2"
@@ -79,13 +68,13 @@ export default function Header() {
           <div className="py-2">
             <LocaleSwitcher />
           </div>
-          <a
-            href="#waitlist"
+          <Link
+            href={`/${locale}#waitlist`}
             className="block text-sm font-semibold text-white bg-teal hover:bg-teal-dark px-5 py-2.5 rounded-full text-center transition-colors"
             onClick={() => setMenuOpen(false)}
           >
             {t("waitlist")}
-          </a>
+          </Link>
         </div>
       )}
     </header>
