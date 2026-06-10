@@ -32,6 +32,13 @@
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
   --color-info: #3B82F6;
+
+  /* Share landing mini-map (ROA-192) — warm, brand-tinted map palette */
+  --color-map-land: #EFEAE2;
+  --color-map-block: #E6DFD4;
+  --color-map-green: #DCEBDB;
+  --color-map-water: #C9E7E3;
+  --color-map-road: #FBF8F4;
 }
 
 :root {
@@ -78,4 +85,11 @@ html {
 }
 .animate-fade-in-up.delay-400 {
   animation-delay: 0.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+    opacity: 1;
+  }
 }

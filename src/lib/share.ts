@@ -1,0 +1,115 @@
+// Pure helpers for the ROA-192 share landing (/m/[id]). Kept free of React/Next
+// imports so the state/CTA truth tables are unit-testable (eng-review Q2/T1).
+
+export const SHARE_LOCALES = ['ko', 'en', 'th'] as const
+export type ShareLocale = (typeof SHARE_LOCALES)[number]
+
+/**
+ * Viewer locale for the landing chrome. /m/[id] sits OUTSIDE the [locale]
+ * segment, so next-intl's request locale does not apply — we parse the
+ * Accept-Language header ourselves. Fallback: en (matches the backend).
+ */
+export function resolveLocale(acceptLanguage: string | null): ShareLocale {
+  if (!acceptLanguage) return 'en'
+  // RFC 7231-ish: "ko-KR,ko;q=0.9,en;q=0.8" → ordered by q desc.
+  const candidates = acceptLanguage
+    .split(',')
+    .map((part) => {
+      const [tag, ...params] = part.trim().split(';')
+      const qParam = params.find((p) => p.trim().startsWith('q='))
+      const q = qParam ? parseFloat(qParam.trim().slice(2)) : 1
+      return { lang: tag.trim().toLowerCase().split('-')[0], q: Number.isNaN(q) ? 0 : q }
+    })
+    .sort((a, b) => b.q - a.q)
+  for (const { lang } of candidates) {
+    if ((SHARE_LOCALES as readonly string[]).includes(lang)) return lang as ShareLocale
+  }
+  return 'en'
+}
+
+// ── State matrix ──────────────────────────────────────────────────────────────
+// completed/cancelled win over full; full only applies to a still-active meetup.
+export type ShareState = 'active' | 'full' | 'completed' | 'cancelled'
+
+export function resolveState(status: string, full: boolean): ShareState {
+  if (status === 'completed') return 'completed'
+  if (status === 'cancelled') return 'cancelled'
+  if (full) return 'full'
+  return 'active'
+}
+
+// ── CTA matrix (launch state × recipient platform) ───────────────────────────
+export type Platform = 'ios' | 'android' | 'desktop'
+export type LaunchState = 'prelaunch' | 'launched'
+export type CtaVariant =
+  | 'stores' // store badges (launched mobile) — landing CTA opens the right store
+  | 'testflight' // pre-launch iOS → TestFlight public link
+  | 'android_beta_email' // pre-launch Android → email capture → waitlist
+  | 'desktop_panel' // desktop → QR + (launched: store badges | prelaunch: TestFlight QR + email field)
+
+export function resolveCta(platform: Platform, launchState: LaunchState): CtaVariant {
+  if (platform === 'desktop') return 'desktop_panel'
+  if (launchState === 'launched') return 'stores'
+  return platform === 'ios' ? 'testflight' : 'android_beta_email'
+}
+
+export function detectPlatform(userAgent: string | null): Platform {
+  if (!userAgent) return 'desktop'
+  if (/android/i.test(userAgent)) return 'android'
+  if (/iphone|ipad|ipod/i.test(userAgent)) return 'ios'
+  return 'desktop'
+}
+
+// ── Category presentation (D1) — keys mirror the Flutter client + backend ────
+export const CATEGORY_EMOJI: Record<string, string> = {
+  eat: '🍜',
+  cafe: '☕',
+  drinks: '🍺',
+  activity: '🎯',
+  sightseeing: '🗺️',
+}
+
+// Matches --color-* category tokens in globals.css.
+export const CATEGORY_COLOR: Record<string, string> = {
+  eat: '#E07A45',
+  cafe: '#A78B6B',
+  drinks: '#D9A63A',
+  activity: '#5C7CE6',
+  sightseeing: '#4CAF7A',
+}
+
+export function categoryEmoji(category: string): string {
+  return CATEGORY_EMOJI[category] ?? '📍'
+}
+
+export function categoryColor(category: string): string {
+  return CATEGORY_COLOR[category] ?? '#2CB5AE'
+}
+
+/** ISO 3166-1 alpha-2 → flag emoji via regional indicators; null-safe (D1). */
+export function flagEmoji(countryCode: string | null): string | null {
+  if (!countryCode || !/^[A-Za-z]{2}$/.test(countryCode)) return null
+  const base = 0x1f1e6
+  const a = countryCode.toUpperCase().charCodeAt(0) - 65
+  const b = countryCode.toUpperCase().charCodeAt(1) - 65
+  return String.fromCodePoint(base + a, base + b)
+}
+
+/**
+ * Meetup start time for display. The public DTO has no timezone; the beta
+ * footprint (Thailand/Vietnam) is uniformly UTC+7, so we format in
+ * Asia/Bangkok. Revisit when meetups span other offsets.
+ */
+export function formatStartTime(iso: string, locale: ShareLocale): string {
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return ''
+  return new Intl.DateTimeFormat(locale === 'ko' ? 'ko-KR' : locale === 'th' ? 'th-TH' : 'en-US', {
+    timeZone: 'Asia/Bangkok',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date)
+}
