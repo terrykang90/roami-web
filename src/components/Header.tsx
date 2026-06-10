@@ -40,6 +40,8 @@ export default function Header() {
           className="md:hidden p-2 text-text-secondary"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={t("menu")}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
           {menuOpen ? (
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -55,7 +57,7 @@ export default function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-border-subtle px-6 py-4 space-y-3">
+        <div id="mobile-menu" className="md:hidden bg-white border-t border-border-subtle px-6 py-4 space-y-3">
           <Link
             href={`/${locale}/faq`}
             className="block text-sm text-text-secondary hover:text-teal py-2"

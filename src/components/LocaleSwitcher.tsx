@@ -43,8 +43,9 @@ export default function LocaleSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        aria-haspopup="listbox"
+        aria-haspopup="true"
         aria-expanded={open}
+        aria-controls="locale-menu"
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-tertiary cursor-pointer transition-colors"
       >
         <svg
@@ -79,14 +80,13 @@ export default function LocaleSwitcher() {
 
       {open && (
         <ul
-          role="listbox"
+          id="locale-menu"
           className="absolute right-0 mt-2 min-w-[128px] py-1 rounded-xl bg-white border border-border-subtle shadow-lg z-50"
         >
           {LOCALES.map((l) => (
             <li key={l.code}>
               <button
-                role="option"
-                aria-selected={l.code === locale}
+                aria-current={l.code === locale ? "true" : undefined}
                 onClick={() => switchTo(l.code)}
                 className={`w-full text-left px-4 py-2 text-sm cursor-pointer transition-colors hover:bg-bg-secondary ${
                   l.code === locale ? "text-teal font-semibold" : "text-text-secondary"

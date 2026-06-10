@@ -45,7 +45,7 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: "https://roami.kr",
+      url: `https://roami.kr/${locale}`,
       siteName: "roami",
       locale: locale === "ko" ? "ko_KR" : locale === "th" ? "th_TH" : "en_US",
       type: "website",
