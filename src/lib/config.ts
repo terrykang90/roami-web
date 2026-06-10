@@ -3,6 +3,10 @@
 import type { LaunchState } from './share'
 
 export const SITE_BASE = 'https://roami.kr'
+// Final host after the apex 307 redirect. Use for URLs that crawlers FETCH
+// (og:image etc.) — some scrapers (notably KakaoTalk) are unreliable through
+// redirects, while og:url/QR links are fine on the apex.
+export const SITE_CANONICAL = 'https://www.roami.kr'
 
 // Flip to the full store funnel at launch by changing ONE env var (plan 070 4b).
 export const LAUNCH_STATE: LaunchState =

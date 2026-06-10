@@ -5,7 +5,7 @@ import { routing } from "@/i18n/routing";
 import localFont from "next/font/local";
 import { Prompt } from "next/font/google";
 import type { Metadata } from "next";
-import { SITE_BASE } from "@/lib/config";
+import { SITE_BASE, SITE_CANONICAL } from "@/lib/config";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "../../globals.css";
@@ -50,11 +50,20 @@ export async function generateMetadata({
       siteName: "roami",
       locale: locale === "ko" ? "ko_KR" : locale === "th" ? "th_TH" : "en_US",
       type: "website",
+      images: [
+        {
+          url: `${SITE_CANONICAL}/og.png`,
+          width: 1200,
+          height: 630,
+          alt: "roami — travel meetups, right on the map",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
+      images: [`${SITE_CANONICAL}/og.png`],
     },
     robots: {
       index: true,
