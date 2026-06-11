@@ -14,7 +14,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # 로컬 개발 환경(node 24 / npm 11)과 일치 필수 — npm 10은 @swc/core의
+          # optional peer(@swc/helpers)를 lockfile 필수로 취급해 npm ci가 깨진다.
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run lint
