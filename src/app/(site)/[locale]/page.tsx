@@ -5,8 +5,25 @@ import ScrollReveal from "@/components/ScrollReveal";
 import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
-import { TESTFLIGHT_URL } from "@/lib/config";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { TESTFLIGHT_URL, SITE_CANONICAL, LAUNCH_STATE, APP_STORE_URL, PLAY_STORE_URL } from "@/lib/config";
+import { localeAlternates, storeInstallUrls } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
 import { androidBetaPath, type ShareLocale } from "@/lib/share";
+
+// title/description/OG는 layout이 제공 — 여기선 홈의 canonical/hreflang만.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: raw } = await params;
+  // 미들웨어 matcher가 점(.) 포함 경로를 흘려보내므로 raw 세그먼트가 임의
+  // 문자열일 수 있다 — 검증 없이 canonical에 반사하지 않는다.
+  const locale = hasLocale(routing.locales, raw) ? raw : routing.defaultLocale;
+  return { alternates: localeAlternates(locale) };
+}
 
 // App-preview phones. Ordered so the emphasized `chat` phone sits centre-front
 // in the desktop 3D fan. `fan` holds the md+ perspective transform per position;
@@ -36,6 +53,8 @@ export default async function Home() {
   const trust = await getTranslations("trust");
   const waitlist = await getTranslations("waitlist");
   const faq = await getTranslations("faq");
+  const meta = await getTranslations("meta");
+  const installUrls = storeInstallUrls(LAUNCH_STATE, APP_STORE_URL, PLAY_STORE_URL);
 
   const categories = [
     {
@@ -250,6 +269,43 @@ export default async function Home() {
 
   return (
     <>
+      {/* 사이트 스키마는 layout이 아닌 홈에만 — 약관/계정삭제 페이지에 앱
+          스키마가 묻지 않게 한다 (layout은 모든 페이지를 감싼다). */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": `${SITE_CANONICAL}/#org`,
+              name: "roami",
+              url: SITE_CANONICAL,
+              logo: `${SITE_CANONICAL}/logo.svg`,
+              email: "hello@roami.kr",
+            },
+            {
+              "@type": "WebSite",
+              name: "roami",
+              url: SITE_CANONICAL,
+              inLanguage: ["ko", "en", "th"],
+              publisher: { "@id": `${SITE_CANONICAL}/#org` },
+            },
+            {
+              // aggregateRating이 생기기 전까지 리치 결과 자격은 없음 —
+              // 엔티티 그래프(브랜드 인식)용. 출시 후 평점 쌓이면 추가.
+              "@type": "MobileApplication",
+              name: "roami",
+              operatingSystem: "iOS, Android",
+              applicationCategory: "SocialNetworkingApplication",
+              description: meta("description"),
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              publisher: { "@id": `${SITE_CANONICAL}/#org` },
+              ...(installUrls.length ? { installUrl: installUrls } : {}),
+            },
+          ],
+        }}
+      />
+
       {/* ─── HERO ─── */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-teal-light/40 to-white" />

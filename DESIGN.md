@@ -6,7 +6,7 @@ Derived from the main Roami DESIGN.md. This covers the web landing page and mark
 - **What this is:** Landing page and marketing site for Roami — a map-first travel meetup app
 - **Who it's for:** Korean travelers abroad + English-speaking travelers exploring the app
 - **Space/industry:** Travel social / meetup — peers: Nomadtable, Going Solo, Meetup, Couchsurfing
-- **Project type:** Next.js marketing site with i18n (ko/en)
+- **Project type:** Next.js marketing site with i18n (ko/en/th)
 
 ## Aesthetic Direction
 - **Direction:** Organic/Natural — warm and approachable, not cold SaaS

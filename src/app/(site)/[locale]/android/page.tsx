@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { SITE_CANONICAL, TESTFLIGHT_URL } from "@/lib/config";
+import { localeAlternates } from "@/lib/seo";
 import { meetupReturnPath, androidBetaPath, type ShareLocale } from "@/lib/share";
 import { bannerState, type InAppBrowser } from "@/lib/webview";
 import CopyLinkButton from "./CopyLinkButton";
@@ -16,6 +17,7 @@ const OPT_IN_URL = "https://play.google.com/apps/testing/kr.roami.app";
 export async function generateMetadata() {
   const locale = await getLocale();
   return {
+    alternates: localeAlternates(locale, "/android"),
     title:
       locale === "ko"
         ? "Android 베타 참여 — roami"

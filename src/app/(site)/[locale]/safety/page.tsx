@@ -1,8 +1,10 @@
 import { getLocale } from "next-intl/server";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata() {
   const locale = await getLocale();
   return {
+    alternates: localeAlternates(locale, "/safety"),
     title:
       locale === "ko"
         ? "커뮤니티·안전 수칙 — roami"

@@ -1,0 +1,25 @@
+# drift 가드(sitemap.test.ts)와 lint는 CI에서 돌아야 의미가 있다 — Vercel은
+# next build만 실행하므로 vitest는 여기서만 자동 실행된다.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # 로컬 개발 환경(node 24 / npm 11)과 일치 필수 — npm 10은 @swc/core의
+          # optional peer(@swc/helpers)를 lockfile 필수로 취급해 npm ci가 깨진다.
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npx vitest run
+      - run: npm run build

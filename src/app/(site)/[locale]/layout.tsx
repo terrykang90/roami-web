@@ -5,7 +5,7 @@ import { routing } from "@/i18n/routing";
 import localFont from "next/font/local";
 import { Prompt } from "next/font/google";
 import type { Metadata } from "next";
-import { SITE_BASE, SITE_CANONICAL } from "@/lib/config";
+import { SITE_CANONICAL } from "@/lib/config";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "../../globals.css";
@@ -35,6 +35,10 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "meta" });
 
   return {
+    metadataBase: new URL(SITE_CANONICAL),
+    // alternates(canonical/hreflang)는 의도적으로 layout에 두지 않는다 — 여기
+    // 두면 alternates 없는 미래 페이지가 홈의 canonical을 상속해 "홈의 복제본"
+    // 으로 조용히 디인덱스된다. 각 page.tsx가 localeAlternates()로 직접 선언.
     title: t("title"),
     description: t("description"),
     keywords:
@@ -46,7 +50,9 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: `${SITE_BASE}/${locale}`,
+      // og:url은 의도적으로 비움 — layout의 openGraph는 서브페이지에 통째로
+      // 상속되므로, 여기 url을 박으면 /ko/faq 공유가 /ko로 뭉친다 (canonical과
+      // 모순). og:url 부재 시 스크레이퍼는 실제 fetch URL을 쓴다.
       siteName: "roami",
       locale: locale === "ko" ? "ko_KR" : locale === "th" ? "th_TH" : "en_US",
       type: "website",

@@ -9,6 +9,7 @@ import {
   LAUNCH_STATE,
   PLAY_STORE_URL,
   SITE_BASE,
+  SITE_CANONICAL,
   TESTFLIGHT_URL,
 } from "@/lib/config";
 import {
@@ -60,6 +61,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const result = await getPublicMeetup(id, locale);
 
   const base: Metadata = {
+    // 모든 분기 noindex — 단명 UGC 페이지라 색인 가치보다 죽은 SERP 항목
+    // 리스크가 크다. robots.ts가 /m/을 크롤링 허용하는 전제가 바로 이 줄.
+    // (성공 분기에 빠져 있던 걸 2026-06-11 리뷰에서 발견 — 양쪽 공통으로 이동)
+    robots: { index: false },
+    // og:image(파일 컨벤션) URL 해석을 www로 코드 고정 — 없으면 Vercel env
+    // (VERCEL_PROJECT_PRODUCTION_URL)에 의존. og:url은 apex 유지 (config 주석).
+    metadataBase: new URL(SITE_CANONICAL),
     openGraph: {
       url: `${SITE_BASE}/m/${id}`,
       siteName: "roami",
@@ -76,7 +84,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title: `${title} · roami`,
       description: t("notFoundDesc"),
       openGraph: { ...base.openGraph, title, description: t("notFoundDesc") },
-      robots: { index: false },
     };
   }
 

@@ -1,9 +1,13 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import FAQAccordion from "./FAQAccordion";
+import { localeAlternates } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
 
 export async function generateMetadata() {
+  const locale = await getLocale();
   const t = await getTranslations("faq");
   return {
+    alternates: localeAlternates(locale, "/faq"),
     title: `${t("title")} — roami`,
     description: t("subtitle"),
   };
@@ -25,6 +29,17 @@ export default async function FAQPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.question,
+            acceptedAnswer: { "@type": "Answer", text: f.answer },
+          })),
+        }}
+      />
       <div className="text-center mb-12">
         <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-3">{faq("title")}</h1>
         <p className="text-sm text-text-secondary">{faq("subtitle")}</p>
