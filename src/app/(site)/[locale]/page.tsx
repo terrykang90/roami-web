@@ -303,15 +303,18 @@ export default async function Home() {
                   <span className="block text-sm font-bold">{hero("iosCta")}</span>
                 </span>
               </a>
-              <div className="inline-flex items-center gap-2.5 bg-white border-[1.5px] border-border-subtle text-text-muted px-5 py-3 rounded-2xl select-none">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <Link
+                href={`/${locale}/android`}
+                className="inline-flex items-center gap-2.5 bg-white border-[1.5px] border-teal/40 hover:border-teal text-text-primary px-5 py-3 rounded-2xl transition-colors"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#22B07A" aria-hidden="true">
                   <path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.86 3.23a11.5 11.5 0 0 0-9.78 0L5.25 5.9a.4.4 0 1 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
                 </svg>
                 <span className="text-left leading-tight">
-                  <span className="block text-[10px] font-medium">Google Play</span>
-                  <span className="block text-sm font-bold text-text-secondary">{hero("androidCta")}</span>
+                  <span className="block text-[10px] font-medium text-text-muted">Google Play</span>
+                  <span className="block text-sm font-bold">{hero("androidCta")}</span>
                 </span>
-              </div>
+              </Link>
             </div>
             <p className="mt-5 text-sm text-text-secondary">
               {hero("waitlistPrefix")}{" "}
