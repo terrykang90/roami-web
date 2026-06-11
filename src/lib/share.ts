@@ -63,6 +63,12 @@ export interface CtaUrls {
   androidBeta: string // locale-prefixed /android page (self-onboarding steps)
 }
 
+/** Locale-prefixed Android self-onboarding page — single construction site for
+ * every surface that links to it (share landing CTA matrix, landing hero). */
+export function androidBetaPath(locale: ShareLocale): string {
+  return `/${locale}/android`
+}
+
 /**
  * The funnel half of the CTA matrix: where the primary button actually goes.
  * Only an ACTIVE meetup funnels into the app; every other state routes to the

@@ -104,6 +104,20 @@ describe('ctaLabelKey (label half of the CTA matrix)', () => {
   ] as const)('(%s, %s) → %s', (state, cta, expected) => {
     expect(ctaLabelKey(state, cta)).toBe(expected)
   })
+
+  // The truth table above can't catch a key being renamed in the message
+  // files — next-intl renders the raw key path instead of erroring.
+  it('every reachable label key exists in the share namespace', async () => {
+    const { default: en } = await import('../messages/en.json')
+    const shareKeys = Object.keys(en.share)
+    const states = ['active', 'full', 'completed', 'cancelled'] as const
+    const ctas = ['stores', 'testflight', 'android_beta', 'desktop_panel'] as const
+    for (const state of states) {
+      for (const cta of ctas) {
+        expect(shareKeys, `ctaLabelKey(${state}, ${cta})`).toContain(ctaLabelKey(state, cta))
+      }
+    }
+  })
 })
 
 describe('formatStartTime (Asia/Bangkok display)', () => {

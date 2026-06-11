@@ -12,6 +12,7 @@ import {
   TESTFLIGHT_URL,
 } from "@/lib/config";
 import {
+  androidBetaPath,
   ctaLabelKey,
   detectPlatform,
   resolveCta,
@@ -42,7 +43,7 @@ function ctaUrls(locale: ShareLocale) {
     testflight: TESTFLIGHT_URL,
     appStore: APP_STORE_URL,
     playStore: PLAY_STORE_URL,
-    androidBeta: `/${locale}/android`,
+    androidBeta: androidBetaPath(locale),
   };
 }
 

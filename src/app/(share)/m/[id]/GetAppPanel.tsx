@@ -33,7 +33,7 @@ export function StoreBadges({ t, column = false }: { t: ShareT; column?: boolean
         </span>
       </a>
       <a href={PLAY_STORE_URL} className={badge}>
-        <PlayLogo size={16} />
+        <PlayLogo />
         <span className="text-left">
           <small className="block text-[10px] leading-tight text-text-secondary">
             {t("storeGoogleSmall")}
@@ -45,6 +45,8 @@ export function StoreBadges({ t, column = false }: { t: ShareT; column?: boolean
   );
 }
 
+// Default 15, not 16: the Play glyph fills more of its viewBox than the Apple
+// mark, so equal nominal size renders optically larger next to AppleLogo.
 function PlayLogo({ size = 15 }: { size?: number }) {
   return (
     <svg
