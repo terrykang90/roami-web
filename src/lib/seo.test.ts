@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { languagesFor, localeAlternates } from './seo'
+import { languagesFor, localeAlternates, storeInstallUrls } from './seo'
 import { SITE_CANONICAL } from './config'
 
 // x-default=/en은 next-intl 문서 패턴(루트)과 의도적으로 다른 지점 —
@@ -19,6 +19,28 @@ describe('languagesFor', () => {
     for (const url of Object.values(languagesFor('/privacy'))) {
       expect(url.startsWith('https://www.roami.kr/')).toBe(true)
     }
+  })
+
+  it("rejects paths missing the leading slash — 'faq' would silently become /kofaq", () => {
+    expect(() => languagesFor('faq')).toThrow(/must start with/)
+  })
+})
+
+describe('storeInstallUrls', () => {
+  const APP = 'https://apps.apple.com/app/roami'
+  const PLAY = 'https://play.google.com/store/apps/details?id=kr.roami.app'
+
+  it('emits nothing while prelaunch, even with valid URLs', () => {
+    expect(storeInstallUrls('prelaunch', APP, PLAY)).toEqual([])
+  })
+
+  it("drops the '/' env fallback and prefix-only garbage when launched", () => {
+    expect(storeInstallUrls('launched', '/', 'httpsgarbage')).toEqual([])
+    expect(storeInstallUrls('launched', APP, '/')).toEqual([APP])
+  })
+
+  it('emits all valid https store URLs when launched', () => {
+    expect(storeInstallUrls('launched', APP, PLAY)).toEqual([APP, PLAY])
   })
 })
 

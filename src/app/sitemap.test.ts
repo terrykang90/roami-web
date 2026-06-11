@@ -31,30 +31,30 @@ describe('sitemap', () => {
 
 // Drift guard: a page added under (site)/[locale] must be registered in
 // PATHS (sitemap membership) AND declare its own canonical/hreflang.
+// 재귀 스캔 — 중첩 라우트(legal/privacy 등)가 생겨도 잡는다.
 describe('sitemap drift', () => {
-  const pageDirs = readdirSync(LOCALE_DIR, { withFileTypes: true })
-    .filter((d) => d.isDirectory() && existsSync(join(LOCALE_DIR, d.name, 'page.tsx')))
-    .map((d) => `/${d.name}`)
+  const pagePaths = (readdirSync(LOCALE_DIR, { recursive: true }) as string[])
+    .filter((p) => p === 'page.tsx' || p.endsWith('/page.tsx'))
+    .map((p) => (p === 'page.tsx' ? '' : `/${p.slice(0, -'/page.tsx'.length)}`))
     .sort()
 
-  it('PATHS matches the page directories on disk', () => {
-    const subPaths = PATHS.filter((p) => p !== '').slice().sort()
-    expect(pageDirs).toEqual(subPaths)
-    // 홈('')은 [locale]/page.tsx 자체
+  it('PATHS matches the page files on disk (recursive)', () => {
+    expect(pagePaths).toEqual([...PATHS].sort())
     expect(existsSync(join(LOCALE_DIR, 'page.tsx'))).toBe(true)
   })
 
-  it('every page declares localeAlternates (canonical/hreflang)', () => {
-    const pages = [
-      join(LOCALE_DIR, 'page.tsx'),
-      ...pageDirs.map((p) => join(LOCALE_DIR, p.slice(1), 'page.tsx')),
-    ]
-    for (const file of pages) {
-      // 소스 grep — layout 상속에 기대지 않고 페이지가 직접 선언해야 한다
-      // (Issue 2A: 상속이면 누락 시 "홈의 복제본" canonical이 나간다)
-      expect(readFileSync(file, 'utf8'), `${file} is missing localeAlternates(`).toContain(
-        'localeAlternates(',
-      )
+  it('every page declares localeAlternates with ITS OWN path', () => {
+    for (const p of pagePaths) {
+      const file = join(LOCALE_DIR, p === '' ? 'page.tsx' : `${p.slice(1)}/page.tsx`)
+      const src = readFileSync(file, 'utf8')
+      // 소스 검사 — layout 상속에 기대지 않고 페이지가 직접 선언해야 하고
+      // (Issue 2A: 상속이면 누락 시 "홈의 복제본" canonical이 나간다),
+      // path 인자가 디렉토리와 일치해야 한다 (복붙 오타 = 잘못된 canonical).
+      const expected =
+        p === ''
+          ? /localeAlternates\(locale\)/
+          : new RegExp(`localeAlternates\\(locale,\\s*["']${p}["']\\)`)
+      expect(src, `${file} must call localeAlternates(locale${p && `, "${p}"`})`).toMatch(expected)
     }
   })
 })

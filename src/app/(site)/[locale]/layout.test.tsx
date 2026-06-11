@@ -14,12 +14,12 @@ vi.mock("next-intl/server", () => ({
 
 import { generateMetadata } from "./layout";
 
-// 회귀 핀: og:url은 apex(SITE_BASE)가 아니라 canonical 호스트(www)여야 한다.
-// apex는 307이라 link equity가 갈라진다 — plan 003 Phase 1의 의도적 변경.
+// 회귀 핀: layout openGraph는 서브페이지에 통째로 상속되므로 og:url을 두면
+// 안 된다 (/ko/faq 공유가 /ko로 뭉침 — canonical과 모순). metadataBase는 www.
 describe("layout generateMetadata", () => {
-  it.each(["ko", "en", "th"])("og:url uses the www canonical host (%s)", async (locale) => {
+  it.each(["ko", "en", "th"])("og:url is absent; metadataBase is www (%s)", async (locale) => {
     const md = await generateMetadata({ params: Promise.resolve({ locale }) });
-    expect(md.openGraph?.url).toBe(`https://www.roami.kr/${locale}`);
+    expect(md.openGraph?.url).toBeUndefined();
     expect(String(md.metadataBase)).toBe("https://www.roami.kr/");
   });
 

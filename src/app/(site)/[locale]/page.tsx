@@ -5,8 +5,10 @@ import ScrollReveal from "@/components/ScrollReveal";
 import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
-import { TESTFLIGHT_URL, SITE_CANONICAL, LAUNCH_STATE, APP_STORE_URL } from "@/lib/config";
-import { localeAlternates } from "@/lib/seo";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { TESTFLIGHT_URL, SITE_CANONICAL, LAUNCH_STATE, APP_STORE_URL, PLAY_STORE_URL } from "@/lib/config";
+import { localeAlternates, storeInstallUrls } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 import { androidBetaPath, type ShareLocale } from "@/lib/share";
 
@@ -16,7 +18,10 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const { locale: raw } = await params;
+  // 미들웨어 matcher가 점(.) 포함 경로를 흘려보내므로 raw 세그먼트가 임의
+  // 문자열일 수 있다 — 검증 없이 canonical에 반사하지 않는다.
+  const locale = hasLocale(routing.locales, raw) ? raw : routing.defaultLocale;
   return { alternates: localeAlternates(locale) };
 }
 
@@ -49,6 +54,7 @@ export default async function Home() {
   const waitlist = await getTranslations("waitlist");
   const faq = await getTranslations("faq");
   const meta = await getTranslations("meta");
+  const installUrls = storeInstallUrls(LAUNCH_STATE, APP_STORE_URL, PLAY_STORE_URL);
 
   const categories = [
     {
@@ -285,6 +291,8 @@ export default async function Home() {
               publisher: { "@id": `${SITE_CANONICAL}/#org` },
             },
             {
+              // aggregateRating이 생기기 전까지 리치 결과 자격은 없음 —
+              // 엔티티 그래프(브랜드 인식)용. 출시 후 평점 쌓이면 추가.
               "@type": "MobileApplication",
               name: "roami",
               operatingSystem: "iOS, Android",
@@ -292,11 +300,7 @@ export default async function Home() {
               description: meta("description"),
               offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               publisher: { "@id": `${SITE_CANONICAL}/#org` },
-              // LAUNCH_STATE만 믿지 않는다: env 부분 설정 시 APP_STORE_URL이
-              // 기본값 '/'인 채 launched로 뒤집히면 쓰레기 installUrl이 나간다.
-              ...(LAUNCH_STATE === "launched" && APP_STORE_URL.startsWith("https")
-                ? { installUrl: APP_STORE_URL }
-                : {}),
+              ...(installUrls.length ? { installUrl: installUrls } : {}),
             },
           ],
         }}

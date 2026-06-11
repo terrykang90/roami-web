@@ -50,7 +50,9 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      url: `${SITE_CANONICAL}/${locale}`,
+      // og:url은 의도적으로 비움 — layout의 openGraph는 서브페이지에 통째로
+      // 상속되므로, 여기 url을 박으면 /ko/faq 공유가 /ko로 뭉친다 (canonical과
+      // 모순). og:url 부재 시 스크레이퍼는 실제 fetch URL을 쓴다.
       siteName: "roami",
       locale: locale === "ko" ? "ko_KR" : locale === "th" ? "th_TH" : "en_US",
       type: "website",
