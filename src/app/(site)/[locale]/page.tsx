@@ -5,8 +5,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
-import { TESTFLIGHT_URL } from "@/lib/config";
+import { TESTFLIGHT_URL, SITE_CANONICAL, LAUNCH_STATE, APP_STORE_URL } from "@/lib/config";
 import { localeAlternates } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
 import { androidBetaPath, type ShareLocale } from "@/lib/share";
 
 // title/description/OG는 layout이 제공 — 여기선 홈의 canonical/hreflang만.
@@ -47,6 +48,7 @@ export default async function Home() {
   const trust = await getTranslations("trust");
   const waitlist = await getTranslations("waitlist");
   const faq = await getTranslations("faq");
+  const meta = await getTranslations("meta");
 
   const categories = [
     {
@@ -261,6 +263,45 @@ export default async function Home() {
 
   return (
     <>
+      {/* 사이트 스키마는 layout이 아닌 홈에만 — 약관/계정삭제 페이지에 앱
+          스키마가 묻지 않게 한다 (layout은 모든 페이지를 감싼다). */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": `${SITE_CANONICAL}/#org`,
+              name: "roami",
+              url: SITE_CANONICAL,
+              logo: `${SITE_CANONICAL}/logo.svg`,
+              email: "hello@roami.kr",
+            },
+            {
+              "@type": "WebSite",
+              name: "roami",
+              url: SITE_CANONICAL,
+              inLanguage: ["ko", "en", "th"],
+              publisher: { "@id": `${SITE_CANONICAL}/#org` },
+            },
+            {
+              "@type": "MobileApplication",
+              name: "roami",
+              operatingSystem: "iOS, Android",
+              applicationCategory: "SocialNetworkingApplication",
+              description: meta("description"),
+              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              publisher: { "@id": `${SITE_CANONICAL}/#org` },
+              // LAUNCH_STATE만 믿지 않는다: env 부분 설정 시 APP_STORE_URL이
+              // 기본값 '/'인 채 launched로 뒤집히면 쓰레기 installUrl이 나간다.
+              ...(LAUNCH_STATE === "launched" && APP_STORE_URL.startsWith("https")
+                ? { installUrl: APP_STORE_URL }
+                : {}),
+            },
+          ],
+        }}
+      />
+
       {/* ─── HERO ─── */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-teal-light/40 to-white" />
