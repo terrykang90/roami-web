@@ -13,7 +13,7 @@
 - main 직커밋 금지 — 브랜치 + PR
 - SEO: hreflang/canonical은 `src/lib/seo.ts`가 단일 소스. 새 페이지 추가 시
   `src/app/sitemap.ts`의 `PATHS`에 등록하고 페이지에서 `localeAlternates()` 선언
-  (둘 다 누락하면 `sitemap.test.ts` drift 테스트가 실패함)
+  (어느 한쪽이라도 누락하면 `sitemap.test.ts` drift 테스트가 실패함)
 - next-intl `alternateLinks`는 꺼져 있음 — 다시 켜지 말 것 (head/sitemap과 모순)
 - 공유 페이지 `/m/[id]`는 noindex + apex og:url (KakaoTalk 호환) — 건드리기 전에
   `src/lib/config.ts` 주석 확인
