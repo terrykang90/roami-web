@@ -38,13 +38,14 @@ import { CtaButton, Shell } from "./Shell";
 type Params = { params: Promise<{ id: string }> };
 
 // androidBeta is the locale-prefixed self-onboarding page (Google Group →
-// opt-in → install) — same destination as the landing hero's Android tile.
-function ctaUrls(locale: ShareLocale) {
+// opt-in → install) — same destination as the landing hero's Android tile,
+// plus ?from= so the user can return to this meetup afterwards (ROA-223).
+function ctaUrls(locale: ShareLocale, meetupId: string) {
   return {
     testflight: TESTFLIGHT_URL,
     appStore: APP_STORE_URL,
     playStore: PLAY_STORE_URL,
-    androidBeta: androidBetaPath(locale),
+    androidBeta: androidBetaPath(locale, `/m/${meetupId}`),
   };
 }
 
@@ -129,7 +130,7 @@ export default async function ShareLandingPage({ params }: Params) {
   const meetup = result.meetup;
   const state = resolveState(meetup.status, meetup.full);
   const cta = resolveCta(platform, LAUNCH_STATE);
-  const urls = ctaUrls(locale);
+  const urls = ctaUrls(locale, id);
   const ctaHref = resolveCtaHref(state, cta, platform, urls);
   const qrDataUrl = await QRCode.toDataURL(`${SITE_BASE}/m/${id}`, {
     width: 300,
