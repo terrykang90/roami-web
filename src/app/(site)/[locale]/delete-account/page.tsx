@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getLocale } from "next-intl/server";
 import { localeAlternates } from "@/lib/seo";
 
@@ -69,7 +70,7 @@ function DeleteKo() {
             <li>신고·차단 등 안전 관련 기록은 분쟁 대응을 위해 일정 기간 보관 후 파기됩니다.</li>
             <li>법령상 보존 의무: 계약/청약철회 기록 5년, 소비자 분쟁 기록 3년, 접속 로그 3개월.</li>
           </ul>
-          <p>자세한 내용은 <a href="/ko/privacy" className="text-teal font-semibold">개인정보처리방침</a>을 참고하세요.</p>
+          <p>자세한 내용은 <Link href="/ko/privacy" className="text-teal font-semibold">개인정보처리방침</Link>을 참고하세요.</p>
         </Section>
       </div>
     </>
@@ -116,7 +117,7 @@ function DeleteEn() {
             <li>Safety records (reports, blocks) are kept for a limited period for dispute handling, then deleted.</li>
             <li>Records required by law: contract/withdrawal records 5 years, consumer dispute records 3 years, access logs 3 months.</li>
           </ul>
-          <p>See our <a href="/en/privacy" className="text-teal font-semibold">Privacy Policy</a> for details.</p>
+          <p>See our <Link href="/en/privacy" className="text-teal font-semibold">Privacy Policy</Link> for details.</p>
         </Section>
       </div>
     </>
@@ -162,7 +163,7 @@ function DeleteTh() {
             <li>บันทึกด้านความปลอดภัย (รายงาน บล็อก) เก็บไว้ระยะหนึ่งเพื่อจัดการข้อพิพาท แล้วจึงลบ</li>
             <li>บันทึกตามกฎหมาย: สัญญา/การถอนตัว 5 ปี ข้อพิพาทผู้บริโภค 3 ปี บันทึกการเข้าถึง 3 เดือน</li>
           </ul>
-          <p>ดูรายละเอียดที่<a href="/th/privacy" className="text-teal font-semibold">นโยบายความเป็นส่วนตัว</a></p>
+          <p>ดูรายละเอียดที่<Link href="/th/privacy" className="text-teal font-semibold">นโยบายความเป็นส่วนตัว</Link></p>
         </Section>
       </div>
     </>

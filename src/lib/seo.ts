@@ -9,9 +9,10 @@ import { routing } from '@/i18n/routing'
 // patterns. /en keeps the whole cluster redirect-free 200s.
 export function languagesFor(path = '') {
   return {
-    ...Object.fromEntries(
+    // fromEntries는 키를 string으로 뭉개므로 locale 키 타입을 복원한다
+    ...(Object.fromEntries(
       routing.locales.map((l) => [l, `${SITE_CANONICAL}/${l}${path}`]),
-    ),
+    ) as Record<(typeof routing.locales)[number], string>),
     'x-default': `${SITE_CANONICAL}/en${path}`,
   }
 }
