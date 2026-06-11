@@ -1,8 +1,8 @@
 import { getLocale } from "next-intl/server";
+import { TESTFLIGHT_URL } from "@/lib/config";
 
 const GROUP_URL = "https://groups.google.com/g/roami-beta";
 const OPT_IN_URL = "https://play.google.com/apps/testing/kr.roami.app";
-const TESTFLIGHT_URL = "https://testflight.apple.com/join/AU2THE4z";
 
 export async function generateMetadata() {
   const locale = await getLocale();

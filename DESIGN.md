@@ -150,7 +150,7 @@ Public OG-previewable meetup landing, outside the `[locale]` segment (viewer loc
 
 **5 states** (`resolveState`, truth-tabled in `src/lib/share.test.ts`): active / full (🔒 overlay, muted chip, CTA→비슷한 모임) / completed·cancelled (grayscale map, dimmed body, CTA→다음·다른 모임) / not-found·error (no dead ends — always a CTA to `/`). OG image always renders active-style (platform caches are stale by design; the live page is accurate).
 
-**CTA matrix** (`resolveCta`): `NEXT_PUBLIC_LAUNCH_STATE` (`prelaunch`|`launched`) × UA platform. prelaunch: iOS→TestFlight (`NEXT_PUBLIC_TESTFLIGHT_URL`), Android→email capture→`/waitlist` `source=android_beta`; launched: store badges (`NEXT_PUBLIC_APP_STORE_URL`/`NEXT_PUBLIC_PLAY_STORE_URL`). Desktop (≥768px) = 2-col, card max 480px + sticky get-app panel with server-generated QR (`qrcode` lib — never an external QR API).
+**CTA matrix** (`resolveCta`): `NEXT_PUBLIC_LAUNCH_STATE` (`prelaunch`|`launched`) × UA platform. prelaunch: iOS→TestFlight (`NEXT_PUBLIC_TESTFLIGHT_URL`), Android→`/{locale}/android` self-onboarding link (Google Group → opt-in → Play 설치); launched: store badges (`NEXT_PUBLIC_APP_STORE_URL`/`NEXT_PUBLIC_PLAY_STORE_URL`). Desktop (≥768px) = 2-col, card max 480px + sticky get-app panel with server-generated QR (`qrcode` lib — never an external QR API).
 
 **A11y**: readable text uses `text-secondary` (#6B6460, ≈5:1 on cream) — `text-muted` is decoration-only. `<html lang>` = viewer locale. 48px CTA, 44px badges, focus rings, `prefers-reduced-motion` guard.
 

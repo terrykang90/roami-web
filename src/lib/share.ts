@@ -88,6 +88,25 @@ export function resolveCtaHref(
   }
 }
 
+/**
+ * The label half of the CTA matrix — i18n key for the primary button. Kept
+ * beside resolveCtaHref so label and href can't drift apart silently when the
+ * funnel rules change. ctaFull is the only key that interpolates {city}.
+ */
+export function ctaLabelKey(state: ShareState, cta: CtaVariant): string {
+  if (state === 'active' && cta === 'android_beta') return 'androidBetaCta'
+  switch (state) {
+    case 'active':
+      return 'ctaActive'
+    case 'full':
+      return 'ctaFull'
+    case 'completed':
+      return 'ctaCompleted'
+    case 'cancelled':
+      return 'ctaCancelled'
+  }
+}
+
 // Tiers the share UI knows how to label; unknown future values must never leak
 // a raw i18n key path into the trust chip — fall back to new_member.
 export const KNOWN_TIERS = ['new_member', 'first_completed', 'trusted', 'veteran'] as const

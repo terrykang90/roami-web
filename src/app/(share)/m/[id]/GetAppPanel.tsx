@@ -33,9 +33,7 @@ export function StoreBadges({ t, column = false }: { t: ShareT; column?: boolean
         </span>
       </a>
       <a href={PLAY_STORE_URL} className={badge}>
-        <span aria-hidden="true" className="text-[16px]">
-          ▶
-        </span>
+        <PlayLogo size={16} />
         <span className="text-left">
           <small className="block text-[10px] leading-tight text-text-secondary">
             {t("storeGoogleSmall")}

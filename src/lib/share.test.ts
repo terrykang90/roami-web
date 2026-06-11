@@ -6,6 +6,7 @@ import {
   resolveLocale,
   detectPlatform,
   categoryEmoji,
+  ctaLabelKey,
   flagEmoji,
   formatStartTime,
   normalizeTier,
@@ -85,6 +86,23 @@ describe('resolveCtaHref (funnel routing)', () => {
     ['active', 'desktop_panel', 'desktop', '/'],
   ] as const)('(%s, %s, %s) → %s', (state, cta, platform, expected) => {
     expect(resolveCtaHref(state, cta, platform, urls)).toBe(expected)
+  })
+})
+
+describe('ctaLabelKey (label half of the CTA matrix)', () => {
+  it.each([
+    // active: android_beta is the only cta with its own label
+    ['active', 'android_beta', 'androidBetaCta'],
+    ['active', 'testflight', 'ctaActive'],
+    ['active', 'stores', 'ctaActive'],
+    ['active', 'desktop_panel', 'ctaActive'],
+    // non-active states label by state, whatever the cta
+    ['full', 'android_beta', 'ctaFull'],
+    ['full', 'stores', 'ctaFull'],
+    ['completed', 'testflight', 'ctaCompleted'],
+    ['cancelled', 'android_beta', 'ctaCancelled'],
+  ] as const)('(%s, %s) → %s', (state, cta, expected) => {
+    expect(ctaLabelKey(state, cta)).toBe(expected)
   })
 })
 

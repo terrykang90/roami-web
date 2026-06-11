@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import QRCode from "qrcode";
-import { getPublicMeetup, type PublicMeetup } from "@/lib/api";
+import { getPublicMeetup } from "@/lib/api";
 import {
   APP_STORE_URL,
   LAUNCH_STATE,
@@ -12,6 +12,7 @@ import {
   TESTFLIGHT_URL,
 } from "@/lib/config";
 import {
+  ctaLabelKey,
   detectPlatform,
   resolveCta,
   resolveCtaHref,
@@ -120,7 +121,8 @@ export default async function ShareLandingPage({ params }: Params) {
   const meetup = result.meetup;
   const state = resolveState(meetup.status, meetup.full);
   const cta = resolveCta(platform, LAUNCH_STATE);
-  const ctaHref = resolveCtaHref(state, cta, platform, ctaUrls(locale));
+  const urls = ctaUrls(locale);
+  const ctaHref = resolveCtaHref(state, cta, platform, urls);
   const qrDataUrl = await QRCode.toDataURL(`${SITE_BASE}/m/${id}`, {
     width: 300,
     margin: 0,
@@ -138,11 +140,7 @@ export default async function ShareLandingPage({ params }: Params) {
           <div className="mt-4 md:hidden">
             <CtaButton
               href={ctaHref}
-              label={
-                cta === "android_beta" && state === "active"
-                  ? t("androidBetaCta")
-                  : ctaLabel(state, t, meetup)
-              }
+              label={t(ctaLabelKey(state, cta), { city: meetup.city || "Roami" })}
             />
             <SecondaryArea state={state} cta={cta} t={t} />
           </div>
@@ -150,24 +148,11 @@ export default async function ShareLandingPage({ params }: Params) {
 
         {/* desktop get-app panel */}
         <div className="hidden w-[320px] flex-none md:block">
-          <GetAppPanel qrDataUrl={qrDataUrl} androidBetaHref={`/${locale}/android`} t={t} />
+          <GetAppPanel qrDataUrl={qrDataUrl} androidBetaHref={urls.androidBeta} t={t} />
         </div>
       </div>
     </Shell>
   );
-}
-
-function ctaLabel(state: ShareState, t: ShareT, meetup: PublicMeetup): string {
-  switch (state) {
-    case "active":
-      return t("ctaActive");
-    case "full":
-      return t("ctaFull", { city: meetup.city || "Roami" });
-    case "completed":
-      return t("ctaCompleted");
-    case "cancelled":
-      return t("ctaCancelled");
-  }
 }
 
 // Below the mobile CTA: state note (full/done/cancel) or install paths (active).
