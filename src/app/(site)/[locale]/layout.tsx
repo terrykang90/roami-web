@@ -36,6 +36,11 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE_CANONICAL),
+    // 네이버 서치어드바이저 소유확인 — public/naverXXXX.html(파일 방식)과 병행.
+    // 루트가 /ko로 307되므로 봇이 리다이렉트를 따라와도 확인되게 메타도 유지.
+    verification: {
+      other: { "naver-site-verification": "0313587e0139ae5c07dc12707a94455fa175cde9" },
+    },
     // alternates(canonical/hreflang)는 의도적으로 layout에 두지 않는다 — 여기
     // 두면 alternates 없는 미래 페이지가 홈의 canonical을 상속해 "홈의 복제본"
     // 으로 조용히 디인덱스된다. 각 page.tsx가 localeAlternates()로 직접 선언.
