@@ -6,6 +6,7 @@ import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
 import { TESTFLIGHT_URL } from "@/lib/config";
+import { androidBetaPath, type ShareLocale } from "@/lib/share";
 
 // App-preview phones. Ordered so the emphasized `chat` phone sits centre-front
 // in the desktop 3D fan. `fan` holds the md+ perspective transform per position;
@@ -304,7 +305,7 @@ export default async function Home() {
                 </span>
               </a>
               <Link
-                href={`/${locale}/android`}
+                href={androidBetaPath(locale as ShareLocale)}
                 className="inline-flex items-center gap-2.5 bg-white border-[1.5px] border-teal/40 hover:border-teal text-text-primary px-5 py-3 rounded-2xl transition-colors"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#22B07A" aria-hidden="true">

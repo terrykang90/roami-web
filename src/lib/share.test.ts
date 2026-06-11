@@ -6,6 +6,7 @@ import {
   resolveLocale,
   detectPlatform,
   categoryEmoji,
+  ctaLabelKey,
   flagEmoji,
   formatStartTime,
   normalizeTier,
@@ -36,7 +37,7 @@ describe('resolveCta', () => {
     ['android', 'launched', 'stores'],
     ['desktop', 'launched', 'desktop_panel'],
     ['ios', 'prelaunch', 'testflight'],
-    ['android', 'prelaunch', 'android_beta_email'],
+    ['android', 'prelaunch', 'android_beta'],
     ['desktop', 'prelaunch', 'desktop_panel'],
   ] as const)('(%s, %s) → %s', (platform, launchState, expected) => {
     expect(resolveCta(platform, launchState)).toBe(expected)
@@ -71,7 +72,7 @@ describe('detectPlatform', () => {
 })
 
 describe('resolveCtaHref (funnel routing)', () => {
-  const urls: CtaUrls = { testflight: 'https://tf.example', appStore: 'https://as.example', playStore: 'https://ps.example' }
+  const urls: CtaUrls = { testflight: 'https://tf.example', appStore: 'https://as.example', playStore: 'https://ps.example', androidBeta: '/ko/android' }
   it.each([
     // every non-active state routes to the marketing site, whatever the cta
     ['full', 'testflight', 'ios', '/'],
@@ -81,10 +82,41 @@ describe('resolveCtaHref (funnel routing)', () => {
     ['active', 'testflight', 'ios', 'https://tf.example'],
     ['active', 'stores', 'ios', 'https://as.example'],
     ['active', 'stores', 'android', 'https://ps.example'],
-    ['active', 'android_beta_email', 'android', '/'],
+    ['active', 'android_beta', 'android', '/ko/android'],
     ['active', 'desktop_panel', 'desktop', '/'],
   ] as const)('(%s, %s, %s) → %s', (state, cta, platform, expected) => {
     expect(resolveCtaHref(state, cta, platform, urls)).toBe(expected)
+  })
+})
+
+describe('ctaLabelKey (label half of the CTA matrix)', () => {
+  it.each([
+    // active: android_beta is the only cta with its own label
+    ['active', 'android_beta', 'androidBetaCta'],
+    ['active', 'testflight', 'ctaActive'],
+    ['active', 'stores', 'ctaActive'],
+    ['active', 'desktop_panel', 'ctaActive'],
+    // non-active states label by state, whatever the cta
+    ['full', 'android_beta', 'ctaFull'],
+    ['full', 'stores', 'ctaFull'],
+    ['completed', 'testflight', 'ctaCompleted'],
+    ['cancelled', 'android_beta', 'ctaCancelled'],
+  ] as const)('(%s, %s) → %s', (state, cta, expected) => {
+    expect(ctaLabelKey(state, cta)).toBe(expected)
+  })
+
+  // The truth table above can't catch a key being renamed in the message
+  // files — next-intl renders the raw key path instead of erroring.
+  it('every reachable label key exists in the share namespace', async () => {
+    const { default: en } = await import('../messages/en.json')
+    const shareKeys = Object.keys(en.share)
+    const states = ['active', 'full', 'completed', 'cancelled'] as const
+    const ctas = ['stores', 'testflight', 'android_beta', 'desktop_panel'] as const
+    for (const state of states) {
+      for (const cta of ctas) {
+        expect(shareKeys, `ctaLabelKey(${state}, ${cta})`).toContain(ctaLabelKey(state, cta))
+      }
+    }
   })
 })
 

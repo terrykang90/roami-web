@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import QRCode from "qrcode";
-import { getPublicMeetup, type PublicMeetup } from "@/lib/api";
+import { getPublicMeetup } from "@/lib/api";
 import {
   APP_STORE_URL,
   LAUNCH_STATE,
@@ -12,6 +12,8 @@ import {
   TESTFLIGHT_URL,
 } from "@/lib/config";
 import {
+  androidBetaPath,
+  ctaLabelKey,
   detectPlatform,
   resolveCta,
   resolveCtaHref,
@@ -24,7 +26,6 @@ import {
 } from "@/lib/share";
 import ShareCard from "./ShareCard";
 import GetAppPanel, { StoreBadges } from "./GetAppPanel";
-import AndroidBetaForm, { type AndroidBetaLabels } from "./AndroidBetaForm";
 import { CtaButton, Shell } from "./Shell";
 
 // Public share landing (ROA-192 Phase 2). Server-rendered; personalizes on
@@ -35,7 +36,16 @@ import { CtaButton, Shell } from "./Shell";
 
 type Params = { params: Promise<{ id: string }> };
 
-const CTA_URLS = { testflight: TESTFLIGHT_URL, appStore: APP_STORE_URL, playStore: PLAY_STORE_URL };
+// androidBeta is the locale-prefixed self-onboarding page (Google Group →
+// opt-in → install) — same destination as the landing hero's Android tile.
+function ctaUrls(locale: ShareLocale) {
+  return {
+    testflight: TESTFLIGHT_URL,
+    appStore: APP_STORE_URL,
+    playStore: PLAY_STORE_URL,
+    androidBeta: androidBetaPath(locale),
+  };
+}
 
 async function viewerLocale(): Promise<ShareLocale> {
   const h = await headers();
@@ -91,16 +101,6 @@ export default async function ShareLandingPage({ params }: Params) {
   // Gone/hidden meetup → branded not-found WITH a real 404 status (not-found.tsx).
   if (result.kind === "not_found") notFound();
 
-  const androidBetaLabels: AndroidBetaLabels = {
-    title: t("androidBetaTitle"),
-    placeholder: t("androidBetaPlaceholder"),
-    submit: t("androidBetaSubmit"),
-    submitting: t("androidBetaSubmitting"),
-    success: t("androidBetaSuccess"),
-    error: t("androidBetaError"),
-    duplicate: t("androidBetaDuplicate"),
-  };
-
   // Transient API failure: same shell, apologetic copy, still funnels to "/".
   if (result.kind === "error") {
     return (
@@ -122,7 +122,8 @@ export default async function ShareLandingPage({ params }: Params) {
   const meetup = result.meetup;
   const state = resolveState(meetup.status, meetup.full);
   const cta = resolveCta(platform, LAUNCH_STATE);
-  const ctaHref = resolveCtaHref(state, cta, platform, CTA_URLS);
+  const urls = ctaUrls(locale);
+  const ctaHref = resolveCtaHref(state, cta, platform, urls);
   const qrDataUrl = await QRCode.toDataURL(`${SITE_BASE}/m/${id}`, {
     width: 300,
     margin: 0,
@@ -138,35 +139,21 @@ export default async function ShareLandingPage({ params }: Params) {
 
           {/* mobile CTA area (desktop uses the right panel) */}
           <div className="mt-4 md:hidden">
-            {cta === "android_beta_email" && state === "active" ? (
-              <AndroidBetaForm meetupId={meetup.id} labels={androidBetaLabels} />
-            ) : (
-              <CtaButton href={ctaHref} label={ctaLabel(state, t, meetup)} />
-            )}
+            <CtaButton
+              href={ctaHref}
+              label={t(ctaLabelKey(state, cta), { city: meetup.city || "Roami" })}
+            />
             <SecondaryArea state={state} cta={cta} t={t} />
           </div>
         </div>
 
         {/* desktop get-app panel */}
         <div className="hidden w-[320px] flex-none md:block">
-          <GetAppPanel qrDataUrl={qrDataUrl} meetupId={meetup.id} androidBetaLabels={androidBetaLabels} t={t} />
+          <GetAppPanel qrDataUrl={qrDataUrl} androidBetaHref={urls.androidBeta} t={t} />
         </div>
       </div>
     </Shell>
   );
-}
-
-function ctaLabel(state: ShareState, t: ShareT, meetup: PublicMeetup): string {
-  switch (state) {
-    case "active":
-      return t("ctaActive");
-    case "full":
-      return t("ctaFull", { city: meetup.city || "Roami" });
-    case "completed":
-      return t("ctaCompleted");
-    case "cancelled":
-      return t("ctaCancelled");
-  }
 }
 
 // Below the mobile CTA: state note (full/done/cancel) or install paths (active).
@@ -178,6 +165,9 @@ function SecondaryArea({ state, cta, t }: { state: ShareState; cta: CtaVariant; 
   }
   if (cta === "testflight") {
     return <p className="mt-2.5 text-center text-[12px] text-text-secondary">{t("testflightNote")}</p>;
+  }
+  if (cta === "android_beta") {
+    return <p className="mt-2.5 text-center text-[12px] text-text-secondary">{t("androidBetaNote")}</p>;
   }
   if (cta === "stores") {
     return (

@@ -47,19 +47,26 @@ export type LaunchState = 'prelaunch' | 'launched'
 export type CtaVariant =
   | 'stores' // store badges (launched mobile) — landing CTA opens the right store
   | 'testflight' // pre-launch iOS → TestFlight public link
-  | 'android_beta_email' // pre-launch Android → email capture → waitlist
-  | 'desktop_panel' // desktop → QR + (launched: store badges | prelaunch: TestFlight QR + email field)
+  | 'android_beta' // pre-launch Android → /android self-onboarding (Google Group → opt-in → install)
+  | 'desktop_panel' // desktop → QR + (launched: store badges | prelaunch: TestFlight + /android links)
 
 export function resolveCta(platform: Platform, launchState: LaunchState): CtaVariant {
   if (platform === 'desktop') return 'desktop_panel'
   if (launchState === 'launched') return 'stores'
-  return platform === 'ios' ? 'testflight' : 'android_beta_email'
+  return platform === 'ios' ? 'testflight' : 'android_beta'
 }
 
 export interface CtaUrls {
   testflight: string
   appStore: string
   playStore: string
+  androidBeta: string // locale-prefixed /android page (self-onboarding steps)
+}
+
+/** Locale-prefixed Android self-onboarding page — single construction site for
+ * every surface that links to it (share landing CTA matrix, landing hero). */
+export function androidBetaPath(locale: ShareLocale): string {
+  return `/${locale}/android`
 }
 
 /**
@@ -80,9 +87,29 @@ export function resolveCtaHref(
       return urls.testflight
     case 'stores':
       return platform === 'ios' ? urls.appStore : urls.playStore
-    case 'android_beta_email':
+    case 'android_beta':
+      return urls.androidBeta
     case 'desktop_panel':
       return '/'
+  }
+}
+
+/**
+ * The label half of the CTA matrix — i18n key for the primary button. Kept
+ * beside resolveCtaHref so label and href can't drift apart silently when the
+ * funnel rules change. ctaFull is the only key that interpolates {city}.
+ */
+export function ctaLabelKey(state: ShareState, cta: CtaVariant): string {
+  if (state === 'active' && cta === 'android_beta') return 'androidBetaCta'
+  switch (state) {
+    case 'active':
+      return 'ctaActive'
+    case 'full':
+      return 'ctaFull'
+    case 'completed':
+      return 'ctaCompleted'
+    case 'cancelled':
+      return 'ctaCancelled'
   }
 }
 

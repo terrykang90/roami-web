@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
 import { APP_STORE_URL, LAUNCH_STATE, PLAY_STORE_URL, TESTFLIGHT_URL } from "@/lib/config";
 import type { ShareT } from "@/lib/share";
-import AndroidBetaForm, { type AndroidBetaLabels } from "./AndroidBetaForm";
 
 function AppleLogo({ size = 16 }: { size?: number }) {
   return (
@@ -33,9 +33,7 @@ export function StoreBadges({ t, column = false }: { t: ShareT; column?: boolean
         </span>
       </a>
       <a href={PLAY_STORE_URL} className={badge}>
-        <span aria-hidden="true" className="text-[16px]">
-          ▶
-        </span>
+        <PlayLogo />
         <span className="text-left">
           <small className="block text-[10px] leading-tight text-text-secondary">
             {t("storeGoogleSmall")}
@@ -47,19 +45,36 @@ export function StoreBadges({ t, column = false }: { t: ShareT; column?: boolean
   );
 }
 
+// Default 15, not 16: the Play glyph fills more of its viewBox than the Apple
+// mark, so equal nominal size renders optically larger next to AppleLogo.
+function PlayLogo({ size = 15 }: { size?: number }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="shrink-0"
+    >
+      <path d="M3.6 1.8c-.4.2-.6.6-.6 1.1v18.2c0 .5.2.9.6 1.1l9.5-10.2L3.6 1.8zM14.6 10.6 5.3 1l11.6 6.6-2.3 3zM5.3 23l9.3-9.6 2.3 3L5.3 23zM17.9 8.2l-2.6 3.8 2.6 3.8 3.5-2c1-.6 1-2.9 0-3.5l-3.5-2.1z" />
+    </svg>
+  );
+}
+
 // Desktop right column (≥768px, meetup-desktop.html): QR is the hero — you
 // can't install on a PC, so scan-to-phone leads and store paths are secondary.
 export default function GetAppPanel({
   qrDataUrl,
-  meetupId,
-  androidBetaLabels,
+  androidBetaHref,
   t,
 }: {
   qrDataUrl: string;
-  meetupId: string | null;
-  androidBetaLabels: AndroidBetaLabels;
+  androidBetaHref: string;
   t: ShareT;
 }) {
+  const betaBtn =
+    "flex min-h-[44px] items-center justify-center gap-2 rounded-[11px] border border-border-default bg-white px-3 py-2 text-[13px] font-bold text-text-primary transition-colors hover:border-text-muted focus:outline-none focus:ring-2 focus:ring-teal/40";
   return (
     <aside className="sticky top-5 rounded-[20px] border border-border-subtle bg-white p-6 text-center shadow-[0_16px_36px_rgba(26,22,20,0.08)]">
       <h2 className="text-[21px] font-bold tracking-[-0.02em]">{t("getAppTitle")}</h2>
@@ -79,13 +94,12 @@ export default function GetAppPanel({
         <StoreBadges t={t} column />
       ) : (
         <div className="space-y-3">
-          <a
-            href={TESTFLIGHT_URL}
-            className="flex min-h-[44px] items-center justify-center gap-2 rounded-[11px] border border-border-default bg-white px-3 py-2 text-[13px] font-bold text-text-primary transition-colors hover:border-text-muted focus:outline-none focus:ring-2 focus:ring-teal/40"
-          >
+          <a href={TESTFLIGHT_URL} className={betaBtn}>
             <AppleLogo /> {t("testflightCta")}
           </a>
-          <AndroidBetaForm meetupId={meetupId} labels={androidBetaLabels} />
+          <Link href={androidBetaHref} className={betaBtn}>
+            <PlayLogo /> {t("androidBetaCta")}
+          </Link>
         </div>
       )}
     </aside>

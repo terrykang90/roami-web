@@ -13,9 +13,11 @@ export const LAUNCH_STATE: LaunchState =
   process.env.NEXT_PUBLIC_LAUNCH_STATE === 'launched' ? 'launched' : 'prelaunch'
 
 // Chiang Mai public beta link — also used by the marketing homepage.
+// `||` not `??`: an empty-but-defined env var must still fall back — `href=""`
+// is a same-page no-op link, the one thing these constants must never produce.
 export const TESTFLIGHT_URL =
-  process.env.NEXT_PUBLIC_TESTFLIGHT_URL ?? 'https://testflight.apple.com/join/AU2THE4z'
+  process.env.NEXT_PUBLIC_TESTFLIGHT_URL || 'https://testflight.apple.com/join/AU2THE4z'
 
 // Until the store listings exist these default to the marketing site (never a dead link).
-export const APP_STORE_URL = process.env.NEXT_PUBLIC_APP_STORE_URL ?? '/'
-export const PLAY_STORE_URL = process.env.NEXT_PUBLIC_PLAY_STORE_URL ?? '/'
+export const APP_STORE_URL = process.env.NEXT_PUBLIC_APP_STORE_URL || '/'
+export const PLAY_STORE_URL = process.env.NEXT_PUBLIC_PLAY_STORE_URL || '/'
