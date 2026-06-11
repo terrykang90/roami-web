@@ -64,9 +64,21 @@ export interface CtaUrls {
 }
 
 /** Locale-prefixed Android self-onboarding page — single construction site for
- * every surface that links to it (share landing CTA matrix, landing hero). */
-export function androidBetaPath(locale: ShareLocale): string {
-  return `/${locale}/android`
+ * every surface that links to it (share landing CTA matrix, landing hero).
+ * `from` (ROA-223) is the share-landing path to return to after onboarding. */
+export function androidBetaPath(locale: ShareLocale, from?: string): string {
+  const base = `/${locale}/android`
+  return from ? `${base}?from=${encodeURIComponent(from)}` : base
+}
+
+/**
+ * Validates a ?from= value before it's rendered as a back-link href on
+ * /android (ROA-223). Mirrors the meetup-id charset enforced in api.ts —
+ * no `/` `%` `:` beyond the literal `/m/` prefix, so `//evil.com`, schemes,
+ * traversal, and encoded slashes are all rejected (open-redirect guard).
+ */
+export function meetupReturnPath(from: string | null): string | null {
+  return from && /^\/m\/[A-Za-z0-9-]{1,64}$/.test(from) ? from : null
 }
 
 /**

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
+  androidBetaPath,
   resolveState,
   resolveCta,
   resolveCtaHref,
@@ -9,6 +10,7 @@ import {
   ctaLabelKey,
   flagEmoji,
   formatStartTime,
+  meetupReturnPath,
   normalizeTier,
   truncate,
   type CtaUrls,
@@ -72,7 +74,8 @@ describe('detectPlatform', () => {
 })
 
 describe('resolveCtaHref (funnel routing)', () => {
-  const urls: CtaUrls = { testflight: 'https://tf.example', appStore: 'https://as.example', playStore: 'https://ps.example', androidBeta: '/ko/android' }
+  // androidBeta carries a ?from= query in production — prove pass-through.
+  const urls: CtaUrls = { testflight: 'https://tf.example', appStore: 'https://as.example', playStore: 'https://ps.example', androidBeta: '/ko/android?from=%2Fm%2F123' }
   it.each([
     // every non-active state routes to the marketing site, whatever the cta
     ['full', 'testflight', 'ios', '/'],
@@ -82,10 +85,38 @@ describe('resolveCtaHref (funnel routing)', () => {
     ['active', 'testflight', 'ios', 'https://tf.example'],
     ['active', 'stores', 'ios', 'https://as.example'],
     ['active', 'stores', 'android', 'https://ps.example'],
-    ['active', 'android_beta', 'android', '/ko/android'],
+    ['active', 'android_beta', 'android', '/ko/android?from=%2Fm%2F123'],
     ['active', 'desktop_panel', 'desktop', '/'],
   ] as const)('(%s, %s, %s) → %s', (state, cta, platform, expected) => {
     expect(resolveCtaHref(state, cta, platform, urls)).toBe(expected)
+  })
+})
+
+describe('androidBetaPath (ROA-223 from param)', () => {
+  it.each([['ko'], ['en'], ['th']] as const)('%s without from → plain path', (locale) => {
+    expect(androidBetaPath(locale)).toBe(`/${locale}/android`)
+  })
+  it('encodes the from path into the query', () => {
+    expect(androidBetaPath('ko', '/m/abc-123')).toBe('/ko/android?from=%2Fm%2Fabc-123')
+  })
+})
+
+describe('meetupReturnPath (open-redirect guard)', () => {
+  it.each([
+    ['/m/0b8e6c2a-1f4d-4e8a-9c3b-2d5f6a7b8c9d', '/m/0b8e6c2a-1f4d-4e8a-9c3b-2d5f6a7b8c9d'],
+    ['/m/abc-123', '/m/abc-123'],
+    // everything below must be rejected
+    ['//evil.com', null],
+    ['https://evil.com/m/x', null],
+    ['/m/x/../admin', null],
+    ['/m/x%2Fy', null], // encoded slash — % not in charset
+    ['/m/', null],
+    [`/m/${'a'.repeat(65)}`, null], // over the 64-char id cap
+    ['/android', null],
+    ['', null],
+    [null, null],
+  ])('%s → %s', (from, expected) => {
+    expect(meetupReturnPath(from)).toBe(expected)
   })
 })
 

@@ -1,5 +1,14 @@
+import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { TESTFLIGHT_URL } from "@/lib/config";
+import { meetupReturnPath, androidBetaPath, type ShareLocale } from "@/lib/share";
+import { bannerState } from "@/lib/webview";
+import CopyLinkButton from "./CopyLinkButton";
+
+// ROA-222/223: this page personalizes on User-Agent (in-app webview escape
+// banner) and ?from= (back-to-meetup link), both SERVER-rendered — the escape
+// hatch must exist in the first HTML, never behind hydration. Like /m/[id],
+// this HTML must NEVER be force-cached by a CDN (UA/query poisoning).
 
 const GROUP_URL = "https://groups.google.com/g/roami-beta";
 const OPT_IN_URL = "https://play.google.com/apps/testing/kr.roami.app";
@@ -22,14 +31,64 @@ export async function generateMetadata() {
   };
 }
 
-export default async function AndroidBetaPage() {
+export default async function AndroidBetaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ from?: string }>;
+}) {
   const locale = await getLocale();
   const t = locale === "ko" ? KO : locale === "th" ? TH : EN;
 
+  const { from: rawFrom } = await searchParams;
+  const from = meetupReturnPath(rawFrom ?? null);
+
+  // Full URL of this page (validated from only) — the escape link reopens it
+  // in an external browser, so the meetup context must survive the hop.
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "www.roami.kr";
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const currentUrl = `${proto}://${host}${androidBetaPath(locale as ShareLocale, from ?? undefined)}`;
+  const banner = bannerState(h.get("user-agent"), currentUrl);
+
   return (
     <div className="max-w-2xl mx-auto px-6 py-16 md:py-24">
+      {from && (
+        <a
+          href={from}
+          className="inline-flex items-center gap-1 text-sm font-semibold text-teal hover:text-teal-dark transition-colors mb-4"
+        >
+          ← {t.backToMeetup}
+        </a>
+      )}
+
       <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-3">{t.title}</h1>
       <p className="text-sm text-text-secondary leading-relaxed mb-4">{t.intro}</p>
+
+      {banner && (
+        <div className="bg-secondary-light border border-secondary/30 rounded-2xl px-5 py-4 mb-4">
+          <p className="text-sm font-bold text-text-primary leading-relaxed">
+            📱 {bannerTitle(banner.app, t)}
+          </p>
+          <p className="mt-1 text-[13px] text-text-secondary leading-relaxed">
+            {banner.mode === "escape" ? t.webviewSub : t.webviewManualOnly}
+          </p>
+          {banner.mode === "escape" ? (
+            <>
+              <a
+                href={banner.url}
+                className="inline-block mt-3 bg-secondary hover:bg-secondary/90 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors"
+              >
+                {t.webviewCta}
+              </a>
+              {/* Always visible (eng review issue 1): scheme navigation failure
+                  is undetectable from JS, so the manual path can't be hidden. */}
+              <p className="mt-2.5 text-xs text-text-muted leading-relaxed">{t.webviewManual}</p>
+            </>
+          ) : (
+            <CopyLinkButton url={currentUrl} label={t.copyLink} copiedLabel={t.copied} />
+          )}
+        </div>
+      )}
 
       <div className="bg-teal-light/30 border border-teal/20 rounded-2xl px-5 py-4 mb-10">
         <p className="text-sm text-text-primary font-medium leading-relaxed">⚠️ {t.accountWarning}</p>
@@ -59,6 +118,12 @@ export default async function AndroidBetaPage() {
       </div>
     </div>
   );
+}
+
+function bannerTitle(app: string, t: typeof KO | typeof EN | typeof TH): string {
+  if (app === "kakaotalk") return t.webviewTitleKakao;
+  if (app === "line") return t.webviewTitleLine;
+  return t.webviewTitleGeneric;
 }
 
 function Step({ n, title, desc, cta, href }: { n: number; title: string; desc: string; cta?: string; href?: string }) {
@@ -101,6 +166,16 @@ const KO = {
   keepNote: "베타 기간 동안 앱을 지우지 말고 가끔 열어봐 주시면 큰 힘이 돼요.",
   iosNote: "iPhone을 쓰신다면:",
   contactNote: "막히면 편하게 연락주세요:",
+  backToMeetup: "모임으로 돌아가기",
+  webviewTitleKakao: "지금 카카오톡 안의 브라우저예요 — 여기서는 Google 로그인이 막혀 있어요",
+  webviewTitleLine: "지금 LINE 안의 브라우저예요 — 여기서는 Google 로그인이 막혀 있어요",
+  webviewTitleGeneric: "인앱 브라우저에서는 Google 로그인이 막혀 있어요",
+  webviewSub: "베타 참여를 마치려면 Chrome 같은 외부 브라우저에서 이 페이지를 열어주세요.",
+  webviewCta: "브라우저에서 열기",
+  webviewManual: "버튼이 안 되면 오른쪽 위 ⋯ 메뉴에서 ‘다른 브라우저로 열기’를 눌러주세요.",
+  webviewManualOnly: "오른쪽 위 ⋯ 메뉴에서 ‘다른 브라우저로 열기’를 누르거나, 링크를 복사해 Safari/Chrome에 붙여넣어 주세요.",
+  copyLink: "링크 복사",
+  copied: "복사됨!",
 };
 
 const EN = {
@@ -119,6 +194,16 @@ const EN = {
   keepNote: "Please keep the app installed during the beta and open it now and then — it really helps.",
   iosNote: "On iPhone?",
   contactNote: "Stuck? Reach out anytime:",
+  backToMeetup: "Back to the meetup",
+  webviewTitleKakao: "You're in KakaoTalk's in-app browser — Google sign-in is blocked here",
+  webviewTitleLine: "You're in LINE's in-app browser — Google sign-in is blocked here",
+  webviewTitleGeneric: "You're in an in-app browser — Google sign-in is blocked here",
+  webviewSub: "To finish joining the beta, open this page in an external browser like Chrome.",
+  webviewCta: "Open in browser",
+  webviewManual: "If the button doesn't work, tap the ⋯ menu and choose “Open in browser”.",
+  webviewManualOnly: "Tap the ⋯ menu and choose “Open in browser”, or copy the link and paste it into Safari/Chrome.",
+  copyLink: "Copy link",
+  copied: "Copied!",
 };
 
 const TH = {
@@ -137,4 +222,14 @@ const TH = {
   keepNote: "โปรดอย่าลบแอประหว่างช่วงเบต้า และเปิดใช้เป็นครั้งคราว — ช่วยเราได้มาก",
   iosNote: "ใช้ iPhone?",
   contactNote: "ติดปัญหา? ติดต่อได้ที่:",
+  backToMeetup: "กลับไปที่มีตอัป",
+  webviewTitleKakao: "คุณกำลังใช้เบราว์เซอร์ใน KakaoTalk — ล็อกอิน Google ถูกบล็อกที่นี่",
+  webviewTitleLine: "คุณกำลังใช้เบราว์เซอร์ใน LINE — ล็อกอิน Google ถูกบล็อกที่นี่",
+  webviewTitleGeneric: "คุณกำลังใช้เบราว์เซอร์ในแอป — ล็อกอิน Google ถูกบล็อกที่นี่",
+  webviewSub: "เพื่อเข้าร่วมเบต้าให้สำเร็จ โปรดเปิดหน้านี้ในเบราว์เซอร์ภายนอก เช่น Chrome",
+  webviewCta: "เปิดในเบราว์เซอร์",
+  webviewManual: "หากปุ่มไม่ทำงาน แตะเมนู ⋯ แล้วเลือก “เปิดในเบราว์เซอร์อื่น”",
+  webviewManualOnly: "แตะเมนู ⋯ แล้วเลือก “เปิดในเบราว์เซอร์อื่น” หรือคัดลอกลิงก์ไปวางใน Safari/Chrome",
+  copyLink: "คัดลอกลิงก์",
+  copied: "คัดลอกแล้ว!",
 };
