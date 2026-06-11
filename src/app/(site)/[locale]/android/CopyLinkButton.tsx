@@ -23,7 +23,7 @@ export default function CopyLinkButton({ url, label, copiedLabel }: { url: strin
     <button
       type="button"
       onClick={handleCopy}
-      className="inline-block mt-3 bg-white border border-border-default hover:border-text-muted text-text-primary font-semibold text-sm px-5 py-2.5 rounded-full transition-colors cursor-pointer"
+      className="inline-flex items-center min-h-[44px] mt-3 bg-white border border-border-default hover:border-text-muted text-text-primary font-semibold text-sm px-5 py-2.5 rounded-full transition-colors cursor-pointer"
     >
       {copied ? `✓ ${copiedLabel}` : label}
     </button>

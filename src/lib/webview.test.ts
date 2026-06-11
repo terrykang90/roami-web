@@ -31,6 +31,15 @@ const UA = {
     'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
   chromeIos:
     'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0.6367.71 Mobile/15E148 Safari/604.1',
+  firefoxIos:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/124.0 Mobile/15E148 Safari/604.1',
+  edgeIos:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 EdgiOS/124.0 Mobile/15E148 Safari/604.1',
+  // The \bLine\/ word boundary must not match "Outline/" or similar tokens.
+  outlineDesktop:
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Outline/1.2.3 Chrome/124.0.0.0 Safari/537.36',
+  naverIos:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/21A329 NAVER(inapp; search; 2000; 12.1.5)',
 }
 
 describe('detectInAppBrowser', () => {
@@ -46,10 +55,14 @@ describe('detectInAppBrowser', () => {
     [UA.naverAndroid, 'naver'],
     [UA.genericAndroidWv, 'android_webview'],
     [UA.iosWkWebview, 'ios_webview'],
-    // Real browsers must NOT trigger the banner.
+    // Real browsers / alt iOS browsers must NOT trigger the banner.
     [UA.chromeAndroid, null],
     [UA.safariIos, null],
     [UA.chromeIos, null],
+    [UA.firefoxIos, null],
+    [UA.edgeIos, null],
+    // "Outline/" must not match the LINE word boundary.
+    [UA.outlineDesktop, null],
     [null, null],
     ['', null],
   ])('%s → %s', (ua, expected) => {
@@ -103,5 +116,7 @@ describe('bannerState', () => {
     expect(bannerState(UA.instagramIos, PAGE)).toEqual({ mode: 'manual', app: 'instagram' })
     expect(bannerState(UA.facebookIos, PAGE)).toEqual({ mode: 'manual', app: 'facebook' })
     expect(bannerState(UA.iosWkWebview, PAGE)).toEqual({ mode: 'manual', app: 'ios_webview' })
+    // Naver app on iOS: detected by the named-app token, but no Android → manual.
+    expect(bannerState(UA.naverIos, PAGE)).toEqual({ mode: 'manual', app: 'naver' })
   })
 })

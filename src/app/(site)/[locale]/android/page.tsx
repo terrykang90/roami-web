@@ -1,8 +1,8 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
-import { TESTFLIGHT_URL } from "@/lib/config";
+import { SITE_CANONICAL, TESTFLIGHT_URL } from "@/lib/config";
 import { meetupReturnPath, androidBetaPath, type ShareLocale } from "@/lib/share";
-import { bannerState } from "@/lib/webview";
+import { bannerState, type InAppBrowser } from "@/lib/webview";
 import CopyLinkButton from "./CopyLinkButton";
 
 // ROA-222/223: this page personalizes on User-Agent (in-app webview escape
@@ -43,11 +43,13 @@ export default async function AndroidBetaPage({
   const from = meetupReturnPath(rawFrom ?? null);
 
   // Full URL of this page (validated from only) — the escape link reopens it
-  // in an external browser, so the meetup context must survive the hop.
+  // in an external browser, so the meetup context must survive the hop. Origin
+  // is PINNED to SITE_CANONICAL, never the request host: nothing here depends
+  // on the host (locale + validated from fully determine the path), and
+  // reflecting x-forwarded-host into a kakaotalk://...url= / intent:// link
+  // would be a host-header-injection phishing/crash vector.
   const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "www.roami.kr";
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  const currentUrl = `${proto}://${host}${androidBetaPath(locale as ShareLocale, from ?? undefined)}`;
+  const currentUrl = `${SITE_CANONICAL}${androidBetaPath(locale as ShareLocale, from ?? undefined)}`;
   const banner = bannerState(h.get("user-agent"), currentUrl);
 
   return (
@@ -55,7 +57,7 @@ export default async function AndroidBetaPage({
       {from && (
         <a
           href={from}
-          className="inline-flex items-center gap-1 text-sm font-semibold text-teal hover:text-teal-dark transition-colors mb-4"
+          className="inline-flex items-center gap-1 min-h-[44px] -my-2 text-sm font-semibold text-teal hover:text-teal-dark transition-colors mb-2"
         >
           ← {t.backToMeetup}
         </a>
@@ -76,13 +78,15 @@ export default async function AndroidBetaPage({
             <>
               <a
                 href={banner.url}
-                className="inline-block mt-3 bg-secondary hover:bg-secondary/90 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors"
+                className="inline-flex items-center min-h-[44px] mt-3 bg-secondary hover:bg-secondary/90 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors"
               >
                 {t.webviewCta}
               </a>
               {/* Always visible (eng review issue 1): scheme navigation failure
-                  is undetectable from JS, so the manual path can't be hidden. */}
-              <p className="mt-2.5 text-xs text-text-muted leading-relaxed">{t.webviewManual}</p>
+                  is undetectable from JS, so the manual path can't be hidden.
+                  text-secondary (not muted) — this is load-bearing copy and
+                  must clear AA contrast on the cream banner (DESIGN.md). */}
+              <p className="mt-2.5 text-xs text-text-secondary leading-relaxed">{t.webviewManual}</p>
             </>
           ) : (
             <CopyLinkButton url={currentUrl} label={t.copyLink} copiedLabel={t.copied} />
@@ -120,7 +124,7 @@ export default async function AndroidBetaPage({
   );
 }
 
-function bannerTitle(app: string, t: typeof KO | typeof EN | typeof TH): string {
+function bannerTitle(app: Exclude<InAppBrowser, null>, t: typeof KO | typeof EN | typeof TH): string {
   if (app === "kakaotalk") return t.webviewTitleKakao;
   if (app === "line") return t.webviewTitleLine;
   return t.webviewTitleGeneric;
