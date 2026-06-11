@@ -6,7 +6,18 @@ import WaitlistForm from "@/components/WaitlistForm";
 import FAQAccordion from "./faq/FAQAccordion";
 
 import { TESTFLIGHT_URL } from "@/lib/config";
+import { localeAlternates } from "@/lib/seo";
 import { androidBetaPath, type ShareLocale } from "@/lib/share";
+
+// title/description/OG는 layout이 제공 — 여기선 홈의 canonical/hreflang만.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return { alternates: localeAlternates(locale) };
+}
 
 // App-preview phones. Ordered so the emphasized `chat` phone sits centre-front
 // in the desktop 3D fan. `fan` holds the md+ perspective transform per position;

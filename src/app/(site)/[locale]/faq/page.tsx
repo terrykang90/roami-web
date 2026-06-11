@@ -1,9 +1,12 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import FAQAccordion from "./FAQAccordion";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata() {
+  const locale = await getLocale();
   const t = await getTranslations("faq");
   return {
+    alternates: localeAlternates(locale, "/faq"),
     title: `${t("title")} — roami`,
     description: t("subtitle"),
   };

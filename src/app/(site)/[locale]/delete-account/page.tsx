@@ -1,8 +1,10 @@
 import { getLocale } from "next-intl/server";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata() {
   const locale = await getLocale();
   return {
+    alternates: localeAlternates(locale, "/delete-account"),
     title:
       locale === "ko"
         ? "계정 삭제 안내 — roami"
