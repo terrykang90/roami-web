@@ -47,19 +47,20 @@ export type LaunchState = 'prelaunch' | 'launched'
 export type CtaVariant =
   | 'stores' // store badges (launched mobile) — landing CTA opens the right store
   | 'testflight' // pre-launch iOS → TestFlight public link
-  | 'android_beta_email' // pre-launch Android → email capture → waitlist
-  | 'desktop_panel' // desktop → QR + (launched: store badges | prelaunch: TestFlight QR + email field)
+  | 'android_beta' // pre-launch Android → /android self-onboarding (Google Group → opt-in → install)
+  | 'desktop_panel' // desktop → QR + (launched: store badges | prelaunch: TestFlight + /android links)
 
 export function resolveCta(platform: Platform, launchState: LaunchState): CtaVariant {
   if (platform === 'desktop') return 'desktop_panel'
   if (launchState === 'launched') return 'stores'
-  return platform === 'ios' ? 'testflight' : 'android_beta_email'
+  return platform === 'ios' ? 'testflight' : 'android_beta'
 }
 
 export interface CtaUrls {
   testflight: string
   appStore: string
   playStore: string
+  androidBeta: string // locale-prefixed /android page (self-onboarding steps)
 }
 
 /**
@@ -80,7 +81,8 @@ export function resolveCtaHref(
       return urls.testflight
     case 'stores':
       return platform === 'ios' ? urls.appStore : urls.playStore
-    case 'android_beta_email':
+    case 'android_beta':
+      return urls.androidBeta
     case 'desktop_panel':
       return '/'
   }

@@ -36,7 +36,7 @@ describe('resolveCta', () => {
     ['android', 'launched', 'stores'],
     ['desktop', 'launched', 'desktop_panel'],
     ['ios', 'prelaunch', 'testflight'],
-    ['android', 'prelaunch', 'android_beta_email'],
+    ['android', 'prelaunch', 'android_beta'],
     ['desktop', 'prelaunch', 'desktop_panel'],
   ] as const)('(%s, %s) → %s', (platform, launchState, expected) => {
     expect(resolveCta(platform, launchState)).toBe(expected)
@@ -71,7 +71,7 @@ describe('detectPlatform', () => {
 })
 
 describe('resolveCtaHref (funnel routing)', () => {
-  const urls: CtaUrls = { testflight: 'https://tf.example', appStore: 'https://as.example', playStore: 'https://ps.example' }
+  const urls: CtaUrls = { testflight: 'https://tf.example', appStore: 'https://as.example', playStore: 'https://ps.example', androidBeta: '/ko/android' }
   it.each([
     // every non-active state routes to the marketing site, whatever the cta
     ['full', 'testflight', 'ios', '/'],
@@ -81,7 +81,7 @@ describe('resolveCtaHref (funnel routing)', () => {
     ['active', 'testflight', 'ios', 'https://tf.example'],
     ['active', 'stores', 'ios', 'https://as.example'],
     ['active', 'stores', 'android', 'https://ps.example'],
-    ['active', 'android_beta_email', 'android', '/'],
+    ['active', 'android_beta', 'android', '/ko/android'],
     ['active', 'desktop_panel', 'desktop', '/'],
   ] as const)('(%s, %s, %s) → %s', (state, cta, platform, expected) => {
     expect(resolveCtaHref(state, cta, platform, urls)).toBe(expected)
