@@ -17,6 +17,9 @@
     "cta": "Join the waitlist",
     "iosTagline": "iOS beta",
     "iosCta": "Get it on TestFlight",
+    "iosTaglineLaunched": "Now on the App Store",
+    "iosCtaLaunched": "Get it on the App Store",
+    "badgeIosLaunched": "iOS on the App Store · Android beta",
     "androidCta": "Join the Android beta",
     "waitlistPrefix": "Outside Chiang Mai?",
     "waitlistLink": "Join the waitlist for launch updates →"
@@ -208,6 +211,7 @@
     "footerTagline": "Roami — travel meetups, right on the map",
     "testflightCta": "Get the beta on TestFlight",
     "testflightNote": "iOS beta — installs right from TestFlight",
+    "appStoreNote": "Official release — installs right from the App Store",
     "androidBetaCta": "Join the Android beta",
     "androidBetaNote": "Android beta — join the group, then install right from the Play Store",
     "storeApple": "App Store",

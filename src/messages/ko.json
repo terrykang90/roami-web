@@ -17,6 +17,9 @@
     "cta": "사전 등록하기",
     "iosTagline": "iOS 베타",
     "iosCta": "TestFlight로 받기",
+    "iosTaglineLaunched": "iOS 정식 출시",
+    "iosCtaLaunched": "App Store에서 받기",
+    "badgeIosLaunched": "iOS 정식 출시 · Android 베타",
     "androidCta": "Android 베타 참여",
     "waitlistPrefix": "치앙마이 밖이신가요?",
     "waitlistLink": "사전 등록하고 오픈 알림 받기 →"
@@ -208,6 +211,7 @@
     "footerTagline": "Roami — 지도에서 바로 찾는 여행 모임",
     "testflightCta": "TestFlight로 베타 받기",
     "testflightNote": "iOS 베타 — TestFlight에서 바로 설치돼요",
+    "appStoreNote": "정식 버전 — App Store에서 바로 설치돼요",
     "androidBetaCta": "Android 베타 참여하기",
     "androidBetaNote": "Android 베타 — 그룹 가입하면 Play 스토어에서 바로 설치돼요",
     "storeApple": "App Store",

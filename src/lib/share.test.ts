@@ -34,15 +34,26 @@ describe('resolveState', () => {
 })
 
 describe('resolveCta', () => {
+  // platform × ios-state × android-state 전수 (plan 005 — 혼합 출시 상태 포함)
   it.each([
-    ['ios', 'launched', 'stores'],
-    ['android', 'launched', 'stores'],
-    ['desktop', 'launched', 'desktop_panel'],
-    ['ios', 'prelaunch', 'testflight'],
-    ['android', 'prelaunch', 'android_beta'],
-    ['desktop', 'prelaunch', 'desktop_panel'],
-  ] as const)('(%s, %s) → %s', (platform, launchState, expected) => {
-    expect(resolveCta(platform, launchState)).toBe(expected)
+    // 양쪽 prelaunch (회귀 — 기존 동작 불변)
+    ['ios', 'prelaunch', 'prelaunch', 'testflight'],
+    ['android', 'prelaunch', 'prelaunch', 'android_beta'],
+    ['desktop', 'prelaunch', 'prelaunch', 'desktop_panel'],
+    // iOS만 launched (현재 상태: App Store 정식 + Play closed testing)
+    ['ios', 'launched', 'prelaunch', 'app_store'],
+    ['android', 'launched', 'prelaunch', 'android_beta'],
+    ['desktop', 'launched', 'prelaunch', 'desktop_panel'],
+    // Android만 launched (이론상 조합도 truth table에 고정)
+    ['ios', 'prelaunch', 'launched', 'testflight'],
+    ['android', 'prelaunch', 'launched', 'stores'],
+    ['desktop', 'prelaunch', 'launched', 'desktop_panel'],
+    // 양쪽 launched (최종 상태 — plan 070 'stores' 경로로 수렴)
+    ['ios', 'launched', 'launched', 'stores'],
+    ['android', 'launched', 'launched', 'stores'],
+    ['desktop', 'launched', 'launched', 'desktop_panel'],
+  ] as const)('(%s, ios:%s, android:%s) → %s', (platform, ios, android, expected) => {
+    expect(resolveCta(platform, { ios, android })).toBe(expected)
   })
 })
 
@@ -83,6 +94,7 @@ describe('resolveCtaHref (funnel routing)', () => {
     ['cancelled', 'desktop_panel', 'desktop', '/'],
     // active funnels per cta variant
     ['active', 'testflight', 'ios', 'https://tf.example'],
+    ['active', 'app_store', 'ios', 'https://as.example'],
     ['active', 'stores', 'ios', 'https://as.example'],
     ['active', 'stores', 'android', 'https://ps.example'],
     ['active', 'android_beta', 'android', '/ko/android?from=%2Fm%2F123'],
@@ -125,13 +137,17 @@ describe('ctaLabelKey (label half of the CTA matrix)', () => {
     // active: android_beta is the only cta with its own label
     ['active', 'android_beta', 'androidBetaCta'],
     ['active', 'testflight', 'ctaActive'],
+    ['active', 'app_store', 'ctaActive'],
     ['active', 'stores', 'ctaActive'],
     ['active', 'desktop_panel', 'ctaActive'],
     // non-active states label by state, whatever the cta
     ['full', 'android_beta', 'ctaFull'],
     ['full', 'stores', 'ctaFull'],
+    ['full', 'app_store', 'ctaFull'],
     ['completed', 'testflight', 'ctaCompleted'],
+    ['completed', 'app_store', 'ctaCompleted'],
     ['cancelled', 'android_beta', 'ctaCancelled'],
+    ['cancelled', 'app_store', 'ctaCancelled'],
   ] as const)('(%s, %s) → %s', (state, cta, expected) => {
     expect(ctaLabelKey(state, cta)).toBe(expected)
   })
@@ -142,7 +158,7 @@ describe('ctaLabelKey (label half of the CTA matrix)', () => {
     const { default: en } = await import('../messages/en.json')
     const shareKeys = Object.keys(en.share)
     const states = ['active', 'full', 'completed', 'cancelled'] as const
-    const ctas = ['stores', 'testflight', 'android_beta', 'desktop_panel'] as const
+    const ctas = ['stores', 'app_store', 'testflight', 'android_beta', 'desktop_panel'] as const
     for (const state of states) {
       for (const cta of ctas) {
         expect(shareKeys, `ctaLabelKey(${state}, ${cta})`).toContain(ctaLabelKey(state, cta))

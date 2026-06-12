@@ -29,18 +29,28 @@ describe('languagesFor', () => {
 describe('storeInstallUrls', () => {
   const APP = 'https://apps.apple.com/app/roami'
   const PLAY = 'https://play.google.com/store/apps/details?id=kr.roami.app'
+  const BOTH_PRE = { ios: 'prelaunch', android: 'prelaunch' } as const
+  const IOS_ONLY = { ios: 'launched', android: 'prelaunch' } as const
+  const BOTH = { ios: 'launched', android: 'launched' } as const
 
-  it('emits nothing while prelaunch, even with valid URLs', () => {
-    expect(storeInstallUrls('prelaunch', APP, PLAY)).toEqual([])
+  it('emits nothing while both prelaunch, even with valid URLs', () => {
+    expect(storeInstallUrls(BOTH_PRE, APP, PLAY)).toEqual([])
   })
 
+  it('emits only the App Store URL in the iOS-only launched mixed state', () => {
+    expect(storeInstallUrls(IOS_ONLY, APP, PLAY)).toEqual([APP])
+  })
+
+  // plan 005 이슈1(1C): launched인데 URL env 미설정이면 코드 가드 없이
+  // 여기서 조용히 필터된다 — misconfig 동작을 문서화하는 유일한 지점.
   it("drops the '/' env fallback and prefix-only garbage when launched", () => {
-    expect(storeInstallUrls('launched', '/', 'httpsgarbage')).toEqual([])
-    expect(storeInstallUrls('launched', APP, '/')).toEqual([APP])
+    expect(storeInstallUrls(BOTH, '/', 'httpsgarbage')).toEqual([])
+    expect(storeInstallUrls(BOTH, APP, '/')).toEqual([APP])
+    expect(storeInstallUrls(IOS_ONLY, '/', PLAY)).toEqual([])
   })
 
-  it('emits all valid https store URLs when launched', () => {
-    expect(storeInstallUrls('launched', APP, PLAY)).toEqual([APP, PLAY])
+  it('emits all valid https store URLs when both launched', () => {
+    expect(storeInstallUrls(BOTH, APP, PLAY)).toEqual([APP, PLAY])
   })
 })
 

@@ -6,7 +6,7 @@ import QRCode from "qrcode";
 import { getPublicMeetup } from "@/lib/api";
 import {
   APP_STORE_URL,
-  LAUNCH_STATE,
+  LAUNCH,
   PLAY_STORE_URL,
   SITE_BASE,
   SITE_CANONICAL,
@@ -129,7 +129,7 @@ export default async function ShareLandingPage({ params }: Params) {
 
   const meetup = result.meetup;
   const state = resolveState(meetup.status, meetup.full);
-  const cta = resolveCta(platform, LAUNCH_STATE);
+  const cta = resolveCta(platform, LAUNCH);
   const urls = ctaUrls(locale, id);
   const ctaHref = resolveCtaHref(state, cta, platform, urls);
   const qrDataUrl = await QRCode.toDataURL(`${SITE_BASE}/m/${id}`, {
@@ -173,6 +173,9 @@ function SecondaryArea({ state, cta, t }: { state: ShareState; cta: CtaVariant; 
   }
   if (cta === "testflight") {
     return <p className="mt-2.5 text-center text-[12px] text-text-secondary">{t("testflightNote")}</p>;
+  }
+  if (cta === "app_store") {
+    return <p className="mt-2.5 text-center text-[12px] text-text-secondary">{t("appStoreNote")}</p>;
   }
   if (cta === "android_beta") {
     return <p className="mt-2.5 text-center text-[12px] text-text-secondary">{t("androidBetaNote")}</p>;

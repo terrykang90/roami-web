@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
-import { SITE_CANONICAL, TESTFLIGHT_URL } from "@/lib/config";
+import { APP_STORE_URL, LAUNCH, SITE_CANONICAL, TESTFLIGHT_URL } from "@/lib/config";
 import { localeAlternates } from "@/lib/seo";
 import { meetupReturnPath, androidBetaPath, type ShareLocale } from "@/lib/share";
 import { bannerState, type InAppBrowser } from "@/lib/webview";
@@ -110,9 +110,16 @@ export default async function AndroidBetaPage({
         <p>💡 {t.delayNote}</p>
         <p>🙏 {t.keepNote}</p>
         <p>
+          {/* iOS 정식 출시 후엔 App Store로 — App Store 링크에 "TestFlight"
+              라벨이 남는 모순 방지 (plan 005 / eng review C3). */}
           🍎 {t.iosNote}{" "}
-          <a href={TESTFLIGHT_URL} className="text-teal font-semibold hover:text-teal-dark transition-colors" target="_blank" rel="noopener noreferrer">
-            TestFlight
+          <a
+            href={LAUNCH.ios === "launched" ? APP_STORE_URL : TESTFLIGHT_URL}
+            className="text-teal font-semibold hover:text-teal-dark transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {LAUNCH.ios === "launched" ? "App Store" : "TestFlight"}
           </a>
         </p>
         <p>

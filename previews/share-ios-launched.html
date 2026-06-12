@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iOS 정식 출시 — 랜딩/공유 CTA 전환 preview</title>
+<style>
+  :root{
+    --teal:#2CB5AE; --teal-dark:#21958F; --teal-light:#E6F8F6;
+    --secondary:#E07A45;
+    --bg2:#F8F6F4;
+    --border-subtle:#E8E4E0; --border-default:#D9D4CF;
+    --tp:#1A1614; --ts:#6B6460; --tm:#9C9590;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans KR','Noto Sans Thai',sans-serif;background:#EDEAE6;color:var(--tp);padding:32px 20px 64px}
+  h1{font-size:20px;margin-bottom:6px}
+  .lede{font-size:13px;color:var(--ts);margin-bottom:28px;line-height:1.6}
+  .row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;margin-bottom:44px}
+  .panel-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--tm);margin:0 0 10px 4px}
+  h2.locale{font-size:14px;font-weight:700;color:var(--tp);margin:0 0 14px;padding:5px 12px;background:var(--teal-light);border-radius:999px;display:inline-block}
+  .old{opacity:.55;filter:grayscale(.35)}
+  .tag{font-size:10px;font-weight:700;color:#fff;background:var(--secondary);border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:2px}
+  .tag.gray{background:var(--tm)}
+
+  /* ── 랜딩 hero 버튼 ── */
+  .hero-mock{background:#fff;border:1px solid var(--border-subtle);border-radius:20px;padding:26px 28px;box-shadow:0 16px 36px rgba(26,22,20,.08)}
+  .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+  .hbtn{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:16px;text-decoration:none}
+  .hbtn .small{display:block;font-size:10px;font-weight:500;line-height:1.3}
+  .hbtn .big{display:block;font-size:14px;font-weight:700;line-height:1.3}
+  .hbtn.dark{background:var(--tp);color:#fff;box-shadow:0 10px 22px rgba(26,22,20,.15)}
+  .hbtn.dark .small{opacity:.8}
+  .hbtn.light{background:#fff;border:1.5px solid rgba(44,181,174,.4);color:var(--tp)}
+  .hbtn.light .small{color:var(--tm)}
+
+  /* ── 공유 모바일 CTA ── */
+  .phone{width:340px;background:#fff;border-radius:24px;border:1px solid var(--border-default);overflow:hidden;box-shadow:0 18px 44px rgba(26,22,20,.12);padding:18px 16px 20px}
+  .card{border:1px solid var(--border-subtle);border-radius:18px;padding:16px;box-shadow:0 10px 26px rgba(26,22,20,.06)}
+  .card .emoji{font-size:30px}
+  .card h3{font-size:17px;letter-spacing:-.02em;margin:6px 0 4px}
+  .card .meta{font-size:12px;color:var(--ts);line-height:1.6}
+  .obtn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:1px solid var(--border-default);border-radius:11px;background:#fff;padding:8px 12px;font-size:13px;font-weight:700;color:var(--tp);text-decoration:none;margin-top:14px}
+  .note{margin-top:8px;text-align:center;font-size:11.5px;color:var(--ts)}
+
+  /* ── 공유 데스크톱 패널 ── */
+  .dpanel{width:300px;background:#fff;border:1px solid var(--border-subtle);border-radius:20px;padding:22px;text-align:center;box-shadow:0 16px 36px rgba(26,22,20,.08)}
+  .or{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--ts);margin:14px 0}
+  .or::before,.or::after{content:"";height:1px;flex:1;background:var(--border-subtle)}
+  .badge{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:1px solid var(--border-default);border-radius:11px;background:#fff;padding:8px 12px;text-decoration:none;color:var(--tp);margin-bottom:12px}
+  .badge .small{display:block;font-size:10px;color:var(--ts);line-height:1.2;text-align:left}
+  .badge .big{display:block;font-size:13px;font-weight:700;line-height:1.2;text-align:left}
+  .qr-ph{width:120px;height:120px;margin:0 auto 10px;border:1px solid var(--border-subtle);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--tm)}
+</style>
+</head>
+<body>
+  <h1>iOS 정식 출시 — 랜딩/공유 CTA 전환</h1>
+  <p class="lede">
+    iOS는 App Store 정식(id6760629019), Android는 closed testing 유지 → <b>플랫폼별 launch state 분리</b>.<br>
+    바뀌는 곳: ① 랜딩 hero iOS 버튼 (TestFlight → App Store) ② 공유페이지 iOS 방문자 CTA ③ 공유 데스크톱 패널 Apple 버튼.<br>
+    Android 쪽(베타 온보딩 /android 경로)은 <b>전부 그대로</b>. 신규 i18n 키: <code>appStoreCta</code>, <code>appStoreNote</code> + <code>hero.iosTagline/iosCta</code> 카피 교체.
+  </p>
+
+  <!-- ════ BEFORE (현재, ko만) ════ -->
+  <p class="panel-label">Before — 현재 (ko) <span class="tag gray">변경 전</span></p>
+  <div class="row old">
+    <div class="hero-mock">
+      <div class="hero-btns">
+        <a class="hbtn dark" href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>
+          <span><span class="small">iOS 베타</span><span class="big">TestFlight로 받기</span></span></a>
+        <a class="hbtn light" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="#22B07A"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.86 3.23a11.5 11.5 0 0 0-9.78 0L5.25 5.9a.4.4 0 1 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+          <span><span class="small">Google Play</span><span class="big">Android 베타 참여</span></span></a>
+      </div>
+    </div>
+    <div class="phone">
+      <div class="card">
+        <span class="emoji">🍜</span>
+        <h3>치앙마이 카오소이 투어</h3>
+        <p class="meta">내일 12:00 · Old City · 3/6명</p>
+        <a class="obtn" href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>TestFlight로 베타 받기</a>
+        <p class="note">iOS 베타 — TestFlight에서 바로 설치돼요</p>
+      </div>
+    </div>
+    <div class="dpanel">
+      <div class="qr-ph">QR</div>
+      <div class="or">또는</div>
+      <a class="obtn" style="margin-top:0" href="#">🍎 TestFlight로 베타 받기</a>
+      <a class="obtn" href="#">▶ Android 베타 참여</a>
+    </div>
+  </div>
+
+  <!-- ════ AFTER ko ════ -->
+  <h2 class="locale">🇰🇷 ko — After</h2>
+  <div class="row">
+    <div>
+      <p class="panel-label">랜딩 hero <span class="tag">iOS만 변경</span></p>
+      <div class="hero-mock">
+        <div class="hero-btns">
+          <a class="hbtn dark" href="https://apps.apple.com/app/roami/id6760629019"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>
+            <span><span class="small">iOS 정식 출시</span><span class="big">App Store에서 받기</span></span></a>
+          <a class="hbtn light" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="#22B07A"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.86 3.23a11.5 11.5 0 0 0-9.78 0L5.25 5.9a.4.4 0 1 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+            <span><span class="small">Google Play</span><span class="big">Android 베타 참여</span></span></a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="panel-label">공유 — iOS 모바일 방문자</p>
+      <div class="phone">
+        <div class="card">
+          <span class="emoji">🍜</span>
+          <h3>치앙마이 카오소이 투어</h3>
+          <p class="meta">내일 12:00 · Old City · 3/6명</p>
+          <a class="obtn" href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>App Store에서 받기</a>
+          <p class="note">정식 버전 — App Store에서 바로 설치돼요</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="panel-label">공유 — 데스크톱 패널</p>
+      <div class="dpanel">
+        <div class="qr-ph">QR</div>
+        <div class="or">또는</div>
+        <a class="badge" href="#"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>
+          <span><span class="small">Download on the</span><span class="big">App Store</span></span></a>
+        <a class="obtn" style="margin-top:0" href="#">▶ Android 베타 참여</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ AFTER en ════ -->
+  <h2 class="locale">🇺🇸 en — After</h2>
+  <div class="row">
+    <div class="hero-mock">
+      <div class="hero-btns">
+        <a class="hbtn dark" href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>
+          <span><span class="small">Now on the App Store</span><span class="big">Get it on the App Store</span></span></a>
+        <a class="hbtn light" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="#22B07A"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.86 3.23a11.5 11.5 0 0 0-9.78 0L5.25 5.9a.4.4 0 1 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+          <span><span class="small">Google Play</span><span class="big">Join the Android beta</span></span></a>
+      </div>
+    </div>
+    <div class="phone">
+      <div class="card">
+        <span class="emoji">🍜</span>
+        <h3>Khao Soi tour in Chiang Mai</h3>
+        <p class="meta">Tomorrow 12:00 · Old City · 3/6</p>
+        <a class="obtn" href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>Get it on the App Store</a>
+        <p class="note">Official release — installs right from the App Store</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ AFTER th ════ -->
+  <h2 class="locale">🇹🇭 th — After</h2>
+  <div class="row">
+    <div class="hero-mock">
+      <div class="hero-btns">
+        <a class="hbtn dark" href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>
+          <span><span class="small">มีบน App Store แล้ว</span><span class="big">รับผ่าน App Store</span></span></a>
+        <a class="hbtn light" href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="#22B07A"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.69-.4l-1.86 3.23a11.5 11.5 0 0 0-9.78 0L5.25 5.9a.4.4 0 1 0-.69.4L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52zM7 15.25a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+          <span><span class="small">Google Play</span><span class="big">ร่วมเบต้า Android</span></span></a>
+      </div>
+    </div>
+    <div class="phone">
+      <div class="card">
+        <span class="emoji">🍜</span>
+        <h3>ทัวร์ข้าวซอยเชียงใหม่</h3>
+        <p class="meta">พรุ่งนี้ 12:00 · เมืองเก่า · 3/6</p>
+        <a class="obtn" href="#"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z"/></svg>รับผ่าน App Store</a>
+        <p class="note">เวอร์ชันทางการ — ติดตั้งจาก App Store ได้เลย</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="lede" style="margin-top:8px">
+    구현 메모: <code>LAUNCH_STATE</code> → <code>{ ios, android }</code> 분리 (env: <code>NEXT_PUBLIC_IOS_LAUNCH_STATE=launched</code>, 기존 <code>NEXT_PUBLIC_LAUNCH_STATE</code>는 양쪽 fallback으로 유지).
+    <code>NEXT_PUBLIC_APP_STORE_URL=https://apps.apple.com/app/roami/id6760629019</code>.
+    별도: backend Cloud Run에 <code>IOS_STORE_URL</code> env 설정 (force-update 화면용).
+  </p>
+</body>
+</html>
