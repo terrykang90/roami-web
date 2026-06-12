@@ -56,6 +56,8 @@ export default async function Home() {
   const faq = await getTranslations("faq");
   const meta = await getTranslations("meta");
   const installUrls = storeInstallUrls(LAUNCH, APP_STORE_URL, PLAY_STORE_URL);
+  // LAUNCH.android는 여기서 의도적으로 무시 — hero의 Android-launched 분기는
+  // plan 005 D2에서 연기됨 (Android 정식 출시 때 뱃지/버튼 함께 작업).
   const iosLaunched = LAUNCH.ios === "launched";
 
   const categories = [

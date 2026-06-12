@@ -1,6 +1,6 @@
-// 스토어 로고 글리프 단일소스 (plan 005 eng-review 2A) — GetAppPanel과 랜딩
-// hero가 각자 다른 사과 패스를 인라인으로 들고 있던 중복을 여기로 합친다.
-// 로고를 바꿀 일이 생기면(다크모드 등) 이 파일만 고친다.
+// Apple/Play 배지 글리프 단일소스 (plan 005 eng-review 2A) — GetAppPanel과
+// 랜딩 hero가 각자 다른 사과 패스를 인라인으로 들고 있던 중복을 합친 것.
+// (랜딩 hero Android 버튼의 로봇 글리프는 단일 사용처라 page.tsx 인라인 유지.)
 
 export function AppleLogo({ size = 16 }: { size?: number }) {
   return (

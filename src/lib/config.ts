@@ -8,14 +8,6 @@ export const SITE_BASE = 'https://roami.kr'
 // redirects, while og:url/QR links are fine on the apex.
 export const SITE_CANONICAL = 'https://www.roami.kr'
 
-// 플랫폼별 출시 상태 (plan 005). 글로벌 NEXT_PUBLIC_LAUNCH_STATE fallback은
-// 의도적으로 없음 — 레거시 글로벌 값이 환경에 남아 있으면 Android까지 조용히
-// launched로 끌려가는 롤백 함정이 된다 (eng review C1). 플랫폼별 env만 읽는다.
-export const LAUNCH: PlatformLaunch = {
-  ios: process.env.NEXT_PUBLIC_IOS_LAUNCH_STATE === 'launched' ? 'launched' : 'prelaunch',
-  android: process.env.NEXT_PUBLIC_ANDROID_LAUNCH_STATE === 'launched' ? 'launched' : 'prelaunch',
-}
-
 // Chiang Mai public beta link — also used by the marketing homepage.
 // `||` not `??`: an empty-but-defined env var must still fall back — `href=""`
 // is a same-page no-op link, the one thing these constants must never produce.
@@ -25,3 +17,22 @@ export const TESTFLIGHT_URL =
 // Until the store listings exist these default to the marketing site (never a dead link).
 export const APP_STORE_URL = process.env.NEXT_PUBLIC_APP_STORE_URL || '/'
 export const PLAY_STORE_URL = process.env.NEXT_PUBLIC_PLAY_STORE_URL || '/'
+
+// 플랫폼별 출시 상태 (plan 005). 두 가지 의도적 설계:
+// 1) 글로벌 NEXT_PUBLIC_LAUNCH_STATE fallback 없음 — 레거시 글로벌 값이 남아
+//    있으면 Android까지 조용히 launched로 끌려가는 롤백 함정 (eng review C1).
+// 2) 스토어 URL이 실제 https가 아니면 launched여도 prelaunch로 강등 — 스위치
+//    env만 켜고 URL env를 깜빡하면 모든 "App Store" 버튼이 '/'(홈 루프)가
+//    되는 조용한 실패를 기존 베타 화면 유지로 바꾼다 (/review 1A, cross-model).
+export const LAUNCH: PlatformLaunch = {
+  ios:
+    process.env.NEXT_PUBLIC_IOS_LAUNCH_STATE === 'launched' &&
+    APP_STORE_URL.startsWith('https://')
+      ? 'launched'
+      : 'prelaunch',
+  android:
+    process.env.NEXT_PUBLIC_ANDROID_LAUNCH_STATE === 'launched' &&
+    PLAY_STORE_URL.startsWith('https://')
+      ? 'launched'
+      : 'prelaunch',
+}

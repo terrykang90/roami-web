@@ -164,6 +164,11 @@ describe('ctaLabelKey (label half of the CTA matrix)', () => {
         expect(shareKeys, `ctaLabelKey(${state}, ${cta})`).toContain(ctaLabelKey(state, cta))
       }
     }
+    // SecondaryArea가 variant별로 직접 렌더하는 note 키들 — ctaLabelKey를 안
+    // 거치므로 위 루프가 못 잡는다. JSX의 키 문자열 오타 방지용 고정.
+    for (const noteKey of ['testflightNote', 'appStoreNote', 'androidBetaNote']) {
+      expect(shareKeys, `SecondaryArea note key ${noteKey}`).toContain(noteKey)
+    }
   })
 })
 

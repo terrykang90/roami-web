@@ -41,6 +41,12 @@ describe('storeInstallUrls', () => {
     expect(storeInstallUrls(IOS_ONLY, APP, PLAY)).toEqual([APP])
   })
 
+  it('emits only the Play URL in the android-only launched state (2x2 완성)', () => {
+    expect(storeInstallUrls({ ios: 'prelaunch', android: 'launched' } as const, APP, PLAY)).toEqual([
+      PLAY,
+    ])
+  })
+
   // plan 005 이슈1(1C): launched인데 URL env 미설정이면 코드 가드 없이
   // 여기서 조용히 필터된다 — misconfig 동작을 문서화하는 유일한 지점.
   it("drops the '/' env fallback and prefix-only garbage when launched", () => {

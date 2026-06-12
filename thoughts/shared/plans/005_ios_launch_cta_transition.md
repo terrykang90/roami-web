@@ -25,7 +25,7 @@ iOS가 App Store 정식 출시됨 (`https://apps.apple.com/app/roami/id676062901
 - **랜딩 hero의 Android-launched 분기** — eng review D2에서 YAGNI로 절단. Android 출시 때 hero 작업 1회 필요 (그때 QA에 묻어감)
 - 글로벌 `NEXT_PUBLIC_LAUNCH_STATE` fallback — eng review C1로 **제거** (양쪽 fallback은 롤백 함정: 레거시 글로벌 값이 남아 있으면 Android까지 silently launched). 플랫폼별 env만 사용
 - TestFlight 상수/키 삭제 (롤백 + prelaunch 분기용 유지)
-- config.ts 미스컨피그 가드 (eng review 이슈1 → 1C: 운영 주의로 커버, 가드 코드 없음 — misconfig 동작은 테스트로만 문서화)
+- ~~config.ts 미스컨피그 가드 (eng review 이슈1 → 1C)~~ → **/review에서 1A로 번복**: diff 단계 Claude+Codex adversarial이 둘 다 1순위 머지 블로커로 재격상 → URL이 https 아니면 prelaunch 강등 가드 추가 (config.ts + config.test.ts)
 - 앱 내부 딥링크 로직 변경
 
 ## Implementation Approach
