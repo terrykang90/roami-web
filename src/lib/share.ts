@@ -44,16 +44,40 @@ export function resolveState(status: string, full: boolean): ShareState {
 // ── CTA matrix (launch state × recipient platform) ───────────────────────────
 export type Platform = 'ios' | 'android' | 'desktop'
 export type LaunchState = 'prelaunch' | 'launched'
+
+/** 플랫폼별 출시 상태 (plan 005) — iOS는 App Store 정식, Android는 closed
+ * testing인 혼합 기간을 표현. config.ts가 env에서 채운다. (타입은 여기 —
+ * config→share import 방향 유지, 역의존 금지.) */
+export interface PlatformLaunch {
+  ios: LaunchState
+  android: LaunchState
+}
+
 export type CtaVariant =
-  | 'stores' // store badges (launched mobile) — landing CTA opens the right store
+  | 'stores' // both launched — store badges, CTA opens the right store
+  | 'app_store' // iOS launched + Android not — single-store funnel to the App Store
   | 'testflight' // pre-launch iOS → TestFlight public link
   | 'android_beta' // pre-launch Android → /android self-onboarding (Google Group → opt-in → install)
-  | 'desktop_panel' // desktop → QR + (launched: store badges | prelaunch: TestFlight + /android links)
+  | 'desktop_panel' // desktop → QR + state-appropriate store/beta links
 
-export function resolveCta(platform: Platform, launchState: LaunchState): CtaVariant {
+/**
+ * platform × launch → variant truth table:
+ *
+ *               │ android: prelaunch  │ android: launched
+ *  ─────────────┼─────────────────────┼───────────────────
+ *  ios: pre     │ ios → testflight    │ ios → testflight
+ *               │ and → android_beta  │ and → stores
+ *  ios: launched│ ios → app_store     │ ios → stores
+ *               │ and → android_beta  │ and → stores
+ *  desktop      │ always desktop_panel
+ */
+export function resolveCta(platform: Platform, launch: PlatformLaunch): CtaVariant {
   if (platform === 'desktop') return 'desktop_panel'
-  if (launchState === 'launched') return 'stores'
-  return platform === 'ios' ? 'testflight' : 'android_beta'
+  if (platform === 'ios') {
+    if (launch.ios !== 'launched') return 'testflight'
+    return launch.android === 'launched' ? 'stores' : 'app_store'
+  }
+  return launch.android === 'launched' ? 'stores' : 'android_beta'
 }
 
 export interface CtaUrls {
@@ -97,6 +121,8 @@ export function resolveCtaHref(
   switch (cta) {
     case 'testflight':
       return urls.testflight
+    case 'app_store':
+      return urls.appStore
     case 'stores':
       return platform === 'ios' ? urls.appStore : urls.playStore
     case 'android_beta':

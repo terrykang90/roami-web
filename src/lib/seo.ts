@@ -2,7 +2,7 @@
 // their language maps here so the two can never disagree (Google treats
 // mismatched head/sitemap hreflang as a conflicting signal and ignores it).
 import { SITE_CANONICAL } from './config'
-import type { LaunchState } from './share'
+import type { PlatformLaunch } from './share'
 import { routing } from '@/i18n/routing'
 
 // x-default is /en, NOT the bare root: the root 307-redirects to a locale,
@@ -33,7 +33,9 @@ export function localeAlternates(locale: string, path = '') {
 // MobileApplication.installUrl 가드 — launched여도 env가 절반만 설정되면
 // 스토어 URL이 기본값 '/'인 채 남는다. 풀 프리픽스(https://)만 통과시켜
 // 쓰레기 installUrl이 구조화 데이터로 나가는 사고를 막는다.
-export function storeInstallUrls(state: LaunchState, ...urls: string[]) {
-  if (state !== 'launched') return []
+export function storeInstallUrls(launch: PlatformLaunch, appStore: string, playStore: string) {
+  const urls: string[] = []
+  if (launch.ios === 'launched') urls.push(appStore)
+  if (launch.android === 'launched') urls.push(playStore)
   return urls.filter((u) => u.startsWith('https://'))
 }

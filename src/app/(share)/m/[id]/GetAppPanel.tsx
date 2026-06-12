@@ -1,64 +1,59 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { APP_STORE_URL, LAUNCH_STATE, PLAY_STORE_URL, TESTFLIGHT_URL } from "@/lib/config";
+import { APP_STORE_URL, LAUNCH, PLAY_STORE_URL, TESTFLIGHT_URL } from "@/lib/config";
+import { AppleLogo, PlayLogo } from "@/components/StoreLogos";
 import type { ShareT } from "@/lib/share";
 
-function AppleLogo({ size = 16 }: { size?: number }) {
+// 배지 마크업 단일소스 — Apple 배지가 StoreBadges(양쪽)와 혼합 상태(단독)
+// 두 곳에서 쓰여서, 복제하면 hover/focus 스타일이 따로 드리프트한다.
+const badgeClass =
+  "flex min-h-[44px] items-center justify-center gap-2 rounded-[11px] border border-border-default bg-white px-3 py-2 text-text-primary transition-colors hover:border-text-muted focus:outline-none focus:ring-2 focus:ring-teal/40";
+
+function StoreBadge({
+  href,
+  logo,
+  small,
+  big,
+}: {
+  href: string;
+  logo: React.ReactNode;
+  small: string;
+  big: string;
+}) {
   return (
-    <svg
-      aria-hidden="true"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="shrink-0"
-    >
-      <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
-    </svg>
+    <a href={href} className={badgeClass}>
+      {logo}
+      <span className="text-left">
+        <small className="block text-[10px] leading-tight text-text-secondary">{small}</small>
+        <b className="block text-[13px] font-bold leading-tight">{big}</b>
+      </span>
+    </a>
+  );
+}
+
+/** Apple 단일 배지 — iOS만 출시된 혼합 상태에서 StoreBadges의 Apple쪽만 노출. */
+function AppleBadge({ t }: { t: ShareT }) {
+  return (
+    <StoreBadge
+      href={APP_STORE_URL}
+      logo={<AppleLogo />}
+      small={t("storeAppleSmall")}
+      big={t("storeApple")}
+    />
   );
 }
 
 export function StoreBadges({ t, column = false }: { t: ShareT; column?: boolean }) {
-  const badge =
-    "flex min-h-[44px] items-center justify-center gap-2 rounded-[11px] border border-border-default bg-white px-3 py-2 text-text-primary transition-colors hover:border-text-muted focus:outline-none focus:ring-2 focus:ring-teal/40";
   return (
     <div className={`flex justify-center gap-2 ${column ? "flex-col" : ""}`}>
-      <a href={APP_STORE_URL} className={badge}>
-        <AppleLogo />
-        <span className="text-left">
-          <small className="block text-[10px] leading-tight text-text-secondary">
-            {t("storeAppleSmall")}
-          </small>
-          <b className="block text-[13px] font-bold leading-tight">{t("storeApple")}</b>
-        </span>
-      </a>
-      <a href={PLAY_STORE_URL} className={badge}>
-        <PlayLogo />
-        <span className="text-left">
-          <small className="block text-[10px] leading-tight text-text-secondary">
-            {t("storeGoogleSmall")}
-          </small>
-          <b className="block text-[13px] font-bold leading-tight">{t("storeGoogle")}</b>
-        </span>
-      </a>
+      <AppleBadge t={t} />
+      <StoreBadge
+        href={PLAY_STORE_URL}
+        logo={<PlayLogo />}
+        small={t("storeGoogleSmall")}
+        big={t("storeGoogle")}
+      />
     </div>
-  );
-}
-
-// Default 15, not 16: the Play glyph fills more of its viewBox than the Apple
-// mark, so equal nominal size renders optically larger next to AppleLogo.
-function PlayLogo({ size = 15 }: { size?: number }) {
-  return (
-    <svg
-      aria-hidden="true"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="shrink-0"
-    >
-      <path d="M3.6 1.8c-.4.2-.6.6-.6 1.1v18.2c0 .5.2.9.6 1.1l9.5-10.2L3.6 1.8zM14.6 10.6 5.3 1l11.6 6.6-2.3 3zM5.3 23l9.3-9.6 2.3 3L5.3 23zM17.9 8.2l-2.6 3.8 2.6 3.8 3.5-2c1-.6 1-2.9 0-3.5l-3.5-2.1z" />
-    </svg>
   );
 }
 
@@ -75,6 +70,14 @@ export default function GetAppPanel({
 }) {
   const betaBtn =
     "flex min-h-[44px] items-center justify-center gap-2 rounded-[11px] border border-border-default bg-white px-3 py-2 text-[13px] font-bold text-text-primary transition-colors hover:border-text-muted focus:outline-none focus:ring-2 focus:ring-teal/40";
+
+  // 2×2 전사분면 (plan 005 + /review 2A): resolveCta 진리표와 패널이 일치해야
+  // 한다 — android만 launched인 롤백 시나리오에서 모바일은 Play로 보내는데
+  // 데스크톱만 베타로 보내는 모순 방지.
+  const bothLaunched = LAUNCH.ios === "launched" && LAUNCH.android === "launched";
+  const iosOnlyLaunched = LAUNCH.ios === "launched" && !bothLaunched;
+  const androidOnlyLaunched = LAUNCH.android === "launched" && !bothLaunched;
+
   return (
     <aside className="sticky top-5 rounded-[20px] border border-border-subtle bg-white p-6 text-center shadow-[0_16px_36px_rgba(26,22,20,0.08)]">
       <h2 className="text-[21px] font-bold tracking-[-0.02em]">{t("getAppTitle")}</h2>
@@ -90,8 +93,27 @@ export default function GetAppPanel({
         {t("or")}
       </div>
 
-      {LAUNCH_STATE === "launched" ? (
+      {bothLaunched ? (
         <StoreBadges t={t} column />
+      ) : iosOnlyLaunched ? (
+        <div className="space-y-3">
+          <AppleBadge t={t} />
+          <Link href={androidBetaHref} className={betaBtn}>
+            <PlayLogo /> {t("androidBetaCta")}
+          </Link>
+        </div>
+      ) : androidOnlyLaunched ? (
+        <div className="space-y-3">
+          <StoreBadge
+            href={PLAY_STORE_URL}
+            logo={<PlayLogo />}
+            small={t("storeGoogleSmall")}
+            big={t("storeGoogle")}
+          />
+          <a href={TESTFLIGHT_URL} className={betaBtn}>
+            <AppleLogo /> {t("testflightCta")}
+          </a>
+        </div>
       ) : (
         <div className="space-y-3">
           <a href={TESTFLIGHT_URL} className={betaBtn}>

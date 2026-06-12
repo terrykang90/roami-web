@@ -7,9 +7,10 @@ import FAQAccordion from "./faq/FAQAccordion";
 
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
-import { TESTFLIGHT_URL, SITE_CANONICAL, LAUNCH_STATE, APP_STORE_URL, PLAY_STORE_URL } from "@/lib/config";
+import { TESTFLIGHT_URL, SITE_CANONICAL, LAUNCH, APP_STORE_URL, PLAY_STORE_URL } from "@/lib/config";
 import { localeAlternates, storeInstallUrls } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
+import { AppleLogo } from "@/components/StoreLogos";
 import { androidBetaPath, type ShareLocale } from "@/lib/share";
 
 // title/description/OG는 layout이 제공 — 여기선 홈의 canonical/hreflang만.
@@ -54,7 +55,10 @@ export default async function Home() {
   const waitlist = await getTranslations("waitlist");
   const faq = await getTranslations("faq");
   const meta = await getTranslations("meta");
-  const installUrls = storeInstallUrls(LAUNCH_STATE, APP_STORE_URL, PLAY_STORE_URL);
+  const installUrls = storeInstallUrls(LAUNCH, APP_STORE_URL, PLAY_STORE_URL);
+  // LAUNCH.android는 여기서 의도적으로 무시 — hero의 Android-launched 분기는
+  // plan 005 D2에서 연기됨 (Android 정식 출시 때 뱃지/버튼 함께 작업).
+  const iosLaunched = LAUNCH.ios === "launched";
 
   const categories = [
     {
@@ -326,7 +330,7 @@ export default async function Home() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-60 animate-ping" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22C55E]" />
               </span>
-              {hero("betaBadge")}
+              {iosLaunched ? hero("badgeIosLaunched") : hero("betaBadge")}
             </span>
           </ScrollReveal>
 
@@ -347,17 +351,19 @@ export default async function Home() {
           <ScrollReveal delay={400}>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
               <a
-                href={TESTFLIGHT_URL}
+                href={iosLaunched ? APP_STORE_URL : TESTFLIGHT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2.5 bg-text-primary hover:opacity-90 text-white px-5 py-3 rounded-2xl transition-opacity shadow-lg shadow-text-primary/15"
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M16.36 12.78c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 6.02c.64-.78 1.07-1.85.95-2.94-.92.04-2.04.62-2.7 1.39-.59.68-1.11 1.79-.97 2.84 1.03.08 2.08-.52 2.72-1.29z" />
-                </svg>
+                <AppleLogo size={22} />
                 <span className="text-left leading-tight">
-                  <span className="block text-[10px] font-medium opacity-80">{hero("iosTagline")}</span>
-                  <span className="block text-sm font-bold">{hero("iosCta")}</span>
+                  <span className="block text-[10px] font-medium opacity-80">
+                    {iosLaunched ? hero("iosTaglineLaunched") : hero("iosTagline")}
+                  </span>
+                  <span className="block text-sm font-bold">
+                    {iosLaunched ? hero("iosCtaLaunched") : hero("iosCta")}
+                  </span>
                 </span>
               </a>
               <Link

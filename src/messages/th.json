@@ -17,6 +17,9 @@
     "cta": "ลงทะเบียนล่วงหน้า",
     "iosTagline": "iOS เบต้า",
     "iosCta": "รับผ่าน TestFlight",
+    "iosTaglineLaunched": "มีบน App Store แล้ว",
+    "iosCtaLaunched": "รับผ่าน App Store",
+    "badgeIosLaunched": "iOS บน App Store · Android เบต้า",
     "androidCta": "ร่วมเบต้า Android",
     "waitlistPrefix": "อยู่นอกเชียงใหม่?",
     "waitlistLink": "ลงทะเบียนล่วงหน้าเพื่อรับข่าวเปิดตัว →"
@@ -208,6 +211,7 @@
     "footerTagline": "Roami — มีตอัปนักเดินทาง บนแผนที่",
     "testflightCta": "รับเบต้าผ่าน TestFlight",
     "testflightNote": "เบต้า iOS — ติดตั้งได้เลยจาก TestFlight",
+    "appStoreNote": "เวอร์ชันทางการ — ติดตั้งจาก App Store ได้เลย",
     "androidBetaCta": "ร่วมเบต้า Android",
     "androidBetaNote": "เบต้า Android — เข้าร่วมกลุ่มแล้วติดตั้งจาก Play Store ได้เลย",
     "storeApple": "App Store",
