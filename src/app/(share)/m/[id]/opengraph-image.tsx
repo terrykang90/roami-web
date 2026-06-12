@@ -94,11 +94,51 @@ function staticFallback() {
   );
 }
 
-function Wordmark({ size: fz }: { size: number }) {
+// Brand header matching public/logo.svg. Recreated with satori-native elements
+// instead of embedding the SVG: its <text> wordmark needs system fonts the OG
+// runtime doesn't have. Icon geometry mirrors the SVG (two 88×88 r22 squares,
+// the orange one offset 38,28 within a 126×116 box).
+function Brand({ size: fz }: { size: number }) {
+  const u = (fz * 1.08) / 116;
   return (
-    <div style={{ display: "flex", fontSize: fz, fontWeight: 700, letterSpacing: "-0.03em" }}>
-      <span style={{ color: "#2CB5AE" }}>roa</span>
-      <span style={{ color: "#E07A45" }}>mi</span>
+    <div style={{ display: "flex", alignItems: "center", gap: fz * 0.3 }}>
+      <div style={{ display: "flex", position: "relative", width: 126 * u, height: 116 * u }}>
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: 88 * u,
+            height: 88 * u,
+            borderRadius: 22 * u,
+            background: "#2CB5AE",
+            opacity: 0.92,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: 38 * u,
+            top: 28 * u,
+            width: 88 * u,
+            height: 88 * u,
+            borderRadius: 22 * u,
+            background: "#E07A45",
+            opacity: 0.88,
+          }}
+        />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          fontSize: fz,
+          fontWeight: 700,
+          letterSpacing: "-0.03em",
+          color: "#1A1614",
+        }}
+      >
+        roami
+      </div>
     </div>
   );
 }
@@ -135,7 +175,7 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Wordmark size={52} />
+            <Brand size={52} />
             <div
               style={{
                 display: "flex",

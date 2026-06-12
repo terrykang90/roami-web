@@ -1,18 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ShareT } from "@/lib/share";
 
 // Shared chrome for the share landing's page + not-found boundary:
-// wordmark header, flexible main, tagline footer.
+// brand logo header (same asset + size as the landing Header), flexible main,
+// tagline footer.
 export function Shell({ children, t }: { children: React.ReactNode; t: ShareT }) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="flex items-center justify-between px-5 pb-3 pt-5 md:px-10">
         <Link
           href="/"
-          className="rounded text-[19px] font-bold tracking-[-0.03em] focus:outline-none focus:ring-2 focus:ring-teal/40"
+          className="rounded focus:outline-none focus:ring-2 focus:ring-teal/40"
         >
-          <span className="text-teal">roa</span>
-          <span className="text-secondary">mi</span>
+          <Image src="/logo.svg" alt="roami" width={120} height={43} />
         </Link>
       </header>
       <main className="flex flex-1 flex-col">{children}</main>
