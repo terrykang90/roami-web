@@ -8,9 +8,14 @@ import { join } from 'node:path'
 // silently breaking verification for the build whose key IS present. AASA has
 // applinks.test.ts; this is the assetlinks equivalent guard.
 //
-// This test FAILS while __PLAY_APP_SIGNING_SHA256__ is unfilled — by design.
-// It blocks deploying a half-filled assetlinks. Paste the real Play App
-// Signing SHA-256 (Play Console → Setup → App integrity) to make it pass.
+// Currently lists the upload-key SHA-256 only. This is enough to ship the WEB
+// side (web-first deploy). Before the MOBILE app ships, the Play App Signing
+// key SHA-256 (Play Console → App integrity → App signing) MUST be added too —
+// Play-distributed installs are signed with Google's key, not the upload key,
+// so without it their App Links won't auto-verify (they open in browser).
+// This guard keeps the file well-formed (a malformed entry poisons the whole
+// statement list); it can't know the Play cert is missing, so see the mobile
+// PR checklist + TODOS for that gate.
 describe('assetlinks.json', () => {
   const raw = readFileSync(
     join(process.cwd(), 'public/.well-known/assetlinks.json'),
