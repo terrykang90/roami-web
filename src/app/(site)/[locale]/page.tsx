@@ -330,7 +330,7 @@ export default async function Home() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-60 animate-ping" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22C55E]" />
               </span>
-              {iosLaunched ? hero("badgeIosLaunched") : hero("betaBadge")}
+              {iosLaunched ? hero("badgeLive") : hero("betaBadge")}
             </span>
           </ScrollReveal>
 
