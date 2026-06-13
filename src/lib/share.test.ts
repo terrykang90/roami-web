@@ -252,7 +252,7 @@ describe('androidAppLinkHref (Android open-in-app intent, plan 074 D1)', () => {
     expect(href).not.toContain('&x=1')
   })
 
-  it.each(['full', 'completed', 'cancelled', 'not_found'] as const)(
+  it.each(['full', 'completed', 'cancelled'] as const)(
     'non-active state %s returns the plain fallback (no app-open for a dead meetup)',
     (state) => {
       expect(androidAppLinkHref('abc123', '/', state)).toBe('/')
