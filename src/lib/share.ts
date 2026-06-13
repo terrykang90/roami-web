@@ -106,6 +106,28 @@ export function meetupReturnPath(from: string | null): string | null {
 }
 
 /**
+ * Android `intent://` deep link that opens the meetup in the app via the
+ * `roami://m/{id}` scheme, with a built-in browser fallback to the store/beta
+ * funnel when the app isn't installed (Chrome handles the fallback natively,
+ * no JS). Used as the Android primary CTA for active meetups (plan 074 D1).
+ *
+ * `id` is the already-validated meetup id (api.ts charset). `fallbackUrl` is
+ * whatever the normal funnel would have used (resolveCtaHref). Returns the
+ * plain `fallbackUrl` for non-active states so a dead meetup never offers an
+ * app-open.
+ */
+export function androidAppLinkHref(
+  id: string,
+  fallbackUrl: string,
+  state: ShareState,
+): string {
+  if (state !== 'active') return fallbackUrl
+  // intent:// fragment params are ;-delimited; the fallback URL is percent-
+  // encoded so its own &/; can't break out of the intent envelope.
+  return `intent://m/${id}#Intent;scheme=roami;package=kr.roami.app;S.browser_fallback_url=${encodeURIComponent(fallbackUrl)};end`
+}
+
+/**
  * The funnel half of the CTA matrix: where the primary button actually goes.
  * Only an ACTIVE meetup funnels into the app; every other state routes to the
  * marketing site (no dead ends). Desktop's button is informational — the

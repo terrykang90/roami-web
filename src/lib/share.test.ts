@@ -11,6 +11,7 @@ import {
   flagEmoji,
   formatStartTime,
   meetupReturnPath,
+  androidAppLinkHref,
   normalizeTier,
   truncate,
   type CtaUrls,
@@ -232,4 +233,29 @@ describe('presentation helpers', () => {
     expect(flagEmoji('KOR')).toBeNull()
     expect(flagEmoji('')).toBeNull()
   })
+})
+
+describe('androidAppLinkHref (Android open-in-app intent, plan 074 D1)', () => {
+  it('builds an intent:// that opens roami://m/{id} with the package set', () => {
+    const href = androidAppLinkHref('abc123', 'https://www.roami.kr/ko/android', 'active')
+    expect(href).toMatch(/^intent:\/\/m\/abc123#Intent;/)
+    expect(href).toContain('scheme=roami')
+    expect(href).toContain('package=kr.roami.app')
+    expect(href).toMatch(/;end$/)
+  })
+
+  it('percent-encodes the fallback so its &/; cannot break the intent envelope', () => {
+    const fallback = 'https://www.roami.kr/ko/android?from=/m/abc123&x=1'
+    const href = androidAppLinkHref('abc123', fallback, 'active')
+    expect(href).toContain(`S.browser_fallback_url=${encodeURIComponent(fallback)}`)
+    // the raw & must not appear loose in the fragment
+    expect(href).not.toContain('&x=1')
+  })
+
+  it.each(['full', 'completed', 'cancelled', 'not_found'] as const)(
+    'non-active state %s returns the plain fallback (no app-open for a dead meetup)',
+    (state) => {
+      expect(androidAppLinkHref('abc123', '/', state)).toBe('/')
+    },
+  )
 })
