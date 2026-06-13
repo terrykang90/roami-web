@@ -217,6 +217,13 @@
     "storeApple": "App Store",
     "storeAppleSmall": "Download on the",
     "storeGoogle": "Google Play",
-    "storeGoogleSmall": "GET IT ON"
+    "storeGoogleSmall": "GET IT ON",
+    "webviewTitleKakao": "คุณกำลังอยู่ในเบราว์เซอร์ในแอป KakaoTalk — เปิดมีตอัปในแอปต้องใช้เบราว์เซอร์ภายนอก",
+    "webviewTitleLine": "คุณกำลังอยู่ในเบราว์เซอร์ในแอป LINE — เปิดมีตอัปในแอปต้องใช้เบราว์เซอร์ภายนอก",
+    "webviewTitleGeneric": "เบราว์เซอร์ในแอปไม่สามารถเปิดแอปได้โดยตรง",
+    "webviewSub": "หากต้องการเปิดมีตอัปนี้ในแอป Roami โปรดเปิดหน้านี้ในเบราว์เซอร์ภายนอก เช่น Chrome",
+    "webviewCta": "เปิดในเบราว์เซอร์",
+    "webviewManual": "หากปุ่มไม่ทำงาน แตะเมนู ⋯ มุมขวาบนแล้วเลือก “เปิดในเบราว์เซอร์อื่น”",
+    "webviewManualOnly": "แตะเมนู ⋯ มุมขวาบนแล้วเลือก “เปิดในเบราว์เซอร์อื่น” หรือคัดลอกลิงก์ไปวางใน Safari/Chrome"
   }
 }

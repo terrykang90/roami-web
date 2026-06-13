@@ -13,6 +13,7 @@ import {
   TESTFLIGHT_URL,
 } from "@/lib/config";
 import {
+  androidAppLinkHref,
   androidBetaPath,
   ctaLabelKey,
   detectPlatform,
@@ -27,6 +28,7 @@ import {
 } from "@/lib/share";
 import ShareCard from "./ShareCard";
 import GetAppPanel, { StoreBadges } from "./GetAppPanel";
+import EscapeBanner from "./EscapeBanner";
 import { CtaButton, Shell } from "./Shell";
 
 // Public share landing (ROA-192 Phase 2). Server-rendered; personalizes on
@@ -131,18 +133,32 @@ export default async function ShareLandingPage({ params }: Params) {
   const state = resolveState(meetup.status, meetup.full);
   const cta = resolveCta(platform, LAUNCH);
   const urls = ctaUrls(locale, id);
-  const ctaHref = resolveCtaHref(state, cta, platform, urls);
-  const qrDataUrl = await QRCode.toDataURL(`${SITE_BASE}/m/${id}`, {
+  const funnelHref = resolveCtaHref(state, cta, platform, urls);
+  // Android: try the app first (roami:// via intent://), fall back to the
+  // funnel when not installed (plan 074 D1). Other platforms keep the funnel.
+  const ctaHref =
+    platform === "android" ? androidAppLinkHref(id, funnelHref, state) : funnelHref;
+  // QR encodes the canonical www host so a phone scan hits the App-Link-verified
+  // host directly (apex 307s and the OS won't follow it — plan 074 D9).
+  const qrDataUrl = await QRCode.toDataURL(`${SITE_CANONICAL}/m/${id}`, {
     width: 300,
     margin: 0,
     color: { dark: "#1A1614", light: "#FFFFFF" },
   });
+
+  // Escape target pinned to the canonical host (never the request host —
+  // host-header injection guard, same as /android), so bouncing out of an
+  // in-app browser lands where Universal Links/App Links are verified.
+  const currentUrl = `${SITE_CANONICAL}/m/${id}`;
 
   return (
     <Shell t={t}>
       <div className="mx-auto flex w-full max-w-[1000px] flex-1 items-start justify-center gap-10 px-4 pb-6 pt-2 md:px-10 md:pt-8">
         {/* card column */}
         <div className="w-full max-w-[480px]">
+          {/* In-app browsers (Kakao/LINE/etc.) bypass Universal Links — offer a
+              bounce to an external browser. Self-hides outside in-app browsers. */}
+          <EscapeBanner ua={h.get("user-agent")} currentUrl={currentUrl} t={t} />
           <ShareCard meetup={meetup} state={state} locale={locale} t={t} />
 
           {/* mobile CTA area (desktop uses the right panel) */}
