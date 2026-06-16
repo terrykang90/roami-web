@@ -75,7 +75,7 @@ export default async function LbTest({ searchParams }: SP) {
       <hr style={{ margin: "20px 0", border: 0, borderTop: "1px solid #eee" }} />
       <p style={{ fontSize: 14, fontWeight: 700 }}>③ Smart App Banner (메타로 자동)</p>
       <p style={note}>
-        <b>사파리에서</b> 이 페이지 맨 위에 회색 띠 뜨나? 띠의 "열기" 누르면 앱이 그 모임으로 가나?
+        <b>사파리에서</b> 이 페이지 맨 위에 회색 띠 뜨나? 띠의 ‘열기’ 누르면 앱이 그 모임으로 가나?
         (크롬·인앱브라우저엔 안 뜸 = 정상)
       </p>
     </main>
