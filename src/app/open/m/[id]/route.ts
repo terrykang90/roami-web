@@ -105,7 +105,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     headers: {
       'content-type': 'text/html; charset=utf-8',
       'x-robots-tag': 'noindex',
-      'cache-control': 'public, max-age=300',
+      // Personalized on Accept-Language + User-Agent → must NOT be shared-cached
+      // (a CDN would serve the first visitor's locale/platform to everyone).
+      'cache-control': 'no-store',
     },
   })
 }

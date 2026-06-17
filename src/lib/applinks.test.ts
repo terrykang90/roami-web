@@ -35,10 +35,10 @@ describe('aasaDocument', () => {
     expect(aasaDocument('link.roami.kr').applinks.details[0].components[0]['/']).toBe('/open/m/*')
   })
 
-  it('matches link host even with a port (dev)', () => {
-    expect(aasaDocument('link.roami.kr:3000').applinks.details[0].components[0]['/']).toBe(
-      '/open/m/*',
-    )
+  it('normalizes the link host (port / case / trailing dot)', () => {
+    for (const h of ['link.roami.kr:3000', 'LINK.Roami.KR', 'link.roami.kr.', 'Link.Roami.Kr.:443']) {
+      expect(aasaDocument(h).applinks.details[0].components[0]['/']).toBe('/open/m/*')
+    }
   })
 
   it('keeps the legacy empty apps array Apple requires + serializes', () => {

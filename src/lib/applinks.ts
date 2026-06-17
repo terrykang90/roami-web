@@ -31,8 +31,10 @@ export const LINK_DEEPLINK_PATH = '/open/m/*'
  * port in dev — we match on the hostname prefix).
  */
 export function aasaDocument(host?: string | null) {
-  const path =
-    host && host.split(':')[0] === LINK_HOST ? LINK_DEEPLINK_PATH : WWW_DEEPLINK_PATH
+  // Normalize before compare: strip port, lowercase, drop trailing dot — a
+  // brittle match silently serves the wrong host's AASA.
+  const h = (host ?? '').split(':')[0].toLowerCase().replace(/\.$/, '')
+  const path = h === LINK_HOST ? LINK_DEEPLINK_PATH : WWW_DEEPLINK_PATH
   return {
     applinks: {
       // `apps` must be present and empty (legacy Apple requirement).
