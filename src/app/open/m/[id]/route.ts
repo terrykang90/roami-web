@@ -20,24 +20,37 @@ export const dynamic = 'force-dynamic'
 
 const ID_RE = /^[A-Za-z0-9-]{1,64}$/
 
-const COPY: Record<ShareLocale, { title: string; open: string; get: string; hint: string }> = {
+// `endedTitle`/`endedOpen` are used when the meetup has already ended
+// (?ended=1): the primary action sends not-installed users to discovery
+// (homepage) instead of back to the share page — which would loop, since the
+// ended share CTA deep-links straight here again.
+const COPY: Record<
+  ShareLocale,
+  { title: string; open: string; get: string; hint: string; endedTitle: string; endedOpen: string }
+> = {
   ko: {
     title: 'Roami에서 이 모임 열기',
     open: '앱에서 열기',
     get: 'Roami 앱 받기',
     hint: '앱이 안 열리면 아래에서 설치하세요.',
+    endedTitle: '이 모임은 끝났어요',
+    endedOpen: '다른 모임 찾기',
   },
   en: {
     title: 'Open this meetup in Roami',
     open: 'Open in app',
     get: 'Get the Roami app',
     hint: "If the app doesn't open, install it below.",
+    endedTitle: 'This meetup has ended',
+    endedOpen: 'Find more meetups',
   },
   th: {
     title: 'เปิดมีตอัปนี้ใน Roami',
     open: 'เปิดในแอป',
     get: 'ดาวน์โหลดแอป Roami',
     hint: 'หากแอปไม่เปิด ติดตั้งด้านล่าง',
+    endedTitle: 'มีตอัปนี้สิ้นสุดแล้ว',
+    endedOpen: 'หามีตอัปอื่น',
   },
 }
 
@@ -52,12 +65,19 @@ function esc(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ESC[c] ?? c)
 }
 
-function page(appUrl: string, storeUrl: string, t: (typeof COPY)[ShareLocale], lang: string): string {
+function page(
+  appUrl: string,
+  storeUrl: string,
+  title: string,
+  openLabel: string,
+  t: (typeof COPY)[ShareLocale],
+  lang: string,
+): string {
   const a = esc(appUrl)
   const s = esc(storeUrl)
   return `<!doctype html><html lang="${lang}"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex"><title>${esc(t.title)}</title>
+<meta name="robots" content="noindex"><title>${esc(title)}</title>
 <style>
   :root{color-scheme:light}
   body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#FAF7F2;color:#1A1614;
@@ -70,8 +90,8 @@ function page(appUrl: string, storeUrl: string, t: (typeof COPY)[ShareLocale], l
   .get{background:#fff;color:#1A1614;border:1px solid #E6DFD5}
   p{font-size:13px;color:#7a7166;margin:16px 0 0}
 </style></head><body><main>
-<h1>${esc(t.title)}</h1>
-<a class="open" href="${a}">${esc(t.open)}</a>
+<h1>${esc(title)}</h1>
+<a class="open" href="${a}">${esc(openLabel)}</a>
 <a class="get" href="${s}">${esc(t.get)}</a>
 <p>${esc(t.hint)}</p>
 </main></body></html>`
@@ -87,8 +107,15 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return Response.redirect(SITE_CANONICAL, 302)
   }
 
-  // "Open in app" re-tries the still-claimed www Universal Link on a user tap.
-  const appUrl = `${SITE_CANONICAL}/m/${id}`
+  // Ended meetup (?ended=1, set by the share page's iOS CTA for completed/
+  // cancelled): the meetup is gone, so "Open in app" → www/m/{id} would just
+  // bounce back to the share page and re-deep-link here (a loop). Instead the
+  // primary becomes "find more meetups" → homepage discovery. The "Get the app"
+  // path is unchanged. (Active meetups keep the re-try behavior.)
+  const ended = req.nextUrl.searchParams.get('ended') === '1'
+  const appUrl = ended ? SITE_CANONICAL : `${SITE_CANONICAL}/m/${id}`
+  const title = ended ? t.endedTitle : t.title
+  const openLabel = ended ? t.endedOpen : t.open
 
   // "Get the app": iOS → App Store, Android → beta onboarding (closed testing,
   // never the bare Play Store), desktop → marketing site.
@@ -101,7 +128,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
         : SITE_CANONICAL
 
   const lang = locale === 'ko' ? 'ko' : locale === 'th' ? 'th' : 'en'
-  return new Response(page(appUrl, storeUrl, t, lang), {
+  return new Response(page(appUrl, storeUrl, title, openLabel, t, lang), {
     headers: {
       'content-type': 'text/html; charset=utf-8',
       'x-robots-tag': 'noindex',

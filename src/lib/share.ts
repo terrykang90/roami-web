@@ -109,41 +109,63 @@ export function meetupReturnPath(from: string | null): string | null {
 }
 
 /**
+ * States whose primary CTA opens the app via the meetup deep link.
+ *  - active  → opens the meetup detail.
+ *  - completed/cancelled (ENDED) → the app opens, finds the meetup gone, and
+ *    lands the recipient on the map. So "Find your next meetup on Roami"
+ *    actually opens the app's discovery instead of dead-ending on the marketing
+ *    homepage (B-light: no new deep-link path / app release needed — reuses the
+ *    existing /open/m + intent:// claims; the app's "no longer available" toast
+ *    is the only rough edge, removable later with a dedicated open-home link).
+ *  - full → NOT here: the meetup still exists, so opening it would contradict
+ *    the "Find SIMILAR meetups" label; it keeps the funnel.
+ */
+function opensAppForState(state: ShareState): boolean {
+  return state === 'active' || state === 'completed' || state === 'cancelled'
+}
+
+/**
  * Android `intent://` deep link that opens the meetup in the app via the
  * `roami://m/{id}` scheme, with a built-in browser fallback to the store/beta
  * funnel when the app isn't installed (Chrome handles the fallback natively,
- * no JS). Used as the Android primary CTA for active meetups (plan 074 D1).
+ * no JS). Used as the Android primary CTA (plan 074 D1).
  *
  * `id` is the already-validated meetup id (api.ts charset). `fallbackUrl` is
  * whatever the normal funnel would have used (resolveCtaHref). Returns the
- * plain `fallbackUrl` for non-active states so a dead meetup never offers an
- * app-open.
+ * plain `fallbackUrl` for states that don't open the app (see opensAppForState).
  */
 export function androidAppLinkHref(
   id: string,
   fallbackUrl: string,
   state: ShareState,
 ): string {
-  if (state !== 'active') return fallbackUrl
+  if (!opensAppForState(state)) return fallbackUrl
   // intent:// fragment params are ;-delimited; the fallback URL is percent-
   // encoded so its own &/; can't break out of the intent envelope.
   return `intent://m/${id}#Intent;scheme=roami;package=kr.roami.app;S.browser_fallback_url=${encodeURIComponent(fallbackUrl)};end`
 }
 
 /**
- * iOS open-in-app link for an ACTIVE meetup: the dedicated cross-host Universal
- * Link `link.roami.kr/open/m/{id}` (plan 082 D1/D8). It MUST be a different host
+ * iOS open-in-app link: the dedicated cross-host Universal Link
+ * `link.roami.kr/open/m/{id}` (plan 082 D1/D8). It MUST be a different host
  * from the share page (www) — iOS suppresses a Universal Link whose host
  * matches the current page, so a www→www tap would never open the app. The
  * `link` host claims `/open/m/*`; if the app isn't installed (or is an old
  * binary that doesn't claim it yet) the tap loads the `/open/m/{id}`
- * interstitial instead of dead-ending. Non-active states fall back to the
- * funnel so a dead meetup never offers an app-open. (Host-split invariant D7:
- * share host = www, iOS CTA host = link — never collapse them.)
+ * interstitial instead of dead-ending. States that don't open the app fall back
+ * to the funnel (see opensAppForState). (Host-split invariant D7: share host =
+ * www, iOS CTA host = link — never collapse them.)
  */
 export function iosAppLinkHref(id: string, fallbackUrl: string, state: ShareState): string {
-  if (state !== 'active') return fallbackUrl
-  return `https://${LINK_HOST}/open/m/${id}`
+  if (!opensAppForState(state)) return fallbackUrl
+  // Ended meetups (completed/cancelled) carry ?ended=1 so the NOT-installed
+  // `/open/m/{id}` interstitial sends the user to discovery instead of looping
+  // back to the share page (whose ended CTA would deep-link here again). The
+  // installed app ignores the query (the UL matches on path, and
+  // meetupIdFromUri parses path segments), so it still opens the meetup → "no
+  // longer available" → map.
+  const ended = state === 'completed' || state === 'cancelled'
+  return `https://${LINK_HOST}/open/m/${id}${ended ? '?ended=1' : ''}`
 }
 
 /**
