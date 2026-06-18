@@ -251,25 +251,41 @@ describe('androidAppLinkHref (Android open-in-app intent, plan 074 D1)', () => {
     expect(href).not.toContain('&x=1')
   })
 
-  it.each(['full', 'completed', 'cancelled'] as const)(
-    'non-active state %s returns the plain fallback (no app-open for a dead meetup)',
+  // B-light: ended meetups (completed/cancelled) also open the app — the app
+  // finds the meetup gone and lands the recipient on the map (discovery), so
+  // "find your next meetup" actually opens the app instead of the homepage.
+  it.each(['active', 'completed', 'cancelled'] as const)(
+    'state %s opens the app via intent://',
     (state) => {
-      expect(androidAppLinkHref('abc123', '/', state)).toBe('/')
+      expect(androidAppLinkHref('abc123', '/', state)).toMatch(/^intent:\/\/m\/abc123#Intent;/)
     },
   )
+
+  it('full keeps the funnel (the meetup still exists — "find similar", not open it)', () => {
+    expect(androidAppLinkHref('abc123', '/', 'full')).toBe('/')
+  })
 })
 
 describe('iosAppLinkHref (iOS open-in-app cross-host UL, plan 082 D1/D8)', () => {
-  it('builds the link.roami.kr/open/m/{id} Universal Link for an active meetup', () => {
+  it('active opens the bare link UL', () => {
     expect(iosAppLinkHref('abc123', '/', 'active')).toBe('https://link.roami.kr/open/m/abc123')
   })
 
-  it.each(['full', 'completed', 'cancelled'] as const)(
-    'non-active state %s returns the plain fallback (no app-open for a dead meetup)',
+  // Ended (completed/cancelled): same link UL + ?ended=1 so the not-installed
+  // interstitial routes to discovery instead of looping. The installed app
+  // ignores the query (path-based UL match + parsing) and still opens → map.
+  it.each(['completed', 'cancelled'] as const)(
+    'ended state %s opens the link UL with ?ended=1 (interstitial → discovery, no loop)',
     (state) => {
-      expect(iosAppLinkHref('abc123', '/', state)).toBe('/')
+      expect(iosAppLinkHref('abc123', '/', state)).toBe(
+        'https://link.roami.kr/open/m/abc123?ended=1',
+      )
     },
   )
+
+  it('full keeps the funnel (the meetup still exists — "find similar", not open it)', () => {
+    expect(iosAppLinkHref('abc123', '/', 'full')).toBe('/')
+  })
 
   // Host-split invariant (plan 082 D7): the share page lives on the canonical
   // www host; the iOS CTA MUST target a DIFFERENT host. iOS suppresses a
