@@ -264,6 +264,19 @@ describe('androidAppLinkHref (Android open-in-app intent, plan 074 D1)', () => {
   it('full keeps the funnel (the meetup still exists — "find similar", not open it)', () => {
     expect(androidAppLinkHref('abc123', '/', 'full')).toBe('/')
   })
+
+  // Ended Android: the not-installed fallback must be the funnel (homepage),
+  // NOT a /m/{id} link — otherwise Chrome's browser_fallback_url would bounce
+  // back to the share page and loop. resolveCtaHref returns '/' for non-active,
+  // so the fallback here is the homepage funnel.
+  it.each(['completed', 'cancelled'] as const)(
+    'ended state %s keeps the funnel (homepage) as browser_fallback_url — no loop',
+    (state) => {
+      const href = androidAppLinkHref('abc123', '/', state)
+      expect(href).toContain(`S.browser_fallback_url=${encodeURIComponent('/')}`)
+      expect(href).not.toContain('%2Fm%2Fabc123')
+    },
+  )
 })
 
 describe('iosAppLinkHref (iOS open-in-app cross-host UL, plan 082 D1/D8)', () => {

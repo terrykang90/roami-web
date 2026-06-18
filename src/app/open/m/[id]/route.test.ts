@@ -28,9 +28,12 @@ describe('/open/m/[id] interstitial (not-installed / old-binary landing)', () =>
     expect(html).not.toContain('href="https://www.roami.kr/m/abc123"')
   })
 
-  it('localizes the ended copy (ko)', async () => {
-    const html = await render('https://link.roami.kr/open/m/abc123?ended=1', 'ko')
-    expect(html).toContain('이 모임은 끝났어요')
-    expect(html).toContain('다른 모임 찾기')
+  it.each([
+    ['ko', '이 모임은 끝났어요', '다른 모임 찾기'],
+    ['th', 'มีตอัปนี้สิ้นสุดแล้ว', 'หามีตอัปอื่น'],
+  ])('localizes the ended copy (%s)', async (lang, title, open) => {
+    const html = await render('https://link.roami.kr/open/m/abc123?ended=1', lang)
+    expect(html).toContain(title)
+    expect(html).toContain(open)
   })
 })
