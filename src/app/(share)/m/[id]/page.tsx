@@ -17,6 +17,7 @@ import {
   androidBetaPath,
   ctaLabelKey,
   detectPlatform,
+  iosAppLinkHref,
   resolveCta,
   resolveCtaHref,
   resolveLocale,
@@ -134,10 +135,17 @@ export default async function ShareLandingPage({ params }: Params) {
   const cta = resolveCta(platform, LAUNCH);
   const urls = ctaUrls(locale, id);
   const funnelHref = resolveCtaHref(state, cta, platform, urls);
-  // Android: try the app first (roami:// via intent://), fall back to the
-  // funnel when not installed (plan 074 D1). Other platforms keep the funnel.
+  // Open-in-app, per platform (plan 082): iOS → link.roami.kr/open/m cross-host
+  // Universal Link (opens the app directly, even inside Kakao/Instagram in-app
+  // browsers — verified on device); Android → intent:// (roami:// scheme,
+  // app-first with a store/beta browser_fallback_url). Both fall back to the
+  // funnel for non-active meetups.
   const ctaHref =
-    platform === "android" ? androidAppLinkHref(id, funnelHref, state) : funnelHref;
+    platform === "android"
+      ? androidAppLinkHref(id, funnelHref, state)
+      : platform === "ios"
+        ? iosAppLinkHref(id, funnelHref, state)
+        : funnelHref;
   // QR encodes the canonical www host so a phone scan hits the App-Link-verified
   // host directly (apex 307s and the OS won't follow it — plan 074 D9).
   const qrDataUrl = await QRCode.toDataURL(`${SITE_CANONICAL}/m/${id}`, {
@@ -156,16 +164,23 @@ export default async function ShareLandingPage({ params }: Params) {
       <div className="mx-auto flex w-full max-w-[1000px] flex-1 items-start justify-center gap-10 px-4 pb-6 pt-2 md:px-10 md:pt-8">
         {/* card column */}
         <div className="w-full max-w-[480px]">
-          {/* In-app browsers (Kakao/LINE/etc.) bypass Universal Links — offer a
-              bounce to an external browser. Self-hides outside in-app browsers. */}
-          <EscapeBanner ua={h.get("user-agent")} currentUrl={currentUrl} t={t} />
+          {/* Android in-app browsers (Kakao/LINE/etc.) only: the iOS CTA is a
+              cross-host Universal Link that opens the app directly even in-app,
+              but Android's intent:// is best-effort inside a webview (the host
+              app may decline it, and browser_fallback_url never fires) — so keep
+              the escape-to-external-browser hatch as a safety net there. iOS
+              in-app needs no banner (the UL works). Self-hides outside in-app
+              browsers via bannerState(). */}
+          {platform === "android" && (
+            <EscapeBanner ua={h.get("user-agent")} currentUrl={currentUrl} t={t} />
+          )}
           <ShareCard meetup={meetup} state={state} locale={locale} t={t} />
 
           {/* mobile CTA area (desktop uses the right panel) */}
           <div className="mt-4 md:hidden">
             <CtaButton
               href={ctaHref}
-              label={t(ctaLabelKey(state, cta), { city: meetup.city || "Roami" })}
+              label={t(ctaLabelKey(state), { city: meetup.city || "Roami" })}
             />
             <SecondaryArea state={state} cta={cta} t={t} />
           </div>
