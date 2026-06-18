@@ -12,10 +12,13 @@ import {
   formatStartTime,
   meetupReturnPath,
   androidAppLinkHref,
+  iosAppLinkHref,
   normalizeTier,
   truncate,
   type CtaUrls,
 } from './share'
+import { LINK_HOST } from './applinks'
+import { SITE_CANONICAL } from './config'
 
 // Eng-review Q2/T1: the state/CTA matrices are where landing bugs hide —
 // exhaustive truth tables, not spot checks.
@@ -135,22 +138,21 @@ describe('meetupReturnPath (open-redirect guard)', () => {
 
 describe('ctaLabelKey (label half of the CTA matrix)', () => {
   it.each([
-    // active: android_beta is the only cta with its own label
-    ['active', 'android_beta', 'androidBetaCta'],
-    ['active', 'testflight', 'ctaActive'],
-    ['active', 'app_store', 'ctaActive'],
-    ['active', 'stores', 'ctaActive'],
-    ['active', 'desktop_panel', 'ctaActive'],
-    // non-active states label by state, whatever the cta
-    ['full', 'android_beta', 'ctaFull'],
-    ['full', 'stores', 'ctaFull'],
-    ['full', 'app_store', 'ctaFull'],
-    ['completed', 'testflight', 'ctaCompleted'],
-    ['completed', 'app_store', 'ctaCompleted'],
-    ['cancelled', 'android_beta', 'ctaCancelled'],
-    ['cancelled', 'app_store', 'ctaCancelled'],
-  ] as const)('(%s, %s) → %s', (state, cta, expected) => {
-    expect(ctaLabelKey(state, cta)).toBe(expected)
+    ['active', 'ctaActive'],
+    ['full', 'ctaFull'],
+    ['completed', 'ctaCompleted'],
+    ['cancelled', 'ctaCancelled'],
+  ] as const)('%s → %s', (state, expected) => {
+    expect(ctaLabelKey(state)).toBe(expected)
+  })
+
+  // Regression (plan 082): an ACTIVE meetup's primary button opens the meetup
+  // in the app on EVERY platform (iOS link.roami.kr/open/m UL, Android
+  // intent://), so the label must never be the install-blind "Join the Android
+  // beta" — that wording belongs only at the /android fallback destination.
+  it('active never labels the button as "join beta"', () => {
+    expect(ctaLabelKey('active')).toBe('ctaActive')
+    expect(ctaLabelKey('active')).not.toBe('androidBetaCta')
   })
 
   // The truth table above can't catch a key being renamed in the message
@@ -159,11 +161,8 @@ describe('ctaLabelKey (label half of the CTA matrix)', () => {
     const { default: en } = await import('../messages/en.json')
     const shareKeys = Object.keys(en.share)
     const states = ['active', 'full', 'completed', 'cancelled'] as const
-    const ctas = ['stores', 'app_store', 'testflight', 'android_beta', 'desktop_panel'] as const
     for (const state of states) {
-      for (const cta of ctas) {
-        expect(shareKeys, `ctaLabelKey(${state}, ${cta})`).toContain(ctaLabelKey(state, cta))
-      }
+      expect(shareKeys, `ctaLabelKey(${state})`).toContain(ctaLabelKey(state))
     }
     // SecondaryArea가 variant별로 직접 렌더하는 note 키들 — ctaLabelKey를 안
     // 거치므로 위 루프가 못 잡는다. JSX의 키 문자열 오타 방지용 고정.
@@ -258,4 +257,30 @@ describe('androidAppLinkHref (Android open-in-app intent, plan 074 D1)', () => {
       expect(androidAppLinkHref('abc123', '/', state)).toBe('/')
     },
   )
+})
+
+describe('iosAppLinkHref (iOS open-in-app cross-host UL, plan 082 D1/D8)', () => {
+  it('builds the link.roami.kr/open/m/{id} Universal Link for an active meetup', () => {
+    expect(iosAppLinkHref('abc123', '/', 'active')).toBe('https://link.roami.kr/open/m/abc123')
+  })
+
+  it.each(['full', 'completed', 'cancelled'] as const)(
+    'non-active state %s returns the plain fallback (no app-open for a dead meetup)',
+    (state) => {
+      expect(iosAppLinkHref('abc123', '/', state)).toBe('/')
+    },
+  )
+
+  // Host-split invariant (plan 082 D7): the share page lives on the canonical
+  // www host; the iOS CTA MUST target a DIFFERENT host. iOS suppresses a
+  // Universal Link whose host matches the current page, so collapsing these two
+  // (e.g. a future "canonicalize everything to www" cleanup) would silently
+  // kill the open-in-app — the page would just reload instead of opening the
+  // app. This test fails loudly if they ever converge.
+  it('iOS CTA host differs from the share-page (www) host', () => {
+    const ctaHost = new URL(iosAppLinkHref('abc123', '/', 'active')).host
+    const pageHost = new URL(SITE_CANONICAL).host
+    expect(ctaHost).toBe(LINK_HOST)
+    expect(ctaHost).not.toBe(pageHost)
+  })
 })

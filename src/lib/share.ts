@@ -1,5 +1,8 @@
 // Pure helpers for the ROA-192 share landing (/m/[id]). Kept free of React/Next
 // imports so the state/CTA truth tables are unit-testable (eng-review Q2/T1).
+// applinks is a pure constants module (no React/Next), so importing the
+// deep-link host here keeps this file unit-testable.
+import { LINK_HOST } from './applinks'
 
 export const SHARE_LOCALES = ['ko', 'en', 'th'] as const
 export type ShareLocale = (typeof SHARE_LOCALES)[number]
@@ -128,6 +131,22 @@ export function androidAppLinkHref(
 }
 
 /**
+ * iOS open-in-app link for an ACTIVE meetup: the dedicated cross-host Universal
+ * Link `link.roami.kr/open/m/{id}` (plan 082 D1/D8). It MUST be a different host
+ * from the share page (www) — iOS suppresses a Universal Link whose host
+ * matches the current page, so a www→www tap would never open the app. The
+ * `link` host claims `/open/m/*`; if the app isn't installed (or is an old
+ * binary that doesn't claim it yet) the tap loads the `/open/m/{id}`
+ * interstitial instead of dead-ending. Non-active states fall back to the
+ * funnel so a dead meetup never offers an app-open. (Host-split invariant D7:
+ * share host = www, iOS CTA host = link — never collapse them.)
+ */
+export function iosAppLinkHref(id: string, fallbackUrl: string, state: ShareState): string {
+  if (state !== 'active') return fallbackUrl
+  return `https://${LINK_HOST}/open/m/${id}`
+}
+
+/**
  * The funnel half of the CTA matrix: where the primary button actually goes.
  * Only an ACTIVE meetup funnels into the app; every other state routes to the
  * marketing site (no dead ends). Desktop's button is informational — the
@@ -155,12 +174,17 @@ export function resolveCtaHref(
 }
 
 /**
- * The label half of the CTA matrix — i18n key for the primary button. Kept
- * beside resolveCtaHref so label and href can't drift apart silently when the
- * funnel rules change. ctaFull is the only key that interpolates {city}.
+ * The label half of the CTA matrix — i18n key for the primary button. Depends
+ * only on `state`: for an ACTIVE meetup every platform's button now opens the
+ * meetup in the app (iOS → link.roami.kr/open/m UL, Android → intent://), so
+ * the label is always `ctaActive` ("Open this meetup in the app").
+ *
+ * Previously active+android returned `androidBetaCta` ("Join the Android beta")
+ * — an install-blind FALSE label: the button actually opens the app (the beta
+ * page is only the not-installed fallback). The "join beta" wording now lives
+ * only at the fallback destination (`/android`). ctaFull interpolates {city}.
  */
-export function ctaLabelKey(state: ShareState, cta: CtaVariant): string {
-  if (state === 'active' && cta === 'android_beta') return 'androidBetaCta'
+export function ctaLabelKey(state: ShareState): string {
   switch (state) {
     case 'active':
       return 'ctaActive'
