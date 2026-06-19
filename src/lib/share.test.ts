@@ -251,13 +251,19 @@ describe('androidAppLinkHref (Android open-in-app intent, plan 074 D1)', () => {
     expect(href).not.toContain('&x=1')
   })
 
-  // B-light: ended meetups (completed/cancelled) also open the app — the app
-  // finds the meetup gone and lands the recipient on the map (discovery), so
-  // "find your next meetup" actually opens the app instead of the homepage.
-  it.each(['active', 'completed', 'cancelled'] as const)(
-    'state %s opens the app via intent://',
+  it('active opens intent://m/{id} without the ?ended flag', () => {
+    expect(androidAppLinkHref('abc123', '/', 'active')).toMatch(/^intent:\/\/m\/abc123#Intent;/)
+  })
+
+  // B-full: ended meetups (completed/cancelled) open the app with ?ended=1 in
+  // the intent's data URI. The app reads it (roami://m/{id}?ended=1) and lands
+  // on the map without opening the gone meetup (no "no longer available" toast).
+  it.each(['completed', 'cancelled'] as const)(
+    'ended state %s opens intent://m/{id}?ended=1',
     (state) => {
-      expect(androidAppLinkHref('abc123', '/', state)).toMatch(/^intent:\/\/m\/abc123#Intent;/)
+      expect(androidAppLinkHref('abc123', '/', state)).toMatch(
+        /^intent:\/\/m\/abc123\?ended=1#Intent;/,
+      )
     },
   )
 

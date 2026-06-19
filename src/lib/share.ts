@@ -140,9 +140,15 @@ export function androidAppLinkHref(
   state: ShareState,
 ): string {
   if (!opensAppForState(state)) return fallbackUrl
+  // Ended meetups carry ?ended=1 (mirrors iosAppLinkHref) so the app lands on
+  // the map instead of opening the gone meetup, skipping the "no longer
+  // available" toast (plan 082 B-full). The flag rides in the intent's data URI
+  // (before #Intent); the app reads it from the delivered roami://m/{id}?ended=1.
+  // Old binaries ignore the query → open the meetup → toast → map (acceptable).
+  const path = state === 'completed' || state === 'cancelled' ? `m/${id}?ended=1` : `m/${id}`
   // intent:// fragment params are ;-delimited; the fallback URL is percent-
   // encoded so its own &/; can't break out of the intent envelope.
-  return `intent://m/${id}#Intent;scheme=roami;package=kr.roami.app;S.browser_fallback_url=${encodeURIComponent(fallbackUrl)};end`
+  return `intent://${path}#Intent;scheme=roami;package=kr.roami.app;S.browser_fallback_url=${encodeURIComponent(fallbackUrl)};end`
 }
 
 /**
